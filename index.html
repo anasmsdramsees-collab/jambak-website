@@ -181,8 +181,8 @@
     .integ-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 14px; margin-top: 48px; }
     .integ-card { background: var(--white); border: 1.5px solid var(--gray-mid); border-radius: var(--radius-lg); padding: 24px 14px; text-align: center; transition: var(--transition); cursor: pointer; text-decoration: none; display: block; }
     .integ-card:hover { border-color: var(--orange); box-shadow: 0 6px 22px rgba(255,69,0,.12); transform: translateY(-4px); }
-    .integ-card .ic-wrap { width: 48px; height: 48px; border-radius: 12px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
-    .integ-card .ic-wrap svg { width: 24px; height: 24px; }
+    .integ-card .ic-wrap { width: 64px; height: 44px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+    .integ-card .ic-wrap img { max-width: 64px; max-height: 36px; object-fit: contain; }
     .integ-card p { font-size: 12px; font-weight: 700; color: var(--text-mid); }
 
     /* ── HOW IT WORKS ── */
@@ -586,12 +586,45 @@
     <p class="sec-sub">جمبك يتكامل مع أشهر منصات التجارة الإلكترونية في المنطقة</p>
   </div>
   <div class="integ-grid">
-    <a href="integrations.html" class="integ-card"><div class="ic-wrap" style="background:#f0f9eb;color:#5a8a1e"><svg><use href="#ic-bag"/></svg></div><p>Shopify</p></a>
-    <a href="integrations.html" class="integ-card"><div class="ic-wrap" style="background:#f4f0f9;color:#7f54b3"><svg><use href="#ic-cart"/></svg></div><p>WooCommerce</p></a>
-    <a href="integrations.html" class="integ-card"><div class="ic-wrap" style="background:#fff8ed;color:#c07200"><svg><use href="#ic-box"/></svg></div><p>Amazon</p></a>
-    <a href="integrations.html" class="integ-card"><div class="ic-wrap" style="background:#fff0f5;color:#e0005a"><svg><use href="#ic-store"/></svg></div><p>سلة Salla</p></a>
-    <a href="integrations.html" class="integ-card"><div class="ic-wrap" style="background:#f0f5ff;color:#2255cc"><svg><use href="#ic-store"/></svg></div><p>زد Zid</p></a>
-    <a href="integrations.html" class="integ-card"><div class="ic-wrap" style="background:#f0faf5;color:#00875a"><svg><use href="#ic-code"/></svg></div><p>API خاص</p></a>
+    <a href="integrations.html" class="integ-card">
+      <div class="ic-wrap"><img src="https://cdn.worldvectorlogo.com/logos/shopify.svg" alt="Shopify"></div>
+      <p>Shopify</p>
+    </a>
+    <a href="integrations.html" class="integ-card">
+      <div class="ic-wrap"><img src="https://cdn.worldvectorlogo.com/logos/woocommerce.svg" alt="WooCommerce"></div>
+      <p>WooCommerce</p>
+    </a>
+    <a href="integrations.html" class="integ-card">
+      <div class="ic-wrap"><img src="https://cdn.worldvectorlogo.com/logos/amazon-2.svg" alt="Amazon"></div>
+      <p>Amazon</p>
+    </a>
+    <a href="integrations.html" class="integ-card">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:28px">
+          <rect width="120" height="40" rx="8" fill="#FF6B35"/>
+          <text x="60" y="28" text-anchor="middle" font-family="Cairo,Arial,sans-serif" font-size="22" font-weight="900" fill="#fff">سلة</text>
+        </svg>
+      </div>
+      <p>Salla سلة</p>
+    </a>
+    <a href="integrations.html" class="integ-card">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:72px;height:28px">
+          <rect width="120" height="40" rx="8" fill="#1B3F7A"/>
+          <text x="60" y="28" text-anchor="middle" font-family="Cairo,Arial,sans-serif" font-size="22" font-weight="900" fill="#fff">زد</text>
+        </svg>
+      </div>
+      <p>Zid زد</p>
+    </a>
+    <a href="integrations.html" class="integ-card">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 64 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:48px;height:36px">
+          <rect width="64" height="44" rx="8" fill="#f0faf5"/>
+          <polyline points="10,22 20,12 32,28 44,16 54,22" stroke="#00875a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <p>API خاص</p>
+    </a>
   </div>
 </section>
 
