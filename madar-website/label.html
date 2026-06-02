@@ -33,15 +33,19 @@ body {
 /* ── LABEL SHEET ── */
 .label {
   width: 148mm;
+  height: 210mm;
   background: #fff;
   border: 2px solid #000;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8pt;
   color: #000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* ── ROW HELPER ── */
-.row { display: flex; border-bottom: 1.5px solid #000; }
+.row { display: flex; border-bottom: 1.5px solid #000; flex-shrink: 0; }
 .row:last-child { border-bottom: none; }
 .cell {
   padding: 3px 5px;
@@ -70,7 +74,7 @@ body {
 .meta-val  { font-size: 7.5pt; font-weight: 700; }
 
 /* ROW 3: Service Codes — big boxes */
-.r3 { display: flex; border-bottom: 1.5px solid #000; }
+.r3 { display: flex; border-bottom: 1.5px solid #000; flex-shrink: 0; }
 .svc-box {
   flex: 1; text-align: center;
   padding: 6px 4px; border-right: 1.5px solid #000;
@@ -81,7 +85,7 @@ body {
 .svc-box.highlight { background: #000; color: #fff; }
 
 /* ROW 4: Weight / Pieces */
-.r4 { display: flex; border-bottom: 1.5px solid #000; }
+.r4 { display: flex; border-bottom: 1.5px solid #000; flex-shrink: 0; }
 .r4 .cell { font-size: 7.5pt; }
 .r4 .cell strong { font-size: 9pt; }
 
@@ -91,19 +95,20 @@ body {
   padding: 3px 6px; font-size: 8.5pt; font-weight: 700;
   letter-spacing: 0.5px;
   border-bottom: 1.5px solid #000;
+  flex-shrink: 0;
 }
 
 /* ROW 6: COD */
-.r6-cod { border-bottom: 1.5px solid #000; padding: 3px 6px; font-size: 7.5pt; }
+.r6-cod { border-bottom: 1.5px solid #000; padding: 3px 6px; font-size: 7.5pt; flex-shrink: 0; }
 .cod-val { font-size: 11pt; font-weight: 900; color: #c00; }
 
 /* ROW 7: Account */
-.r7-acct { border-bottom: 1.5px solid #000; padding: 3px 6px; }
+.r7-acct { border-bottom: 1.5px solid #000; padding: 3px 6px; flex-shrink: 0; }
 .acct-lbl { font-size: 6.5pt; color: #555; }
 .acct-num { font-size: 11pt; font-weight: 900; }
 
 /* ROW 8: Addresses + vertical barcode */
-.r8 { display: flex; border-bottom: 1.5px solid #000; min-height: 50mm; }
+.r8 { display: flex; border-bottom: 1.5px solid #000; flex: 1; }
 .r8-addr { flex: 1; padding: 5px 6px; border-right: 1.5px solid #000; }
 .r8-addr.right { border-right: none; }
 .addr-type { font-size: 6.5pt; color: #555; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -115,16 +120,16 @@ body {
 .r8-vbar svg { transform: rotate(90deg); }
 
 /* ROW 9: Footer refs */
-.r9-footer { padding: 3px 6px; font-size: 6.5pt; display: flex; justify-content: space-between; }
+.r9-footer { padding: 3px 6px; font-size: 6.5pt; display: flex; justify-content: space-between; flex-shrink: 0; }
 .r9-footer span { color: #333; }
 .r9-footer strong { font-size: 7.5pt; }
 
 /* ── PRINT ── */
 @media print {
-  body { background: #fff; padding: 0; }
+  body { background: #fff; padding: 0; margin: 0; }
   .actions { display: none !important; }
-  .label { border: 1.5px solid #000; box-shadow: none; }
-  @page { margin: 4mm; size: A5; }
+  .label { width: 148mm; height: 210mm; border: 1px solid #000; box-shadow: none; page-break-inside: avoid; }
+  @page { margin: 0; size: A5 portrait; }
 }
 </style>
 </head>
