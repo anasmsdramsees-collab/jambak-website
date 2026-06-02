@@ -1,79 +1,72 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوليصة شحن — مدار</title>
+<title>Shipping Label — Madar</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family: 'Arial', sans-serif;
-  background: #f0f0f0;
+  background: #eaeaea;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 24px 16px;
   gap: 16px;
 }
 
-/* ── ACTIONS BAR (screen only) ── */
+/* ── ACTIONS BAR ── */
 .actions {
   display: flex;
   gap: 10px;
   background: #fff;
   padding: 12px 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,.1);
   width: 100%;
-  max-width: 800px;
+  max-width: 740px;
   align-items: center;
   justify-content: space-between;
 }
 .actions-title { font-size: 15px; font-weight: 700; color: #1A0A4A; }
 .btn-print {
   display: flex; align-items: center; gap: 8px;
-  padding: 10px 24px;
-  background: #481DBC;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
+  padding: 9px 22px;
+  background: #481DBC; color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
   transition: background .2s;
 }
 .btn-print:hover { background: #3a169a; }
 .btn-back {
   display: flex; align-items: center; gap: 6px;
-  padding: 10px 18px;
-  background: #F4F2FB;
-  color: #481DBC;
-  border: 1px solid #D8D3EE;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
+  padding: 9px 16px;
+  background: #F4F2FB; color: #481DBC;
+  border: 1px solid #D8D3EE; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
 }
 .btn-back:hover { background: #EDE8FF; }
 
 /* ── LABEL WRAPPER ── */
 .label-wrapper {
   width: 100%;
-  max-width: 800px;
+  max-width: 740px;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0,0,0,.12);
+  border-radius: 6px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.14);
   overflow: hidden;
 }
 
-/* ── LABEL ── */
+/* ── LABEL (A5 148×210mm) ── */
 .label {
   width: 100%;
   background: #fff;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   border: 2px solid #1A0A4A;
+  font-size: 11px;
 }
 
 /* ── HEADER ── */
@@ -81,33 +74,31 @@ body {
   display: flex;
   align-items: stretch;
   border-bottom: 2px solid #1A0A4A;
-  background: #1A0A4A;
 }
 .lbl-logo-box {
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 160px;
-  border-left: 2px solid #1A0A4A;
+  min-width: 150px;
+  border-right: 2px solid #1A0A4A;
 }
-.lbl-logo-box img { height: 42px; }
-.lbl-logo-sub { font-size: 9px; color: #888; margin-top: 4px; text-align: center; }
+.lbl-logo-box img { height: 38px; }
+.lbl-logo-sub { font-size: 8px; color: #999; margin-top: 3px; text-align: center; letter-spacing: .5px; }
 .lbl-service-box {
   flex: 1;
+  background: #1A0A4A;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px 16px;
-  gap: 4px;
+  gap: 2px;
 }
-.lbl-service-label { font-size: 10px; color: rgba(255,255,255,.6); letter-spacing: 1px; }
-.lbl-service-name { font-size: 22px; font-weight: 900; color: #FF6A00; letter-spacing: 1px; }
-.lbl-service-en { font-size: 11px; color: rgba(255,255,255,.5); }
-
+.lbl-service-label { font-size: 9px; color: rgba(255,255,255,.5); letter-spacing: 1.5px; text-transform: uppercase; }
+.lbl-service-name  { font-size: 20px; font-weight: 900; color: #FF6A00; letter-spacing: 1px; }
 .lbl-weight-box {
   padding: 10px 20px;
   background: #FF6A00;
@@ -115,29 +106,47 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 90px;
-  border-right: 2px solid #1A0A4A;
+  min-width: 86px;
+  border-left: 2px solid #1A0A4A;
 }
-.lbl-weight-val { font-size: 26px; font-weight: 900; color: #fff; line-height: 1; }
-.lbl-weight-unit { font-size: 10px; color: rgba(255,255,255,.8); }
+.lbl-weight-lbl { font-size: 8px; color: rgba(255,255,255,.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.lbl-weight-val  { font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
+.lbl-weight-unit { font-size: 9px; color: rgba(255,255,255,.8); }
 
-/* ── BARCODE ROW ── */
+/* ── BARCODE ── */
 .lbl-barcode-row {
-  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 20px 10px;
+  padding: 12px 20px 8px;
   border-bottom: 2px solid #1A0A4A;
-  gap: 4px;
+  gap: 3px;
+  background: #fff;
 }
-.lbl-barcode-row svg, .lbl-barcode-row canvas { max-width: 100%; }
+#barcode { max-width: 100%; }
 .lbl-tracking-num {
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  color: #1A0A4A;
+  font-size: 16px; font-weight: 900;
+  letter-spacing: 3px; color: #1A0A4A;
   font-family: 'Courier New', monospace;
+}
+
+/* ── DELIVERY BANNER ── */
+.lbl-delivery {
+  background: #481DBC;
+  padding: 9px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #1A0A4A;
+}
+.lbl-delivery-left {}
+.lbl-delivery-lbl  { font-size: 9px; color: rgba(255,255,255,.55); letter-spacing: 1px; text-transform: uppercase; }
+.lbl-delivery-city { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: .5px; line-height: 1.1; }
+.lbl-delivery-zone {
+  background: #FF6A00; color: #fff;
+  font-size: 15px; font-weight: 900;
+  padding: 7px 18px; border-radius: 6px;
+  letter-spacing: 2px;
 }
 
 /* ── ADDRESSES ── */
@@ -146,171 +155,100 @@ body {
   grid-template-columns: 1fr 1fr;
   border-bottom: 2px solid #1A0A4A;
 }
-.lbl-addr-box {
-  padding: 14px 16px;
+.lbl-addr-to   { border-right: 1.5px solid #1A0A4A; }
+.lbl-addr-box  { padding: 12px 14px; }
+.lbl-addr-head {
+  font-size: 8px; font-weight: 800;
+  letter-spacing: 2px; color: #aaa;
+  text-transform: uppercase; margin-bottom: 6px;
+  padding-bottom: 5px; border-bottom: 1px solid #F0EEF9;
 }
-.lbl-addr-box:first-child {
-  border-left: 1.5px solid #1A0A4A;
-}
-.lbl-addr-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #888;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-.lbl-addr-name {
-  font-size: 15px;
-  font-weight: 900;
-  color: #1A0A4A;
-  margin-bottom: 4px;
-}
-.lbl-addr-line {
-  font-size: 12px;
-  color: #444;
-  margin-bottom: 2px;
-  line-height: 1.5;
-}
-.lbl-addr-phone {
-  font-size: 13px;
-  font-weight: 700;
-  color: #481DBC;
-  margin-top: 6px;
-  direction: ltr;
-  text-align: right;
-}
-
-/* ── DELIVERY SECTION ── */
-.lbl-delivery {
-  background: #481DBC;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid #1A0A4A;
-}
-.lbl-delivery-to {
-  font-size: 11px;
-  color: rgba(255,255,255,.6);
-}
-.lbl-delivery-city {
-  font-size: 28px;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: 1px;
-}
-.lbl-delivery-zone {
-  background: #FF6A00;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  padding: 6px 16px;
-  border-radius: 6px;
-  letter-spacing: 1px;
-}
+.lbl-addr-name  { font-size: 14px; font-weight: 900; color: #1A0A4A; margin-bottom: 3px; }
+.lbl-addr-line  { font-size: 11px; color: #555; line-height: 1.55; margin-bottom: 1px; }
+.lbl-addr-phone { font-size: 12px; font-weight: 700; color: #481DBC; margin-top: 6px; }
 
 /* ── DETAILS ROW ── */
 .lbl-details {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1.2fr;
   border-bottom: 2px solid #1A0A4A;
 }
-.lbl-detail-cell {
-  padding: 10px 14px;
-  border-left: 1px solid #E0DBF0;
+.lbl-dc {
+  padding: 9px 13px;
+  border-right: 1px solid #E0DBF0;
 }
-.lbl-detail-cell:last-child { border-left: none; }
-.lbl-detail-label {
-  font-size: 8.5px;
-  color: #aaa;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-}
-.lbl-detail-val {
-  font-size: 14px;
-  font-weight: 800;
-  color: #1A0A4A;
-}
-.lbl-detail-val.orange { color: #FF6A00; }
-.lbl-detail-val.green  { color: #15803D; }
+.lbl-dc:last-child { border-right: none; }
+.lbl-dc-lbl { font-size: 7.5px; color: #bbb; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+.lbl-dc-val { font-size: 13px; font-weight: 800; color: #1A0A4A; }
+.lbl-dc-val.orange { color: #FF6A00; }
 
-/* ── COD HIGHLIGHT ── */
+/* ── COD ROW ── */
 .lbl-cod-row {
   background: #FFF8E8;
   border-bottom: 2px solid #1A0A4A;
-  padding: 10px 20px;
+  padding: 9px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.lbl-cod-label { font-size: 12px; font-weight: 700; color: #92400E; }
-.lbl-cod-amount { font-size: 28px; font-weight: 900; color: #D97706; }
-.lbl-cod-unit { font-size: 12px; font-weight: 400; color: #aaa; }
+.lbl-cod-left {}
+.lbl-cod-title { font-size: 11px; font-weight: 800; color: #92400E; }
+.lbl-cod-sub   { font-size: 9px; color: #aaa; margin-top: 2px; }
+.lbl-cod-right { display: flex; align-items: baseline; gap: 5px; }
+.lbl-cod-amt   { font-size: 30px; font-weight: 900; color: #D97706; }
+.lbl-cod-cur   { font-size: 12px; color: #aaa; }
 
 /* ── FOOTER ── */
 .lbl-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  gap: 16px;
+  gap: 14px;
+  padding: 10px 16px;
   background: #FAFAFA;
 }
 .lbl-qr { flex-shrink: 0; }
-.lbl-footer-info { flex: 1; }
-.lbl-footer-ref { font-size: 11px; color: #888; margin-bottom: 3px; }
-.lbl-footer-ref strong { color: #1A0A4A; font-family: monospace; font-size: 12px; }
-.lbl-footer-notes { font-size: 11px; color: #666; margin-top: 6px; line-height: 1.6; }
-.lbl-footer-brand {
-  font-size: 10px;
-  color: #bbb;
-  text-align: center;
-  line-height: 1.5;
-}
-.lbl-footer-brand strong { color: #481DBC; font-size: 12px; display: block; }
+.lbl-footer-mid { flex: 1; }
+.lbl-fref { font-size: 10px; color: #999; margin-bottom: 3px; }
+.lbl-fref strong { color: #1A0A4A; font-family: 'Courier New', monospace; font-size: 11px; }
+.lbl-fnotes { font-size: 10px; color: #777; margin-top: 5px; line-height: 1.5; }
+.lbl-fbrand { text-align: right; font-size: 9px; color: #ccc; line-height: 1.6; }
+.lbl-fbrand strong { font-size: 12px; color: #481DBC; display: block; font-weight: 900; }
 
-/* ── INSTRUCTIONS BOX ── */
-.lbl-instructions {
-  border-top: 1.5px dashed #ccc;
-  margin: 0 20px;
-  padding: 8px 0 10px;
+/* ── CUT LINE ── */
+.lbl-cut {
+  border-top: 1.5px dashed #ddd;
+  margin: 0 16px;
+  padding: 6px 0 8px;
   display: flex;
-  gap: 20px;
-  font-size: 9.5px;
-  color: #999;
-  text-align: center;
+  justify-content: space-around;
+  font-size: 8.5px;
+  color: #ccc;
+  letter-spacing: .5px;
 }
-.lbl-instructions span { flex: 1; }
 
 /* ── PRINT ── */
 @media print {
-  body { background: #fff; padding: 0; }
+  body { background: #fff; padding: 0; margin: 0; }
   .actions { display: none !important; }
-  .label-wrapper {
-    box-shadow: none;
-    border-radius: 0;
-    max-width: 100%;
-  }
-  .label { border: 1.5px solid #000; }
-  @page { margin: 8mm; size: A5 landscape; }
+  .label-wrapper { box-shadow: none; border-radius: 0; max-width: 100%; width: 100%; }
+  .label { border: 1px solid #000; }
+  @page { margin: 5mm; size: A5; }
 }
 </style>
 </head>
 <body>
 
-<!-- ACTIONS BAR -->
+<!-- ACTIONS -->
 <div class="actions">
-  <div class="actions-title">بوليصة الشحن</div>
+  <div class="actions-title">Shipping Label</div>
   <div style="display:flex;gap:8px;">
     <button class="btn-back" onclick="history.back()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      رجوع
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
     </button>
     <button class="btn-print" onclick="window.print()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      طباعة البوليصة
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print Label
     </button>
   </div>
 </div>
@@ -322,201 +260,191 @@ body {
   <!-- HEADER -->
   <div class="lbl-header">
     <div class="lbl-logo-box">
-      <img src="logo.png" alt="مدار" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div style="display:none;font-size:22px;font-weight:900;color:#1A0A4A;letter-spacing:2px;">مدار</div>
-      <div class="lbl-logo-sub">منصة الخدمات اللوجستية</div>
+      <img src="logo.png" alt="Madar" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none;font-size:22px;font-weight:900;color:#1A0A4A;letter-spacing:3px;">MADAR</div>
+      <div class="lbl-logo-sub">Logistics Platform</div>
     </div>
     <div class="lbl-service-box">
-      <div class="lbl-service-label">نوع الخدمة</div>
-      <div class="lbl-service-name" id="lbl-service-name">آخر ميل</div>
-      <div class="lbl-service-en" id="lbl-service-en">Last Mile Express</div>
+      <div class="lbl-service-label">Service Type</div>
+      <div class="lbl-service-name" id="lbl-service-name">Last Mile</div>
     </div>
     <div class="lbl-weight-box">
+      <div class="lbl-weight-lbl">Weight</div>
       <div class="lbl-weight-val" id="lbl-weight">0.5</div>
-      <div class="lbl-weight-unit">كجم</div>
+      <div class="lbl-weight-unit">KG</div>
     </div>
   </div>
 
   <!-- BARCODE -->
   <div class="lbl-barcode-row">
     <svg id="barcode"></svg>
-    <div class="lbl-tracking-num" id="lbl-tracking"></div>
+    <div class="lbl-tracking-num" id="lbl-tracking">MDR0000000000</div>
   </div>
 
-  <!-- DELIVERY CITY -->
+  <!-- DELIVERY BANNER -->
   <div class="lbl-delivery">
-    <div>
-      <div class="lbl-delivery-to">التسليم إلى</div>
-      <div class="lbl-delivery-city" id="lbl-city">الرياض</div>
+    <div class="lbl-delivery-left">
+      <div class="lbl-delivery-lbl">Delivery To</div>
+      <div class="lbl-delivery-city" id="lbl-city">Riyadh</div>
     </div>
     <div class="lbl-delivery-zone" id="lbl-zone">RUH</div>
   </div>
 
   <!-- ADDRESSES -->
   <div class="lbl-addresses">
-    <!-- TO -->
-    <div class="lbl-addr-box">
-      <div class="lbl-addr-label">المستلم — Recipient</div>
-      <div class="lbl-addr-name" id="lbl-to-name">اسم المستلم</div>
-      <div class="lbl-addr-line" id="lbl-to-addr">العنوان</div>
+    <div class="lbl-addr-box lbl-addr-to">
+      <div class="lbl-addr-head">Recipient</div>
+      <div class="lbl-addr-name"  id="lbl-to-name">Recipient Name</div>
+      <div class="lbl-addr-line"  id="lbl-to-addr">Address</div>
       <div class="lbl-addr-phone" id="lbl-to-phone">05XXXXXXXX</div>
     </div>
-    <!-- FROM -->
     <div class="lbl-addr-box">
-      <div class="lbl-addr-label">المرسل — Sender</div>
-      <div class="lbl-addr-name" id="lbl-from-name">المتجر</div>
-      <div class="lbl-addr-line" id="lbl-from-addr">الرياض، المملكة العربية السعودية</div>
+      <div class="lbl-addr-head">Sender</div>
+      <div class="lbl-addr-name"  id="lbl-from-name">Store Name</div>
+      <div class="lbl-addr-line"  id="lbl-from-addr">Riyadh, Saudi Arabia</div>
       <div class="lbl-addr-phone" id="lbl-from-phone"></div>
     </div>
   </div>
 
-  <!-- DETAILS ROW -->
+  <!-- DETAILS -->
   <div class="lbl-details">
-    <div class="lbl-detail-cell">
-      <div class="lbl-detail-label">المحتوى</div>
-      <div class="lbl-detail-val" id="lbl-desc">بضاعة</div>
+    <div class="lbl-dc">
+      <div class="lbl-dc-lbl">Contents</div>
+      <div class="lbl-dc-val" id="lbl-desc">General Goods</div>
     </div>
-    <div class="lbl-detail-cell">
-      <div class="lbl-detail-label">عدد القطع</div>
-      <div class="lbl-detail-val" id="lbl-pieces">1</div>
+    <div class="lbl-dc">
+      <div class="lbl-dc-lbl">Pieces</div>
+      <div class="lbl-dc-val" id="lbl-pieces">1</div>
     </div>
-    <div class="lbl-detail-cell">
-      <div class="lbl-detail-label">التغليف</div>
-      <div class="lbl-detail-val orange" id="lbl-pkg">عادي</div>
+    <div class="lbl-dc">
+      <div class="lbl-dc-lbl">Packaging</div>
+      <div class="lbl-dc-val orange" id="lbl-pkg">Standard</div>
     </div>
-    <div class="lbl-detail-cell">
-      <div class="lbl-detail-label">التاريخ</div>
-      <div class="lbl-detail-val" id="lbl-date">2026-06-03</div>
+    <div class="lbl-dc">
+      <div class="lbl-dc-lbl">Date</div>
+      <div class="lbl-dc-val" id="lbl-date">2026-06-03</div>
     </div>
   </div>
 
   <!-- COD -->
   <div class="lbl-cod-row" id="lbl-cod-row">
-    <div>
-      <div class="lbl-cod-label">الدفع عند الاستلام — Cash on Delivery</div>
-      <div style="font-size:10px;color:#aaa;margin-top:2px;">يرجى تحصيل المبلغ قبل التسليم</div>
+    <div class="lbl-cod-left">
+      <div class="lbl-cod-title">Cash on Delivery (COD)</div>
+      <div class="lbl-cod-sub">Collect before handover</div>
     </div>
-    <div style="display:flex;align-items:baseline;gap:6px;">
-      <div class="lbl-cod-amount" id="lbl-cod-amount">150</div>
-      <div class="lbl-cod-unit">ر.س.</div>
+    <div class="lbl-cod-right">
+      <div class="lbl-cod-amt" id="lbl-cod-amount">150</div>
+      <div class="lbl-cod-cur">SAR</div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <div class="lbl-footer">
     <div class="lbl-qr" id="qr-code"></div>
-    <div class="lbl-footer-info">
-      <div class="lbl-footer-ref">رقم الطلب: <strong id="lbl-order-id">ORD-XXXX</strong></div>
-      <div class="lbl-footer-ref">رقم التتبع: <strong id="lbl-tracking-ref">MDR-XXXXXXXXXX</strong></div>
-      <div class="lbl-footer-notes" id="lbl-notes"></div>
+    <div class="lbl-footer-mid">
+      <div class="lbl-fref">Order No: <strong id="lbl-order-id">ORD-XXXX</strong></div>
+      <div class="lbl-fref">Tracking: <strong id="lbl-tracking-ref">MDR0000000000</strong></div>
+      <div class="lbl-fnotes" id="lbl-notes"></div>
     </div>
-    <div class="lbl-footer-brand">
-      <strong>مدار لوجستيك</strong>
+    <div class="lbl-fbrand">
+      <strong>MADAR Logistics</strong>
       madarlogistic.com<br>
       support@madarlogistic.com
     </div>
   </div>
 
-  <!-- INSTRUCTIONS -->
-  <div class="lbl-instructions">
-    <span>لا تطوِ البوليصة</span>
-    <span>ثبّت على أعلى الطرد بوضوح</span>
-    <span>احتفظ بنسخة لمتابعة الشحنة</span>
-    <span>للاستفسار: madarlogistic.com/track</span>
+  <!-- CUT LINE -->
+  <div class="lbl-cut">
+    <span>Do not fold</span>
+    <span>Attach clearly on top of parcel</span>
+    <span>Keep a copy for tracking</span>
+    <span>Track: madarlogistic.com/track</span>
   </div>
 
 </div>
 </div>
 
 <script>
-/* ─── CITY CODES ─── */
-const CITY_CODES = {
-  'الرياض':'RUH', 'جدة':'JED', 'الدمام':'DMM', 'مكة المكرمة':'MKK',
-  'المدينة المنورة':'MED', 'الطائف':'TIF', 'تبوك':'TUU', 'أبها':'AHB',
-  'الجبيل':'QJB', 'ينبع':'YNB', 'حائل':'HAS', 'القصيم':'ELQ',
-  'نجران':'NJR', 'جازان':'GIZ',
+const CITY_EN = {
+  'الرياض':'Riyadh',       'جدة':'Jeddah',        'الدمام':'Dammam',
+  'مكة المكرمة':'Makkah',  'المدينة المنورة':'Madinah', 'الطائف':'Taif',
+  'تبوك':'Tabuk',          'أبها':'Abha',          'الجبيل':'Jubail',
+  'ينبع':'Yanbu',          'حائل':'Hail',          'القصيم':'Qassim',
+  'نجران':'Najran',        'جازان':'Jazan',
+};
+const CITY_CODE = {
+  'الرياض':'RUH','جدة':'JED','الدمام':'DMM','مكة المكرمة':'MKK',
+  'المدينة المنورة':'MED','الطائف':'TIF','تبوك':'TUU','أبها':'AHB',
+  'الجبيل':'QJB','ينبع':'YNB','حائل':'HAS','القصيم':'ELQ',
+  'نجران':'NJR','جازان':'GIZ',
+};
+const PKG_EN = {
+  'عادي':'Standard','هدية':'Gift','علامة تجارية':'Branded','واقي':'Protected',
+  'Standard':'Standard','Gift':'Gift','Branded':'Branded','Protected':'Protected',
+};
+const SVC_EN = {
+  'آخر ميل':'Last Mile Express','B2B':'B2B Freight','تخزين':'Warehousing',
 };
 
-const SERVICE_EN = {
-  'آخر ميل':'Last Mile Express',
-  'B2B':'Business to Business',
-  'تخزين':'Warehousing',
-};
-
-/* ─── LOAD DATA ─── */
 function loadLabel() {
-  // Try URL params first, then localStorage
   const params = new URLSearchParams(window.location.search);
   const stored = JSON.parse(localStorage.getItem('madar_label') || '{}');
+  const get = (k, def='') => params.get(k) || stored[k] || def;
 
-  const get = (key, fallback='') => params.get(key) || stored[key] || fallback;
+  const orderId  = get('id',       'ORD-8831');
+  const tracking = get('tracking', 'MDR' + Date.now().toString().slice(-10));
+  const toName   = get('toName',   'Saad Al-Maliki');
+  const toAddr   = get('toAddr',   'Al-Nuzha District, Riyadh');
+  const toPhone  = get('toPhone',  '0512340001');
+  const fromName = get('fromName', 'Madar Store');
+  const fromAddr = get('fromAddr', 'Riyadh, Saudi Arabia');
+  const fromPhone= get('fromPhone','');
+  const city     = get('city',     'الرياض');
+  const service  = get('service',  'آخر ميل');
+  const weight   = get('weight',   '0.5');
+  const desc     = get('desc',     'General Goods');
+  const pieces   = get('pieces',   '1');
+  const pkg      = get('pkg',      'عادي');
+  const cod      = parseFloat(get('cod','0'));
+  const notes    = get('notes',    '');
 
-  const orderId   = get('id',       'ORD-8831');
-  const tracking  = get('tracking', 'MDR' + Date.now().toString().slice(-10));
-  const toName    = get('toName',   'سعد المالكي');
-  const toAddr    = get('toAddr',   'حي النزهة، الرياض');
-  const toPhone   = get('toPhone',  '0512340001');
-  const fromName  = get('fromName', 'متجر مدار');
-  const fromAddr  = get('fromAddr', 'الرياض، المملكة العربية السعودية');
-  const fromPhone = get('fromPhone','');
-  const city      = get('city',     'الرياض');
-  const service   = get('service',  'آخر ميل');
-  const weight    = get('weight',   '0.5');
-  const desc      = get('desc',     'بضاعة متنوعة');
-  const pieces    = get('pieces',   '1');
-  const pkg       = get('pkg',      'عادي');
-  const cod       = parseFloat(get('cod', '0'));
-  const notes     = get('notes',    '');
+  document.getElementById('lbl-tracking').textContent     = tracking;
+  document.getElementById('lbl-tracking-ref').textContent = tracking;
+  document.getElementById('lbl-order-id').textContent     = orderId;
+  document.getElementById('lbl-to-name').textContent      = toName;
+  document.getElementById('lbl-to-addr').textContent      = toAddr;
+  document.getElementById('lbl-to-phone').textContent     = toPhone;
+  document.getElementById('lbl-from-name').textContent    = fromName;
+  document.getElementById('lbl-from-addr').textContent    = fromAddr;
+  document.getElementById('lbl-from-phone').textContent   = fromPhone;
+  document.getElementById('lbl-city').textContent         = CITY_EN[city] || city;
+  document.getElementById('lbl-zone').textContent         = CITY_CODE[city] || 'KSA';
+  document.getElementById('lbl-service-name').textContent = SVC_EN[service] || service;
+  document.getElementById('lbl-weight').textContent       = weight;
+  document.getElementById('lbl-desc').textContent         = desc;
+  document.getElementById('lbl-pieces').textContent       = pieces;
+  document.getElementById('lbl-pkg').textContent          = PKG_EN[pkg] || pkg;
+  document.getElementById('lbl-date').textContent         = new Date().toLocaleDateString('en-GB');
 
-  // Set values
-  document.getElementById('lbl-tracking').textContent      = tracking;
-  document.getElementById('lbl-tracking-ref').textContent  = tracking;
-  document.getElementById('lbl-order-id').textContent      = orderId;
-  document.getElementById('lbl-to-name').textContent       = toName;
-  document.getElementById('lbl-to-addr').textContent       = toAddr;
-  document.getElementById('lbl-to-phone').textContent      = toPhone;
-  document.getElementById('lbl-from-name').textContent     = fromName;
-  document.getElementById('lbl-from-addr').textContent     = fromAddr;
-  document.getElementById('lbl-from-phone').textContent    = fromPhone;
-  document.getElementById('lbl-city').textContent          = city;
-  document.getElementById('lbl-zone').textContent          = CITY_CODES[city] || 'KSA';
-  document.getElementById('lbl-service-name').textContent  = service;
-  document.getElementById('lbl-service-en').textContent    = SERVICE_EN[service] || service;
-  document.getElementById('lbl-weight').textContent        = weight;
-  document.getElementById('lbl-desc').textContent          = desc;
-  document.getElementById('lbl-pieces').textContent        = pieces;
-  document.getElementById('lbl-pkg').textContent           = pkg;
-  document.getElementById('lbl-date').textContent          = new Date().toLocaleDateString('ar-SA');
-
-  // COD
   if (cod > 0) {
-    document.getElementById('lbl-cod-amount').textContent = cod.toLocaleString('ar-SA');
+    document.getElementById('lbl-cod-amount').textContent = cod.toLocaleString();
   } else {
     document.getElementById('lbl-cod-row').style.display = 'none';
   }
 
-  // Notes
   if (notes) {
-    document.getElementById('lbl-notes').textContent = 'ملاحظات: ' + notes;
+    document.getElementById('lbl-notes').textContent = 'Notes: ' + notes;
   }
 
-  // Barcode
   JsBarcode('#barcode', tracking, {
-    format: 'CODE128',
-    width: 2.2,
-    height: 60,
-    displayValue: false,
-    margin: 8,
-    lineColor: '#1A0A4A',
+    format: 'CODE128', width: 2.4, height: 62,
+    displayValue: false, margin: 6, lineColor: '#1A0A4A',
   });
 
-  // QR Code
   new QRCode(document.getElementById('qr-code'), {
     text: 'https://madarlogistic.com/track?q=' + tracking,
-    width: 72,
-    height: 72,
-    colorDark: '#1A0A4A',
-    colorLight: '#ffffff',
+    width: 70, height: 70,
+    colorDark: '#1A0A4A', colorLight: '#fff',
     correctLevel: QRCode.CorrectLevel.M,
   });
 }
