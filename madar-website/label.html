@@ -7,361 +7,535 @@
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
+
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: #ccc;
+  background: #b0b0b0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 16px;
-  gap: 14px;
+  justify-content: flex-start;
+  padding: 24px 16px 40px;
+  gap: 12px;
+  min-height: 100vh;
 }
 
-/* ── ACTIONS ── */
+/* ── ACTIONS BAR ── */
 .actions {
-  display: flex; gap: 10px;
-  background: #fff; padding: 10px 18px;
-  border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.15);
-  width: 148mm; justify-content: flex-end;
+  display: flex;
+  gap: 8px;
+  background: #fff;
+  padding: 9px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  width: 148mm;
+  justify-content: flex-end;
 }
-.btn { padding: 8px 20px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.btn {
+  padding: 7px 18px;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
 .btn-print { background: #481DBC; color: #fff; }
 .btn-print:hover { background: #3a169a; }
 .btn-back  { background: #eee; color: #333; }
 .btn-back:hover { background: #ddd; }
 
-/* ── LABEL SHEET ── */
+/* ══════════════════════════════
+   LABEL — exactly A5 (148×210mm)
+   ══════════════════════════════ */
 .label {
   width: 148mm;
   height: 210mm;
   background: #fff;
-  border: 2px solid #000;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 8pt;
-  color: #000;
+  border: 1.5px solid #000;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 7.5pt;
+  color: #000;
 }
 
-/* ── ROW HELPER ── */
-.row { display: flex; border-bottom: 1.5px solid #000; flex-shrink: 0; }
-.row:last-child { border-bottom: none; }
-.cell {
-  padding: 3px 5px;
+/* shared border util */
+.bb { border-bottom: 1px solid #000; }
+.br { border-right:  1px solid #000; }
+.bt { border-top:    1px solid #000; }
+
+/* ── ROW 1: Logo + Horizontal Barcode ── */
+.r-logo-bar {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1.5px solid #000;
+  flex-shrink: 0;
+  height: 18mm;
+}
+.logo-box {
+  width: 34mm;
+  display: flex;
+  align-items: center;
+  padding: 4px 6px;
   border-right: 1.5px solid #000;
+  flex-shrink: 0;
+}
+.logo-text {
+  font-size: 22pt;
+  font-weight: 900;
+  color: #481DBC;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.logo-sub {
+  font-size: 5pt;
+  color: #888;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.bar-box {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-end;
+  padding: 3px 5px 2px;
 }
-.cell:last-child { border-right: none; }
-
-/* ROW 1: Logo + Barcode */
-.r1-logo { width: 36mm; padding: 4px 6px; }
-.r1-logo img { height: 28px; }
-.r1-barcode { flex: 1; padding: 4px 6px 2px; align-items: flex-end; }
-.r1-barcode svg { max-width: 100%; height: 32px; }
-.tracking-num { font-size: 8pt; font-weight: 700; letter-spacing: 1px; text-align: right; margin-top: 1px; }
-
-/* ROW 2: Origin / Dest / Meta */
-.r2-origin { width: 36mm; padding: 4px 6px; }
-.r2-dest   { width: 36mm; padding: 4px 6px; border-right: 1.5px solid #000; }
-.r2-meta   { flex: 1; padding: 4px 6px; }
-.lbl-small { font-size: 6.5pt; color: #555; }
-.city-big  { font-size: 26pt; font-weight: 900; line-height: 1; letter-spacing: -1px; }
-.meta-row  { display: flex; gap: 4px; align-items: baseline; margin-bottom: 2px; }
-.meta-lbl  { font-size: 6.5pt; color: #555; width: 56px; }
-.meta-val  { font-size: 7.5pt; font-weight: 700; }
-
-/* ROW 3: Service Codes — big boxes */
-.r3 { display: flex; border-bottom: 1.5px solid #000; flex-shrink: 0; }
-.svc-box {
-  flex: 1; text-align: center;
-  padding: 6px 4px; border-right: 1.5px solid #000;
-  font-size: 18pt; font-weight: 900; letter-spacing: 1px;
-  line-height: 1;
+.bar-box svg { width: 100%; height: 30px; }
+.tracking-no {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-top: 1px;
 }
-.svc-box:last-child { border-right: none; }
-.svc-box.highlight { background: #000; color: #fff; }
 
-/* ROW 4: Weight / Pieces */
-.r4 { display: flex; border-bottom: 1.5px solid #000; flex-shrink: 0; }
-.r4 .cell { font-size: 7.5pt; }
-.r4 .cell strong { font-size: 9pt; }
+/* ── ROW 2: Origin | Destination | Meta ── */
+.r-cities {
+  display: flex;
+  border-bottom: 1.5px solid #000;
+  flex-shrink: 0;
+  height: 22mm;
+}
+.city-col {
+  width: 28mm;
+  flex-shrink: 0;
+  padding: 3px 5px;
+  border-right: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.city-lbl  { font-size: 5.5pt; color: #666; margin-bottom: 1px; }
+.city-code { font-size: 28pt; font-weight: 900; line-height: 1; color: #000; }
+.meta-col {
+  flex: 1;
+  padding: 3px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+}
+.meta-line { display: flex; align-items: baseline; gap: 3px; }
+.meta-k { font-size: 6pt; color: #666; width: 55px; flex-shrink: 0; }
+.meta-v { font-size: 7pt; font-weight: 700; }
 
-/* ROW 5: Services bar */
-.r5-svc {
-  background: #000; color: #fff;
-  padding: 3px 6px; font-size: 8.5pt; font-weight: 700;
-  letter-spacing: 0.5px;
+/* ── ROW 3: Service Code Boxes ── */
+.r-svc-codes {
+  display: flex;
   border-bottom: 1.5px solid #000;
   flex-shrink: 0;
 }
+.svc-box {
+  flex: 1;
+  text-align: center;
+  padding: 5px 2px;
+  font-size: 20pt;
+  font-weight: 900;
+  line-height: 1;
+  border-right: 1.5px solid #000;
+  letter-spacing: 0.5px;
+}
+.svc-box:last-child { border-right: none; }
+.svc-box.inv { background: #000; color: #fff; }
 
-/* ROW 6: COD */
-.r6-cod { border-bottom: 1.5px solid #000; padding: 3px 6px; font-size: 7.5pt; flex-shrink: 0; }
-.cod-val { font-size: 11pt; font-weight: 900; color: #c00; }
+/* ── ROW 4: Pieces / Weight / Chargeable ── */
+.r-weights {
+  display: flex;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+}
+.wt-cell {
+  flex: 1;
+  padding: 3px 5px;
+  border-right: 1px solid #000;
+  font-size: 7pt;
+}
+.wt-cell:last-child { border-right: none; }
+.wt-cell .wk { font-size: 5.5pt; color: #666; display: block; }
+.wt-cell .wv { font-size: 9pt; font-weight: 900; }
 
-/* ROW 7: Account */
-.r7-acct { border-bottom: 1.5px solid #000; padding: 3px 6px; flex-shrink: 0; }
-.acct-lbl { font-size: 6.5pt; color: #555; }
-.acct-num { font-size: 11pt; font-weight: 900; }
+/* ── ROW 5: Services bar (black) ── */
+.r-svc-bar {
+  background: #000;
+  color: #fff;
+  padding: 3px 6px;
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+}
 
-/* ROW 8: Addresses + vertical barcode */
-.r8 { display: flex; border-bottom: 1.5px solid #000; flex: 1; }
-.r8-addr { flex: 1; padding: 5px 6px; border-right: 1.5px solid #000; }
-.r8-addr.right { border-right: none; }
-.addr-type { font-size: 6.5pt; color: #555; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+/* ── ROW 6: COD (hidden if 0) ── */
+.r-cod {
+  display: none;
+  padding: 3px 6px;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+}
+.r-cod.show { display: flex; }
+.cod-lbl { font-size: 6pt; color: #666; }
+.cod-val { font-size: 12pt; font-weight: 900; color: #c00; }
+.cod-cur { font-size: 8pt; font-weight: 700; }
+.cod-customs { margin-left: auto; font-size: 6pt; color: #666; }
+
+/* ── ROW 7: Account ── */
+.r-account {
+  padding: 3px 6px;
+  border-bottom: 1.5px solid #000;
+  flex-shrink: 0;
+}
+.acct-lbl { font-size: 5.5pt; color: #666; }
+.acct-no  { font-size: 12pt; font-weight: 900; line-height: 1.1; }
+.acct-store { font-size: 8pt; font-weight: 700; }
+
+/* ── ROW 8: Addresses (grow) + Vertical Barcode ── */
+.r-addresses {
+  display: flex;
+  flex: 1;
+  border-bottom: 1.5px solid #000;
+  min-height: 0;
+}
+.addr-block {
+  flex: 1;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
+  overflow: hidden;
+}
+.addr-top, .addr-bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.addr-divider {
+  height: 1px;
+  background: #000;
+  margin: 4px 0;
+  flex-shrink: 0;
+}
+.addr-type { font-size: 5.5pt; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
 .addr-name { font-size: 10pt; font-weight: 900; line-height: 1.2; }
-.addr-company { font-size: 8.5pt; font-weight: 700; margin-bottom: 2px; }
-.addr-line { font-size: 7.5pt; line-height: 1.4; }
-.addr-phone { font-size: 8pt; font-weight: 700; margin-top: 4px; letter-spacing: 0.5px; }
-.r8-vbar { width: 12mm; display: flex; align-items: center; justify-content: center; padding: 3px 2px; }
-.r8-vbar svg { transform: rotate(90deg); }
+.addr-co   { font-size: 8pt; font-weight: 700; margin-bottom: 1px; }
+.addr-line { font-size: 7pt; line-height: 1.5; }
+.addr-phone { font-size: 8pt; font-weight: 700; margin-top: 3px; letter-spacing: 0.5px; }
 
-/* ROW 9: Footer refs */
-.r9-footer { padding: 3px 6px; font-size: 6.5pt; display: flex; justify-content: space-between; flex-shrink: 0; }
-.r9-footer span { color: #333; }
-.r9-footer strong { font-size: 7.5pt; }
+/* vertical barcode column */
+.vbar-col {
+  width: 11mm;
+  flex-shrink: 0;
+  border-left: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 3px 1px;
+}
+.vbar-col svg {
+  transform: rotate(90deg);
+  transform-origin: center center;
+  width: 55mm;   /* becomes height when rotated */
+  height: 9mm;   /* becomes width when rotated */
+}
+
+/* ── ROW 9: Footer refs ── */
+.r-footer {
+  padding: 2px 5px;
+  font-size: 5.5pt;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.footer-row { display: flex; gap: 12px; }
+.footer-row span { color: #333; }
+.footer-row strong { font-size: 6.5pt; }
 
 /* ── PRINT ── */
 @media print {
   body { background: #fff; padding: 0; margin: 0; }
   .actions { display: none !important; }
-  .label { width: 148mm; height: 210mm; border: 1px solid #000; box-shadow: none; page-break-inside: avoid; }
+  .label {
+    width: 148mm;
+    height: 210mm;
+    border: 1px solid #000;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
   @page { margin: 0; size: A5 portrait; }
 }
 </style>
 </head>
 <body>
 
+<!-- ACTIONS -->
 <div class="actions">
   <button class="btn btn-back" onclick="history.back()">&#8592; Back</button>
   <button class="btn btn-print" onclick="window.print()">&#128438; Print Label</button>
 </div>
 
-<div class="label" id="label">
+<!-- ═══════════════ LABEL ═══════════════ -->
+<div class="label">
 
   <!-- ROW 1: LOGO + BARCODE -->
-  <div class="row">
-    <div class="cell r1-logo">
-      <img src="logo.png" alt="MADAR" onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'">
-      <div id="logo-text" style="display:none;font-size:18pt;font-weight:900;color:#481DBC;letter-spacing:-1px;">MADAR</div>
+  <div class="r-logo-bar">
+    <div class="logo-box">
+      <div style="display:flex;flex-direction:column;">
+        <!-- Try image first, fallback to text -->
+        <img id="logo-img" src="logo.png" alt="MADAR"
+             style="height:26px;object-fit:contain;object-position:left;"
+             onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
+        <div id="logo-fallback" style="display:none;">
+          <div class="logo-text">MADAR</div>
+        </div>
+        <div class="logo-sub">Logistics</div>
+      </div>
     </div>
-    <div class="cell r1-barcode">
+    <div class="bar-box">
       <svg id="barcode-h"></svg>
-      <div class="tracking-num" id="tracking-display"></div>
+      <div class="tracking-no" id="tracking-display"></div>
     </div>
   </div>
 
-  <!-- ROW 2: ORIGIN / DESTINATION / META -->
-  <div class="row">
-    <div class="cell r2-origin">
-      <div class="lbl-small">Origin:</div>
-      <div class="city-big" id="city-origin">RUH</div>
+  <!-- ROW 2: ORIGIN | DESTINATION | META -->
+  <div class="r-cities">
+    <div class="city-col">
+      <div class="city-lbl">Origin:</div>
+      <div class="city-code" id="city-origin">RUH</div>
     </div>
-    <div class="cell r2-dest">
-      <div class="lbl-small">Destination:</div>
-      <div class="city-big" id="city-dest">RUH</div>
+    <div class="city-col" style="border-right:1.5px solid #000;">
+      <div class="city-lbl">Destination:</div>
+      <div class="city-code" id="city-dest">RUH</div>
     </div>
-    <div class="cell r2-meta" style="flex:1">
-      <div class="meta-row">
-        <span class="meta-lbl">Date:</span>
-        <span class="meta-val" id="lbl-date"></span>
-      </div>
-      <div class="meta-row">
-        <span class="meta-lbl">Order Ref:</span>
-        <span class="meta-val" id="lbl-order"></span>
-      </div>
-      <div class="meta-row">
-        <span class="meta-lbl">Merchant ID:</span>
-        <span class="meta-val" id="lbl-merchant"></span>
-      </div>
+    <div class="meta-col">
+      <div class="meta-line"><span class="meta-k">Date:</span><span class="meta-v" id="meta-date"></span></div>
+      <div class="meta-line"><span class="meta-k">Order Ref:</span><span class="meta-v" id="meta-order"></span></div>
+      <div class="meta-line"><span class="meta-k">Merchant ID:</span><span class="meta-v" id="meta-merchant"></span></div>
+      <div class="meta-line"><span class="meta-k">Pieces:</span><span class="meta-v" id="meta-pieces">1</span></div>
     </div>
   </div>
 
   <!-- ROW 3: SERVICE CODE BOXES -->
-  <div class="r3">
-    <div class="svc-box" id="svc-type">DOM</div>
-    <div class="svc-box highlight" id="svc-code">EXP</div>
-    <div class="svc-box" id="svc-pkg-code">P</div>
+  <div class="r-svc-codes">
+    <div class="svc-box" id="svc-a">DOM</div>
+    <div class="svc-box inv" id="svc-b">EXP</div>
+    <div class="svc-box" id="svc-c">P</div>
   </div>
 
-  <!-- ROW 4: PIECES / WEIGHT / CHARGEABLE -->
-  <div class="r4">
-    <div class="cell" style="width:33%">
-      <span class="lbl-small">Pieces:</span>
-      <strong id="lbl-pieces">1</strong>
+  <!-- ROW 4: WEIGHT / CHARGEABLE -->
+  <div class="r-weights">
+    <div class="wt-cell">
+      <span class="wk">Weight:</span>
+      <span class="wv" id="wt-weight">0.5 KG</span>
     </div>
-    <div class="cell" style="width:33%">
-      <span class="lbl-small">Weight:</span>
-      <strong id="lbl-weight">0.5 KG</strong>
+    <div class="wt-cell">
+      <span class="wk">Chargeable:</span>
+      <span class="wv" id="wt-charge">0.5 KG</span>
     </div>
-    <div class="cell" style="flex:1">
-      <span class="lbl-small">Chargeable:</span>
-      <strong id="lbl-chargeable">0.5 KG</strong>
+    <div class="wt-cell">
+      <span class="wk">Package:</span>
+      <span class="wv" id="wt-pkg">Parcel</span>
     </div>
   </div>
 
-  <!-- ROW 5: SERVICE BAR -->
-  <div class="r5-svc">Services: <span id="lbl-service-bar">Standard Delivery</span></div>
+  <!-- ROW 5: SERVICES BAR -->
+  <div class="r-svc-bar">Services: <span id="svc-bar-txt">Standard Delivery</span></div>
 
-  <!-- ROW 6: COD (shown only if cod > 0) -->
-  <div class="r6-cod" id="cod-row" style="display:none">
-    <span class="lbl-small">Cash on Delivery (COD):</span>
-    <span class="cod-val" id="lbl-cod"></span>
-    <span style="font-size:7.5pt"> SAR</span>
-    <span style="float:right;font-size:7pt;color:#666;">Customs: &mdash;</span>
+  <!-- ROW 6: COD -->
+  <div class="r-cod" id="cod-row">
+    <span class="cod-lbl">Cash on Delivery:</span>
+    <span class="cod-val" id="cod-amount"></span>
+    <span class="cod-cur">SAR</span>
+    <span class="cod-customs">Customs: &mdash;</span>
   </div>
 
   <!-- ROW 7: ACCOUNT -->
-  <div class="r7-acct">
-    <div class="acct-lbl">Merchant Account</div>
-    <div class="acct-num" id="lbl-acct-num">MAD-00000</div>
-    <div style="font-size:8.5pt;font-weight:700;margin-top:1px;" id="lbl-store-name"></div>
+  <div class="r-account">
+    <div class="acct-lbl">Account</div>
+    <div class="acct-no" id="acct-no">MAD-00000</div>
+    <div class="acct-store" id="acct-store"></div>
   </div>
 
-  <!-- ROW 8: RECIPIENT + SENDER + VERTICAL BARCODE -->
-  <div class="r8">
-    <div class="r8-addr" style="flex:1">
-      <div class="addr-type">Consignee (Recipient)</div>
-      <div class="addr-name" id="to-name"></div>
-      <div class="addr-line" id="to-addr"></div>
-      <div class="addr-line" id="to-city-country"></div>
-      <div class="addr-phone" id="to-phone"></div>
+  <!-- ROW 8: ADDRESSES + VERTICAL BARCODE -->
+  <div class="r-addresses">
+    <div class="addr-block">
+
+      <!-- CONSIGNEE -->
+      <div class="addr-top">
+        <div class="addr-type">Consignee</div>
+        <div class="addr-co"  id="to-co"></div>
+        <div class="addr-name" id="to-name"></div>
+        <div class="addr-line" id="to-addr"></div>
+        <div class="addr-line" id="to-city"></div>
+        <div class="addr-phone" id="to-phone"></div>
+      </div>
+
+      <div class="addr-divider"></div>
+
+      <!-- SHIPPER -->
+      <div class="addr-bottom">
+        <div class="addr-type">Shipper</div>
+        <div class="addr-name" id="from-name"></div>
+        <div class="addr-line" id="from-addr"></div>
+        <div class="addr-line" id="from-city"></div>
+        <div class="addr-phone" id="from-phone"></div>
+      </div>
+
     </div>
-    <div class="r8-vbar">
-      <svg id="barcode-v" width="70" height="10"></svg>
-    </div>
-    <div class="r8-addr right" style="flex:1">
-      <div class="addr-type">Shipper (Sender)</div>
-      <div class="addr-name" id="from-name"></div>
-      <div class="addr-line" id="from-addr"></div>
-      <div class="addr-line" id="from-city-country"></div>
-      <div class="addr-phone" id="from-phone"></div>
+
+    <!-- VERTICAL BARCODE -->
+    <div class="vbar-col">
+      <svg id="barcode-v"></svg>
     </div>
   </div>
 
-  <!-- ROW 9: FOOTER REFS -->
-  <div class="r9-footer">
-    <span>Shipper Ref: <strong id="footer-order"></strong></span>
-    <span>Consignee Ref: <strong id="footer-tracking"></strong></span>
-    <span>Description: <strong id="footer-desc"></strong></span>
+  <!-- ROW 9: FOOTER -->
+  <div class="r-footer">
+    <div class="footer-row">
+      <span>Shipper Ref: <strong id="footer-order"></strong></span>
+      <span>Consignee Ref: <strong id="footer-tracking"></strong></span>
+    </div>
+    <div class="footer-row">
+      <span>Description: <strong id="footer-desc"></strong></span>
+      <span style="margin-left:auto;color:#999;">madarlogistic.com</span>
+    </div>
   </div>
 
 </div><!-- /label -->
 
 <script>
-/* ── CITY MAPS ── */
+/* ── MAPS ── */
 const CITY_CODE = {
   'الرياض':'RUH','جدة':'JED','الدمام':'DMM','مكة المكرمة':'MEC',
   'المدينة المنورة':'MED','الطائف':'TIF','أبها':'AHB','تبوك':'TUU',
-  'حائل':'HAS','جازان':'GIZ','نجران':'EAM','الباحة':'ABT','القصيم':'ULH',
-  'عرعر':'RAE','سكاكا':'AJF'
+  'حائل':'HAS','جازان':'GIZ','نجران':'EAM','الباحة':'ABT',
+  'القصيم':'ULH','عرعر':'RAE','سكاكا':'AJF'
 };
-const SVC_CODE = {
-  'شحن':'EXP','تخزين وشحن':'EXP','شحن وتخزين':'EXP','standard':'STD'
-};
-const PKG_CODE = {
-  'عادي':'P','مجمد':'F','هش':'F','ثقيل':'H','normal':'P','frozen':'F'
-};
-const SVC_EN = {
-  'شحن':'Standard Delivery','شحن وتخزين':'Express + Storage',
+const SVC_MAP = {
+  'شحن':'Standard Delivery',
+  'شحن وتخزين':'Express + Storage',
   'تخزين وشحن':'Express + Storage'
+};
+const SVC_CODE_MAP = {
+  'شحن':'STD','شحن وتخزين':'EXP','تخزين وشحن':'EXP'
+};
+const PKG_MAP = {
+  'عادي':'Parcel','مجمد':'Frozen','هش':'Fragile','ثقيل':'Heavy'
+};
+const PKG_CODE_MAP = {
+  'عادي':'P','مجمد':'F','هش':'F','ثقيل':'H'
 };
 
 /* ── LOAD DATA ── */
 let D = {};
 try { D = JSON.parse(localStorage.getItem('madar_label') || '{}'); } catch(e) {}
+
+/* URL params fallback */
 if (!D.tracking) {
   const p = new URLSearchParams(location.search);
   if (p.get('tracking')) {
-    D = {
-      tracking: p.get('tracking') || 'MDR0000000001',
-      id: p.get('id') || 'ORD-00001',
-      toName: p.get('toName') || 'John Doe',
-      toAddr: p.get('toAddr') || '123 Main Street',
-      toPhone: p.get('toPhone') || '',
-      fromName: p.get('fromName') || 'MADAR Store',
-      fromAddr: p.get('fromAddr') || 'Riyadh, Saudi Arabia',
-      fromPhone: p.get('fromPhone') || '',
-      city: p.get('city') || 'الرياض',
-      service: p.get('service') || 'شحن',
-      weight: p.get('weight') || '0.5',
-      pieces: p.get('pieces') || '1',
-      pkg: p.get('pkg') || 'عادي',
-      cod: p.get('cod') || '0',
-      desc: p.get('desc') || 'General Goods',
-      merchantId: p.get('merchantId') || 'MAD-00000',
-      storeName: p.get('storeName') || ''
-    };
+    ['tracking','id','toName','toAddr','toPhone','fromName','fromAddr','fromPhone',
+     'city','fromCity','service','weight','pieces','pkg','cod','desc','merchantId','storeName']
+    .forEach(k => { if (p.get(k)) D[k] = p.get(k); });
   }
 }
 
-/* ── FALLBACK DEMO DATA ── */
+/* Demo data if nothing */
 if (!D.tracking) {
   D = {
-    tracking:'MDR202500001',id:'ORD-2025-001',
-    toName:'Ahmed Al-Rashidi',toAddr:'King Fahd Road, Al Olaya District',
-    toPhone:'0501234567',fromName:'Store Manager',
-    fromAddr:'Industrial Area, Riyadh',fromPhone:'0112345678',
-    city:'الرياض',service:'شحن',weight:'1.5',pieces:'1',
-    pkg:'عادي',cod:'150',desc:'General Merchandise',
-    merchantId:'MAD-10399',storeName:'Al Amal Trading'
+    tracking:'MDR202500001', id:'ORD-2025-001',
+    toName:'Ahmed Al-Rashidi', toAddr:'King Fahd Road, Al Olaya District',
+    toPhone:'0501234567',
+    fromName:'Store Manager', fromAddr:'Industrial Area, Riyadh', fromPhone:'0112345678',
+    city:'الرياض', fromCity:'الرياض', service:'شحن',
+    weight:'1.5', pieces:'1', pkg:'عادي', cod:'150',
+    desc:'General Merchandise', merchantId:'MAD-10399', storeName:'Al Amal Trading'
   };
 }
 
-/* ── CITY ORIGIN (from-city) ── */
-const originCity = D.fromCity || 'الرياض';
-const destCity   = D.city     || 'الرياض';
-const originCode = CITY_CODE[originCity] || 'RUH';
-const destCode   = CITY_CODE[destCity]   || 'RUH';
+/* ── POPULATE ── */
+const originCode = CITY_CODE[D.fromCity || 'الرياض'] || 'RUH';
+const destCode   = CITY_CODE[D.city]   || 'RUH';
 
-/* ── FILL DOM ── */
-document.getElementById('city-origin').textContent  = originCode;
-document.getElementById('city-dest').textContent    = destCode;
+document.getElementById('city-origin').textContent = originCode;
+document.getElementById('city-dest').textContent   = destCode;
 document.getElementById('tracking-display').textContent = D.tracking;
-document.getElementById('lbl-date').textContent     = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-document.getElementById('lbl-order').textContent    = D.id || '';
-document.getElementById('lbl-merchant').textContent = D.merchantId || '';
-document.getElementById('lbl-pieces').textContent   = (D.pieces || '1');
-document.getElementById('lbl-weight').textContent   = (D.weight || '0.5') + ' KG';
-document.getElementById('lbl-chargeable').textContent = (D.weight || '0.5') + ' KG';
-document.getElementById('lbl-service-bar').textContent = SVC_EN[D.service] || 'Standard Delivery';
-document.getElementById('lbl-acct-num').textContent = D.merchantId || '';
-document.getElementById('lbl-store-name').textContent = D.storeName || '';
-document.getElementById('to-name').textContent      = D.toName || '';
-document.getElementById('to-addr').textContent      = D.toAddr || '';
-document.getElementById('to-city-country').textContent = (CITY_CODE[D.city] ? D.city + ' — SA' : 'SA');
-document.getElementById('to-phone').textContent     = D.toPhone || '';
-document.getElementById('from-name').textContent    = D.fromName || '';
-document.getElementById('from-addr').textContent    = D.fromAddr || '';
-document.getElementById('from-city-country').textContent = (D.fromCity || 'Riyadh') + ' — SA';
-document.getElementById('from-phone').textContent   = D.fromPhone || '';
-document.getElementById('footer-order').textContent = D.id || '';
-document.getElementById('footer-tracking').textContent = D.tracking;
-document.getElementById('footer-desc').textContent  = D.desc || 'General Goods';
+document.getElementById('meta-date').textContent   = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+document.getElementById('meta-order').textContent  = D.id || '';
+document.getElementById('meta-merchant').textContent = D.merchantId || '';
+document.getElementById('meta-pieces').textContent = D.pieces || '1';
 
-/* Service code boxes */
-document.getElementById('svc-type').textContent     = 'DOM';
-document.getElementById('svc-code').textContent     = SVC_CODE[D.service] || 'EXP';
-document.getElementById('svc-pkg-code').textContent = PKG_CODE[D.pkg] || 'P';
+document.getElementById('svc-a').textContent = 'DOM';
+document.getElementById('svc-b').textContent = SVC_CODE_MAP[D.service] || 'STD';
+document.getElementById('svc-c').textContent = PKG_CODE_MAP[D.pkg]     || 'P';
 
-/* COD row */
-const codVal = parseFloat(D.cod || 0);
-if (codVal > 0) {
-  document.getElementById('cod-row').style.display = 'block';
-  document.getElementById('lbl-cod').textContent   = codVal.toFixed(2);
+document.getElementById('wt-weight').textContent = (D.weight||'0.5') + ' KG';
+document.getElementById('wt-charge').textContent = (D.weight||'0.5') + ' KG';
+document.getElementById('wt-pkg').textContent    = PKG_MAP[D.pkg]    || 'Parcel';
+document.getElementById('svc-bar-txt').textContent = SVC_MAP[D.service] || 'Standard Delivery';
+
+const cod = parseFloat(D.cod||0);
+if (cod > 0) {
+  document.getElementById('cod-row').classList.add('show');
+  document.getElementById('cod-amount').textContent = cod.toFixed(2);
 }
+
+document.getElementById('acct-no').textContent    = D.merchantId || '';
+document.getElementById('acct-store').textContent = D.storeName  || '';
+
+document.getElementById('to-co').textContent      = D.storeName  || '';
+document.getElementById('to-name').textContent    = D.toName     || '';
+document.getElementById('to-addr').textContent    = D.toAddr     || '';
+document.getElementById('to-city').textContent    = (D.city ? (CITY_CODE[D.city]||D.city) : '') + '  SA';
+document.getElementById('to-phone').textContent   = D.toPhone    || '';
+
+document.getElementById('from-name').textContent  = D.fromName   || '';
+document.getElementById('from-addr').textContent  = D.fromAddr   || '';
+document.getElementById('from-city').textContent  = (D.fromCity ? (CITY_CODE[D.fromCity]||D.fromCity) : 'Riyadh') + '  SA';
+document.getElementById('from-phone').textContent = D.fromPhone  || '';
+
+document.getElementById('footer-order').textContent    = D.id       || '';
+document.getElementById('footer-tracking').textContent = D.tracking;
+document.getElementById('footer-desc').textContent     = D.desc     || 'General Goods';
 
 /* ── BARCODES ── */
 JsBarcode('#barcode-h', D.tracking, {
-  format:'CODE128', width:1.6, height:40,
-  displayValue:false, margin:0, background:'#ffffff', lineColor:'#000000'
+  format:'CODE128', width:1.5, height:36,
+  displayValue:false, margin:0,
+  background:'#ffffff', lineColor:'#000000'
 });
 JsBarcode('#barcode-v', D.tracking, {
-  format:'CODE128', width:1.2, height:60,
-  displayValue:false, margin:0, background:'#ffffff', lineColor:'#000000'
+  format:'CODE128', width:1.2, height:28,
+  displayValue:false, margin:0,
+  background:'#ffffff', lineColor:'#000000'
 });
 </script>
 </body>
