@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوليصة شحن — مدار</title>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Arial', sans-serif;
+  background: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 16px;
+}
+
+/* ── ACTIONS BAR (screen only) ── */
+.actions {
+  display: flex;
+  gap: 10px;
+  background: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+  width: 100%;
+  max-width: 800px;
+  align-items: center;
+  justify-content: space-between;
+}
+.actions-title { font-size: 15px; font-weight: 700; color: #1A0A4A; }
+.btn-print {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 24px;
+  background: #481DBC;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-print:hover { background: #3a169a; }
+.btn-back {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 18px;
+  background: #F4F2FB;
+  color: #481DBC;
+  border: 1px solid #D8D3EE;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-back:hover { background: #EDE8FF; }
+
+/* ── LABEL WRAPPER ── */
+.label-wrapper {
+  width: 100%;
+  max-width: 800px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.12);
+  overflow: hidden;
+}
+
+/* ── LABEL ── */
+.label {
+  width: 100%;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  border: 2px solid #1A0A4A;
+}
+
+/* ── HEADER ── */
+.lbl-header {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 2px solid #1A0A4A;
+  background: #1A0A4A;
+}
+.lbl-logo-box {
+  padding: 14px 20px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  border-left: 2px solid #1A0A4A;
+}
+.lbl-logo-box img { height: 42px; }
+.lbl-logo-sub { font-size: 9px; color: #888; margin-top: 4px; text-align: center; }
+.lbl-service-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  gap: 4px;
+}
+.lbl-service-label { font-size: 10px; color: rgba(255,255,255,.6); letter-spacing: 1px; }
+.lbl-service-name { font-size: 22px; font-weight: 900; color: #FF6A00; letter-spacing: 1px; }
+.lbl-service-en { font-size: 11px; color: rgba(255,255,255,.5); }
+
+.lbl-weight-box {
+  padding: 10px 20px;
+  background: #FF6A00;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  border-right: 2px solid #1A0A4A;
+}
+.lbl-weight-val { font-size: 26px; font-weight: 900; color: #fff; line-height: 1; }
+.lbl-weight-unit { font-size: 10px; color: rgba(255,255,255,.8); }
+
+/* ── BARCODE ROW ── */
+.lbl-barcode-row {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 20px 10px;
+  border-bottom: 2px solid #1A0A4A;
+  gap: 4px;
+}
+.lbl-barcode-row svg, .lbl-barcode-row canvas { max-width: 100%; }
+.lbl-tracking-num {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #1A0A4A;
+  font-family: 'Courier New', monospace;
+}
+
+/* ── ADDRESSES ── */
+.lbl-addresses {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 2px solid #1A0A4A;
+}
+.lbl-addr-box {
+  padding: 14px 16px;
+}
+.lbl-addr-box:first-child {
+  border-left: 1.5px solid #1A0A4A;
+}
+.lbl-addr-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #888;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.lbl-addr-name {
+  font-size: 15px;
+  font-weight: 900;
+  color: #1A0A4A;
+  margin-bottom: 4px;
+}
+.lbl-addr-line {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+.lbl-addr-phone {
+  font-size: 13px;
+  font-weight: 700;
+  color: #481DBC;
+  margin-top: 6px;
+  direction: ltr;
+  text-align: right;
+}
+
+/* ── DELIVERY SECTION ── */
+.lbl-delivery {
+  background: #481DBC;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #1A0A4A;
+}
+.lbl-delivery-to {
+  font-size: 11px;
+  color: rgba(255,255,255,.6);
+}
+.lbl-delivery-city {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.lbl-delivery-zone {
+  background: #FF6A00;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+}
+
+/* ── DETAILS ROW ── */
+.lbl-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  border-bottom: 2px solid #1A0A4A;
+}
+.lbl-detail-cell {
+  padding: 10px 14px;
+  border-left: 1px solid #E0DBF0;
+}
+.lbl-detail-cell:last-child { border-left: none; }
+.lbl-detail-label {
+  font-size: 8.5px;
+  color: #aaa;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.lbl-detail-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1A0A4A;
+}
+.lbl-detail-val.orange { color: #FF6A00; }
+.lbl-detail-val.green  { color: #15803D; }
+
+/* ── COD HIGHLIGHT ── */
+.lbl-cod-row {
+  background: #FFF8E8;
+  border-bottom: 2px solid #1A0A4A;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.lbl-cod-label { font-size: 12px; font-weight: 700; color: #92400E; }
+.lbl-cod-amount { font-size: 28px; font-weight: 900; color: #D97706; }
+.lbl-cod-unit { font-size: 12px; font-weight: 400; color: #aaa; }
+
+/* ── FOOTER ── */
+.lbl-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  gap: 16px;
+  background: #FAFAFA;
+}
+.lbl-qr { flex-shrink: 0; }
+.lbl-footer-info { flex: 1; }
+.lbl-footer-ref { font-size: 11px; color: #888; margin-bottom: 3px; }
+.lbl-footer-ref strong { color: #1A0A4A; font-family: monospace; font-size: 12px; }
+.lbl-footer-notes { font-size: 11px; color: #666; margin-top: 6px; line-height: 1.6; }
+.lbl-footer-brand {
+  font-size: 10px;
+  color: #bbb;
+  text-align: center;
+  line-height: 1.5;
+}
+.lbl-footer-brand strong { color: #481DBC; font-size: 12px; display: block; }
+
+/* ── INSTRUCTIONS BOX ── */
+.lbl-instructions {
+  border-top: 1.5px dashed #ccc;
+  margin: 0 20px;
+  padding: 8px 0 10px;
+  display: flex;
+  gap: 20px;
+  font-size: 9.5px;
+  color: #999;
+  text-align: center;
+}
+.lbl-instructions span { flex: 1; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; padding: 0; }
+  .actions { display: none !important; }
+  .label-wrapper {
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 100%;
+  }
+  .label { border: 1.5px solid #000; }
+  @page { margin: 8mm; size: A5 landscape; }
+}
+</style>
+</head>
+<body>
+
+<!-- ACTIONS BAR -->
+<div class="actions">
+  <div class="actions-title">بوليصة الشحن</div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn-back" onclick="history.back()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      رجوع
+    </button>
+    <button class="btn-print" onclick="window.print()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      طباعة البوليصة
+    </button>
+  </div>
+</div>
+
+<!-- LABEL -->
+<div class="label-wrapper">
+<div class="label" id="label">
+
+  <!-- HEADER -->
+  <div class="lbl-header">
+    <div class="lbl-logo-box">
+      <img src="logo.png" alt="مدار" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none;font-size:22px;font-weight:900;color:#1A0A4A;letter-spacing:2px;">مدار</div>
+      <div class="lbl-logo-sub">منصة الخدمات اللوجستية</div>
+    </div>
+    <div class="lbl-service-box">
+      <div class="lbl-service-label">نوع الخدمة</div>
+      <div class="lbl-service-name" id="lbl-service-name">آخر ميل</div>
+      <div class="lbl-service-en" id="lbl-service-en">Last Mile Express</div>
+    </div>
+    <div class="lbl-weight-box">
+      <div class="lbl-weight-val" id="lbl-weight">0.5</div>
+      <div class="lbl-weight-unit">كجم</div>
+    </div>
+  </div>
+
+  <!-- BARCODE -->
+  <div class="lbl-barcode-row">
+    <svg id="barcode"></svg>
+    <div class="lbl-tracking-num" id="lbl-tracking"></div>
+  </div>
+
+  <!-- DELIVERY CITY -->
+  <div class="lbl-delivery">
+    <div>
+      <div class="lbl-delivery-to">التسليم إلى</div>
+      <div class="lbl-delivery-city" id="lbl-city">الرياض</div>
+    </div>
+    <div class="lbl-delivery-zone" id="lbl-zone">RUH</div>
+  </div>
+
+  <!-- ADDRESSES -->
+  <div class="lbl-addresses">
+    <!-- TO -->
+    <div class="lbl-addr-box">
+      <div class="lbl-addr-label">المستلم — Recipient</div>
+      <div class="lbl-addr-name" id="lbl-to-name">اسم المستلم</div>
+      <div class="lbl-addr-line" id="lbl-to-addr">العنوان</div>
+      <div class="lbl-addr-phone" id="lbl-to-phone">05XXXXXXXX</div>
+    </div>
+    <!-- FROM -->
+    <div class="lbl-addr-box">
+      <div class="lbl-addr-label">المرسل — Sender</div>
+      <div class="lbl-addr-name" id="lbl-from-name">المتجر</div>
+      <div class="lbl-addr-line" id="lbl-from-addr">الرياض، المملكة العربية السعودية</div>
+      <div class="lbl-addr-phone" id="lbl-from-phone"></div>
+    </div>
+  </div>
+
+  <!-- DETAILS ROW -->
+  <div class="lbl-details">
+    <div class="lbl-detail-cell">
+      <div class="lbl-detail-label">المحتوى</div>
+      <div class="lbl-detail-val" id="lbl-desc">بضاعة</div>
+    </div>
+    <div class="lbl-detail-cell">
+      <div class="lbl-detail-label">عدد القطع</div>
+      <div class="lbl-detail-val" id="lbl-pieces">1</div>
+    </div>
+    <div class="lbl-detail-cell">
+      <div class="lbl-detail-label">التغليف</div>
+      <div class="lbl-detail-val orange" id="lbl-pkg">عادي</div>
+    </div>
+    <div class="lbl-detail-cell">
+      <div class="lbl-detail-label">التاريخ</div>
+      <div class="lbl-detail-val" id="lbl-date">2026-06-03</div>
+    </div>
+  </div>
+
+  <!-- COD -->
+  <div class="lbl-cod-row" id="lbl-cod-row">
+    <div>
+      <div class="lbl-cod-label">الدفع عند الاستلام — Cash on Delivery</div>
+      <div style="font-size:10px;color:#aaa;margin-top:2px;">يرجى تحصيل المبلغ قبل التسليم</div>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:6px;">
+      <div class="lbl-cod-amount" id="lbl-cod-amount">150</div>
+      <div class="lbl-cod-unit">ر.س.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="lbl-footer">
+    <div class="lbl-qr" id="qr-code"></div>
+    <div class="lbl-footer-info">
+      <div class="lbl-footer-ref">رقم الطلب: <strong id="lbl-order-id">ORD-XXXX</strong></div>
+      <div class="lbl-footer-ref">رقم التتبع: <strong id="lbl-tracking-ref">MDR-XXXXXXXXXX</strong></div>
+      <div class="lbl-footer-notes" id="lbl-notes"></div>
+    </div>
+    <div class="lbl-footer-brand">
+      <strong>مدار لوجستيك</strong>
+      madarlogistic.com<br>
+      support@madarlogistic.com
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS -->
+  <div class="lbl-instructions">
+    <span>لا تطوِ البوليصة</span>
+    <span>ثبّت على أعلى الطرد بوضوح</span>
+    <span>احتفظ بنسخة لمتابعة الشحنة</span>
+    <span>للاستفسار: madarlogistic.com/track</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+/* ─── CITY CODES ─── */
+const CITY_CODES = {
+  'الرياض':'RUH', 'جدة':'JED', 'الدمام':'DMM', 'مكة المكرمة':'MKK',
+  'المدينة المنورة':'MED', 'الطائف':'TIF', 'تبوك':'TUU', 'أبها':'AHB',
+  'الجبيل':'QJB', 'ينبع':'YNB', 'حائل':'HAS', 'القصيم':'ELQ',
+  'نجران':'NJR', 'جازان':'GIZ',
+};
+
+const SERVICE_EN = {
+  'آخر ميل':'Last Mile Express',
+  'B2B':'Business to Business',
+  'تخزين':'Warehousing',
+};
+
+/* ─── LOAD DATA ─── */
+function loadLabel() {
+  // Try URL params first, then localStorage
+  const params = new URLSearchParams(window.location.search);
+  const stored = JSON.parse(localStorage.getItem('madar_label') || '{}');
+
+  const get = (key, fallback='') => params.get(key) || stored[key] || fallback;
+
+  const orderId   = get('id',       'ORD-8831');
+  const tracking  = get('tracking', 'MDR' + Date.now().toString().slice(-10));
+  const toName    = get('toName',   'سعد المالكي');
+  const toAddr    = get('toAddr',   'حي النزهة، الرياض');
+  const toPhone   = get('toPhone',  '0512340001');
+  const fromName  = get('fromName', 'متجر مدار');
+  const fromAddr  = get('fromAddr', 'الرياض، المملكة العربية السعودية');
+  const fromPhone = get('fromPhone','');
+  const city      = get('city',     'الرياض');
+  const service   = get('service',  'آخر ميل');
+  const weight    = get('weight',   '0.5');
+  const desc      = get('desc',     'بضاعة متنوعة');
+  const pieces    = get('pieces',   '1');
+  const pkg       = get('pkg',      'عادي');
+  const cod       = parseFloat(get('cod', '0'));
+  const notes     = get('notes',    '');
+
+  // Set values
+  document.getElementById('lbl-tracking').textContent      = tracking;
+  document.getElementById('lbl-tracking-ref').textContent  = tracking;
+  document.getElementById('lbl-order-id').textContent      = orderId;
+  document.getElementById('lbl-to-name').textContent       = toName;
+  document.getElementById('lbl-to-addr').textContent       = toAddr;
+  document.getElementById('lbl-to-phone').textContent      = toPhone;
+  document.getElementById('lbl-from-name').textContent     = fromName;
+  document.getElementById('lbl-from-addr').textContent     = fromAddr;
+  document.getElementById('lbl-from-phone').textContent    = fromPhone;
+  document.getElementById('lbl-city').textContent          = city;
+  document.getElementById('lbl-zone').textContent          = CITY_CODES[city] || 'KSA';
+  document.getElementById('lbl-service-name').textContent  = service;
+  document.getElementById('lbl-service-en').textContent    = SERVICE_EN[service] || service;
+  document.getElementById('lbl-weight').textContent        = weight;
+  document.getElementById('lbl-desc').textContent          = desc;
+  document.getElementById('lbl-pieces').textContent        = pieces;
+  document.getElementById('lbl-pkg').textContent           = pkg;
+  document.getElementById('lbl-date').textContent          = new Date().toLocaleDateString('ar-SA');
+
+  // COD
+  if (cod > 0) {
+    document.getElementById('lbl-cod-amount').textContent = cod.toLocaleString('ar-SA');
+  } else {
+    document.getElementById('lbl-cod-row').style.display = 'none';
+  }
+
+  // Notes
+  if (notes) {
+    document.getElementById('lbl-notes').textContent = 'ملاحظات: ' + notes;
+  }
+
+  // Barcode
+  JsBarcode('#barcode', tracking, {
+    format: 'CODE128',
+    width: 2.2,
+    height: 60,
+    displayValue: false,
+    margin: 8,
+    lineColor: '#1A0A4A',
+  });
+
+  // QR Code
+  new QRCode(document.getElementById('qr-code'), {
+    text: 'https://madarlogistic.com/track?q=' + tracking,
+    width: 72,
+    height: 72,
+    colorDark: '#1A0A4A',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M,
+  });
+}
+
+window.addEventListener('DOMContentLoaded', loadLabel);
+</script>
+</body>
+</html>
