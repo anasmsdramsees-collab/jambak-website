@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدار  تتبع الشحنة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F8F7FF;
+      color: #1A0A4A;
+      direction: rtl;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: #1A0A4A;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a.link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+    .nav-links a.link:hover { color: #fff; }
+    .nav-links a.cta {
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-links a.cta:hover { background: #e05a00; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(145deg, #0f0628 0%, #1A0A4A 50%, #251060 100%);
+      padding: 90px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(72,29,188,0.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,106,0,0.15);
+      border: 1px solid rgba(255,106,0,0.35);
+      color: #FF6A00;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+    .hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 17px;
+      font-weight: 400;
+      margin-bottom: 36px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ─── SEARCH ─── */
+    .search-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.28);
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color .2s;
+    }
+    .search-box:focus-within {
+      border-color: #481DBC;
+    }
+    .search-icon {
+      padding: 0 16px 0 4px;
+      color: #888;
+      flex-shrink: 0;
+    }
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #1A0A4A;
+      padding: 18px 4px;
+      background: transparent;
+      direction: ltr;
+      text-align: right;
+    }
+    .search-box input::placeholder { color: #aaa; direction: rtl; text-align: right; }
+    .search-btn {
+      background: #FF6A00;
+      color: #fff;
+      border: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 0 26px;
+      height: 100%;
+      min-height: 58px;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .search-btn:hover { background: #e05a00; }
+    .search-hint {
+      color: rgba(255,255,255,0.4);
+      font-size: 13px;
+      margin-top: 12px;
+      direction: ltr;
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    .main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    /* ─── RESULT CARD ─── */
+    #result-area { display: none; margin-bottom: 32px; }
+
+    .result-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 32px rgba(26,10,74,0.10);
+      overflow: hidden;
+    }
+    .result-header {
+      background: linear-gradient(135deg, #1A0A4A 0%, #2d1270 100%);
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .result-id-badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 8px 18px;
+      border-radius: 10px;
+      direction: ltr;
+    }
+    .result-meta {
+      text-align: left;
+    }
+    .result-meta .label {
+      color: rgba(255,255,255,0.5);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .result-meta .value {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .result-meta .region-badge {
+      display: inline-block;
+      background: rgba(255,106,0,0.25);
+      border: 1px solid rgba(255,106,0,0.5);
+      color: #FF6A00;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-top: 4px;
+    }
+
+    .timeline-wrap {
+      padding: 28px 28px 24px;
+    }
+    .timeline-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      position: relative;
+    }
+
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .step-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+      background: #fff;
+      flex-shrink: 0;
+      z-index: 1;
+      position: relative;
+      transition: all .3s;
+    }
+    .step-dot.done {
+      background: #481DBC;
+      border-color: #481DBC;
+    }
+    .step-dot.done::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23fff' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .step-dot.current {
+      background: #FF6A00;
+      border-color: #FF6A00;
+      box-shadow: 0 0 0 6px rgba(255,106,0,0.18), 0 0 0 12px rgba(255,106,0,0.07);
+      animation: pulse-orange 2s infinite;
+    }
+    @keyframes pulse-orange {
+      0%, 100% { box-shadow: 0 0 0 6px rgba(255,106,0,0.18), 0 0 0 12px rgba(255,106,0,0.07); }
+      50% { box-shadow: 0 0 0 8px rgba(255,106,0,0.25), 0 0 0 16px rgba(255,106,0,0.10); }
+    }
+    .step-line {
+      width: 2px;
+      flex: 1;
+      min-height: 28px;
+      background: #e8e4f4;
+      margin: 2px 0;
+    }
+    .step-line.done { background: #481DBC; }
+    .step:last-child .step-line { display: none; }
+
+    .step-content {
+      padding-bottom: 28px;
+      padding-top: 0;
+    }
+    .step:last-child .step-content { padding-bottom: 0; }
+    .step-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ccc;
+      line-height: 1.3;
+      margin-top: 0;
+    }
+    .step-label.done { color: #1A0A4A; }
+    .step-label.current { color: #FF6A00; }
+    .step-time {
+      font-size: 12px;
+      font-weight: 500;
+      color: #aaa;
+      margin-top: 4px;
+      direction: rtl;
+    }
+    .step-time.done { color: #481DBC; }
+    .step-time.current { color: #FF6A00; }
+
+    /* ─── NOT FOUND ─── */
+    #notfound-area { display: none; margin-bottom: 32px; }
+    .notfound-card {
+      background: #fff5f5;
+      border: 1.5px solid rgba(220,53,69,0.25);
+      border-radius: 16px;
+      padding: 28px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .notfound-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(220,53,69,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .notfound-text strong {
+      display: block;
+      color: #c0392b;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .notfound-text p {
+      color: #888;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    /* ─── MERCHANT CTA ─── */
+    .merchant-cta {
+      background: linear-gradient(135deg, rgba(72,29,188,0.07) 0%, rgba(72,29,188,0.12) 100%);
+      border: 1.5px solid rgba(72,29,188,0.15);
+      border-radius: 20px;
+      padding: 30px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .merchant-cta-text h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 6px;
+    }
+    .merchant-cta-text p {
+      font-size: 14px;
+      color: #666;
+      font-weight: 400;
+    }
+    .merchant-cta-btns {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #481DBC;
+      color: #481DBC;
+      text-decoration: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-outline:hover { background: #481DBC; color: #fff; }
+    .btn-primary {
+      background: #FF6A00;
+      border: 2px solid #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: #e05a00; border-color: #e05a00; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0A4A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 13px;
+      font-weight: 400;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:36px;"></a>
+  <div class="nav-links">
+    <a href="index.html" class="link">الرئيسية</a>
+    <a href="merchant-login.html" class="link">دخول</a>
+    <a href="merchant-register.html" class="cta">ابدأ الآن</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    تتبع الشحنة
+  </div>
+  <h1>أين شحنتك الآن؟</h1>
+  <p>أدخل رقم الشحنة وتابع حالتها لحظة بلحظة</p>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </span>
+      <input
+        type="text"
+        id="trackInput"
+        placeholder="MDR-00841"
+        autocomplete="off"
+        spellcheck="false"
+        onkeydown="if(event.key==='Enter') doTrack()"
+      >
+      <button class="search-btn" onclick="doTrack()">تتبع الآن</button>
+    </div>
+    <p class="search-hint">مثال: MDR-00841 · MDR-00920 · MDR-01001</p>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- NOT FOUND -->
+  <div id="notfound-area">
+    <div class="notfound-card">
+      <div class="notfound-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div class="notfound-text">
+        <strong>لم يتم العثور على هذه الشحنة</strong>
+        <p>تأكد من رقم الشحنة أو تواصل معنا عبر الدعم</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-area">
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-id-badge" id="res-id">MDR-00841</div>
+        <div class="result-meta">
+          <div class="label">المستلم</div>
+          <div class="value" id="res-recipient"></div>
+          <div class="region-badge" id="res-region"></div>
+        </div>
+        <div class="result-meta">
+          <div class="label">نوع الخدمة</div>
+          <div class="value" id="res-service"></div>
+        </div>
+      </div>
+      <div class="timeline-wrap">
+        <div class="timeline-title">مسار الشحنة</div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MERCHANT CTA (always visible) -->
+  <div class="merchant-cta">
+    <div class="merchant-cta-text">
+      <h3>هل أنت تاجر؟</h3>
+      <p>تتبع جميع شحناتك من لوحة تحكمك في مكان واحد</p>
+    </div>
+    <div class="merchant-cta-btns">
+      <a href="merchant-login.html" class="btn-outline">دخول التجار</a>
+      <a href="merchant-register.html" class="btn-primary">تسجيل جديد</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html">
+    <img src="logo.png" alt="Madar" style="height:28px;opacity:0.6;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
+  </a>
+  <p>© 2025 مدار لوجستيك · جميع الحقوق محفوظة · <a href="index.html">العودة للرئيسية</a></p>
+</footer>
+
+<script>
+  const DEMO = {
+    'MDR-00841': { status: 2, recipient: 'أحمد الشمري', region: 'الرياض', service: 'آخر ميل' },
+    'MDR-00920': { status: 3, recipient: 'نورة السالم', region: 'جدة', service: 'B2B' },
+    'MDR-01001': { status: 4, recipient: 'سعد المالكي', region: 'الدمام', service: 'آخر ميل' },
+    'MDR-00755': { status: 1, recipient: 'منال الشهري', region: 'مكة', service: 'آخر ميل' },
+  };
+
+  const STEPS = [
+    { label: 'تم استلام الطلب', time: 'الأحد، 28 مايو  09:14' },
+    { label: 'جاري التجهيز والتعبئة', time: 'الأحد، 28 مايو  11:30' },
+    { label: 'تم استلام الشحنة بالمستودع', time: 'الإثنين، 29 مايو  08:00' },
+    { label: 'في الطريق إلى المستلم', time: 'الإثنين، 29 مايو  13:45' },
+    { label: 'تم التسليم بنجاح', time: 'الإثنين، 29 مايو  17:22' },
+  ];
+
+  function doTrack() {
+    const raw = document.getElementById('trackInput').value.trim().toUpperCase();
+    const notfound = document.getElementById('notfound-area');
+    const result = document.getElementById('result-area');
+
+    notfound.style.display = 'none';
+    result.style.display = 'none';
+
+    if (!raw) return;
+
+    const data = DEMO[raw];
+    if (!data) {
+      notfound.style.display = 'block';
+      notfound.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+
+    document.getElementById('res-id').textContent = raw;
+    document.getElementById('res-recipient').textContent = data.recipient;
+    document.getElementById('res-region').textContent = data.region;
+    document.getElementById('res-service').textContent = data.service;
+
+    const tl = document.getElementById('timeline');
+    tl.innerHTML = '';
+
+    STEPS.forEach((step, i) => {
+      let state = 'pending';
+      if (i < data.status) state = 'done';
+      else if (i === data.status) state = 'current';
+
+      const dotClass = state === 'done' ? 'done' : state === 'current' ? 'current' : '';
+      const lineClass = i < data.status ? 'done' : '';
+      const labelClass = state === 'done' ? 'done' : state === 'current' ? 'current' : '';
+      const timeClass = state === 'done' ? 'done' : state === 'current' ? 'current' : '';
+      const showTime = (state === 'done' || state === 'current');
+
+      tl.innerHTML += `
+        <div class="step">
+          <div class="step-left">
+            <div class="step-dot ${dotClass}"></div>
+            <div class="step-line ${lineClass}"></div>
+          </div>
+          <div class="step-content">
+            <div class="step-label ${labelClass}">${step.label}</div>
+            ${showTime ? `<div class="step-time ${timeClass}">${step.time}</div>` : ''}
+          </div>
+        </div>
+      `;
+    });
+
+    result.style.display = 'block';
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+
+</body>
+</html>

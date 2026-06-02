@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدار  لوحة التحكم الإدارية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Tajawal','Segoe UI',Tahoma,sans-serif; background:#F4F2FB; display:flex; height:100vh; overflow:hidden; direction:rtl; }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar { width:224px; background:#1A0A4A; color:#fff; display:flex; flex-direction:column; flex-shrink:0; height:100vh; overflow-y:auto; }
+  .sidebar-header { padding:20px 16px 14px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:10px; }
+  .sidebar-logo { }
+  .sidebar-subtitle { font-size:10px; color:rgba(255,255,255,.4); margin-top:2px; }
+  .online-dot { width:8px; height:8px; background:#22C55E; border-radius:50%; margin-right:auto; flex-shrink:0; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
+  .nav-section-label { font-size:9.5px; color:rgba(255,255,255,.28); padding:16px 16px 5px; letter-spacing:1.2px; text-transform:uppercase; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:9px 14px; font-size:13px; color:rgba(255,255,255,.6); cursor:pointer; border-radius:8px; margin:1px 8px; transition:all .15s; text-decoration:none; }
+  .nav-item:hover { background:rgba(255,255,255,.07); color:#fff; }
+  .nav-item.active { background:#481DBC; color:#fff; font-weight:600; }
+  .nav-icon { font-size:15px; width:20px; text-align:center; flex-shrink:0; }
+  .nav-badge { margin-right:auto; background:#EF4444; color:#fff; font-size:10px; font-weight:700; padding:1px 6px; border-radius:10px; }
+  .sidebar-footer { margin-top:auto; padding:14px 16px; border-top:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:10px; }
+  .avatar { width:34px; height:34px; background:#481DBC; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0; }
+  .user-name { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; }
+  .user-role { font-size:11px; color:rgba(255,255,255,.38); }
+  .logout-btn { margin-right:auto; background:none; border:none; color:rgba(255,255,255,.35); cursor:pointer; font-size:16px; padding:4px; transition:color .15s; }
+  .logout-btn:hover { color:#FF6A00; }
+
+  /* ─── MAIN ─── */
+  .main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+  .topbar { background:#fff; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #E8E4F5; flex-shrink:0; gap:12px; }
+  .topbar-title { font-size:17px; font-weight:700; color:#1A0A4A; white-space:nowrap; }
+  .topbar-sub { font-size:12px; color:#aaa; margin-top:2px; }
+  .topbar-right { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .date-filters { display:flex; align-items:center; gap:6px; }
+  .filter-btn { padding:5px 13px; border-radius:20px; border:1px solid #D8D3EE; background:#fff; font-size:12px; color:#666; cursor:pointer; font-family:inherit; transition:all .15s; white-space:nowrap; }
+  .filter-btn:hover { border-color:#481DBC; color:#481DBC; }
+  .filter-btn.active { background:#1A0A4A; color:#fff; border-color:#1A0A4A; font-weight:600; }
+  .date-range { display:flex; align-items:center; gap:5px; font-size:12px; color:#777; background:#F4F2FB; padding:5px 11px; border-radius:8px; border:1px solid #E0DBF0; white-space:nowrap; }
+  .refresh-btn { padding:5px 13px; background:#481DBC; border:none; border-radius:8px; font-size:12px; color:#fff; cursor:pointer; font-weight:600; font-family:inherit; transition:background .2s; }
+  .refresh-btn:hover { background:#3a169a; }
+
+  .content { flex:1; overflow-y:auto; padding:20px 24px; }
+
+  /* ─── PAGE SECTIONS ─── */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* ─── KPI CARDS ─── */
+  .kpi-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .kpi-card { background:#fff; border-radius:14px; padding:20px; border:1px solid #EAE6F5; box-shadow:0 2px 8px rgba(72,29,188,.06); }
+  .kpi-card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:14px; }
+  .kpi-card-title { font-size:14px; font-weight:700; color:#1A0A4A; }
+  .kpi-card-sub { font-size:11px; color:#bbb; margin-top:2px; }
+  .revenue-badge { background:#F4F2FB; color:#481DBC; font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; border:1px solid #D8D3EE; white-space:nowrap; }
+  .dot-green { width:9px; height:9px; background:#22C55E; border-radius:50%; display:inline-block; margin-left:5px; }
+  .dot-orange { width:9px; height:9px; background:#FF6A00; border-radius:50%; display:inline-block; margin-left:5px; }
+  .kpi-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
+  .kpi-metric { text-align:center; }
+  .kpi-metric-label { font-size:10.5px; color:#bbb; margin-bottom:3px; }
+  .kpi-metric-value { font-size:22px; font-weight:800; color:#1A0A4A; }
+  .kpi-metrics-2 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+  .kpi-sm-label { font-size:10.5px; color:#aaa; margin-bottom:3px; text-align:center; }
+  .kpi-sm-value { font-size:15px; font-weight:700; color:#555; text-align:center; }
+  .prog-label { display:flex; justify-content:space-between; font-size:11.5px; color:#888; margin-bottom:4px; }
+  .prog-bg { height:7px; background:#F0EEF9; border-radius:4px; overflow:hidden; margin-bottom:8px; }
+  .prog-fill { height:100%; border-radius:4px; transition:width .6s ease; }
+  .prog-fill.green { background:#22C55E; }
+  .prog-fill.red { background:#EF4444; }
+  .revenue-row { display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding-top:10px; border-top:1px solid #F0EEF9; font-size:13px; }
+  .revenue-label { color:#bbb; }
+  .revenue-value { font-weight:800; font-size:16px; color:#1A0A4A; }
+
+  /* ─── MINI KPIs ─── */
+  .kpi-grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:16px; }
+  .mini-kpi { background:#fff; border-radius:12px; padding:16px; border:1px solid #EAE6F5; }
+  .mini-kpi-label { font-size:11.5px; color:#888; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; gap:4px; }
+  .mini-kpi-value { font-size:30px; font-weight:800; color:#1A0A4A; margin-bottom:3px; line-height:1; }
+  .mini-kpi-sub { font-size:11px; color:#aaa; }
+  .mini-kpi-delta { font-size:11px; font-weight:600; }
+  .delta-up { color:#22C55E; }
+  .delta-down { color:#EF4444; }
+  .live-badge { font-size:10px; padding:2px 7px; border-radius:10px; background:#FFF0E8; color:#FF6A00; font-weight:700; flex-shrink:0; }
+
+  /* ─── CHART ─── */
+  .charts-row { display:grid; grid-template-columns:1.6fr 1fr; gap:16px; margin-bottom:16px; }
+  .chart-card { background:#fff; border-radius:14px; padding:20px; border:1px solid #EAE6F5; }
+  .chart-title { font-size:14px; font-weight:700; color:#1A0A4A; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
+  .chart-sub { font-size:11px; color:#bbb; }
+  canvas { display:block; }
+
+  /* ─── STATUS LIST ─── */
+  .status-list { display:flex; flex-direction:column; gap:12px; }
+  .status-row-item { display:flex; align-items:center; gap:8px; font-size:13px; }
+  .status-dot-sm { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .status-name-txt { color:#555; min-width:90px; }
+  .status-bar-bg { flex:1; height:6px; background:#F0EEF9; border-radius:3px; overflow:hidden; }
+  .status-bar-fill { height:100%; border-radius:3px; transition:width .6s ease; }
+  .status-count-txt { font-weight:700; color:#1A0A4A; min-width:32px; text-align:left; }
+  .status-total { margin-top:14px; padding-top:12px; border-top:1px solid #F0EEF9; display:flex; justify-content:space-between; font-size:12px; color:#aaa; }
+
+  /* ─── TABLE ─── */
+  .table-card { background:#fff; border-radius:14px; border:1px solid #EAE6F5; overflow:hidden; margin-bottom:16px; }
+  .table-header { padding:16px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #F0EEF9; gap:12px; flex-wrap:wrap; }
+  .table-title { font-size:14px; font-weight:700; color:#1A0A4A; }
+  .table-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .search-input { padding:7px 12px; border:1.5px solid #E0DBF0; border-radius:8px; font-size:13px; font-family:inherit; color:#1A0A4A; background:#FAFAFA; outline:none; width:200px; direction:rtl; }
+  .search-input:focus { border-color:#481DBC; }
+  .select-filter { padding:7px 10px; border:1.5px solid #E0DBF0; border-radius:8px; font-size:12px; font-family:inherit; color:#555; background:#fff; cursor:pointer; outline:none; }
+  .add-btn { padding:7px 16px; background:#481DBC; border:none; border-radius:8px; font-size:12px; font-weight:700; color:#fff; cursor:pointer; font-family:inherit; white-space:nowrap; }
+  .add-btn:hover { background:#3a169a; }
+  table { width:100%; border-collapse:collapse; }
+  th { font-size:11px; color:#aaa; font-weight:600; text-align:right; padding:10px 20px; background:#FAFAFA; border-bottom:1px solid #F0EEF9; white-space:nowrap; }
+  td { font-size:13px; color:#333; padding:12px 20px; border-bottom:1px solid #F9F7FF; vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:#FDFCFF; }
+  .pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; }
+  .pill-delivered { background:#F0FDF4; color:#15803D; }
+  .pill-pending   { background:#EFF6FF; color:#1D4ED8; }
+  .pill-transit   { background:#FFF7ED; color:#C2410C; }
+  .pill-failed    { background:#FEF2F2; color:#B91C1C; }
+  .pill-returned  { background:#FFF4ED; color:#EA580C; }
+  .pill-cancelled { background:#F3F4F6; color:#6B7280; }
+  .pill-active    { background:#F0FDF4; color:#15803D; }
+  .pill-inactive  { background:#F3F4F6; color:#6B7280; }
+
+  /* ─── MERCHANT CARD ─── */
+  .merchants-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px; }
+  .merchant-card { background:#fff; border-radius:12px; padding:16px; border:1px solid #EAE6F5; }
+  .mc-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .mc-avatar { width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,#481DBC,#7C3AED); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px; flex-shrink:0; }
+  .mc-name { font-size:14px; font-weight:700; color:#1A0A4A; }
+  .mc-type { font-size:11px; color:#aaa; }
+  .mc-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding-top:10px; border-top:1px solid #F0EEF9; }
+  .mc-stat-label { font-size:10px; color:#bbb; }
+  .mc-stat-value { font-size:14px; font-weight:700; color:#1A0A4A; }
+
+  /* ─── FINANCE ─── */
+  .fin-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+  .fin-card { background:#fff; border-radius:14px; padding:20px; border:1px solid #EAE6F5; }
+  .fin-title { font-size:14px; font-weight:700; color:#1A0A4A; margin-bottom:14px; }
+  .fin-big { font-size:32px; font-weight:800; color:#1A0A4A; margin-bottom:4px; }
+  .fin-big-sub { font-size:12px; color:#aaa; }
+  .fin-rows { display:flex; flex-direction:column; gap:10px; }
+  .fin-row-item { display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-bottom:1px solid #F5F3FF; }
+  .fin-row-item:last-child { border-bottom:none; }
+  .fin-row-label { color:#888; }
+  .fin-row-value { font-weight:700; color:#1A0A4A; }
+
+  /* ─── WAREHOUSE ─── */
+  .wh-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:16px; }
+  .wh-card { background:#fff; border-radius:12px; padding:16px; border:1px solid #EAE6F5; }
+  .wh-icon { font-size:24px; margin-bottom:8px; }
+  .wh-label { font-size:12px; color:#aaa; margin-bottom:4px; }
+  .wh-value { font-size:26px; font-weight:800; color:#1A0A4A; }
+  .wh-sub { font-size:11px; color:#aaa; margin-top:4px; }
+
+  /* ─── NOTIFICATIONS DOT ─── */
+  .notif-dot { position:relative; }
+  .notif-dot::after { content:'3'; position:absolute; top:-5px; left:-5px; background:#EF4444; color:#fff; font-size:9px; font-weight:700; padding:1px 5px; border-radius:10px; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:#D8D3EE; border-radius:3px; }
+  .sidebar::-webkit-scrollbar-thumb { background:rgba(255,255,255,.15); }
+
+  /* ─── TREND ─── */
+  .trend-up { color:#22C55E; font-size:11px; font-weight:600; }
+  .trend-down { color:#EF4444; font-size:11px; font-weight:600; }
+
+  /* ─── RESPONSIVE FIX ─── */
+  @media (max-width:1200px) {
+    .kpi-grid-4 { grid-template-columns:repeat(2,1fr); }
+    .charts-row { grid-template-columns:1fr; }
+    .merchants-grid { grid-template-columns:1fr 1fr; }
+    .fin-grid { grid-template-columns:1fr 1fr; }
+  }
+
+  /* MODAL */
+  .modal-overlay { position:fixed; inset:0; background:rgba(10,5,30,.5); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .2s; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal { background:#fff; border-radius:18px; padding:28px; width:100%; max-width:520px; box-shadow:0 24px 80px rgba(0,0,0,.25); transform:translateY(20px); transition:transform .25s; max-height:90vh; overflow-y:auto; }
+  .modal-overlay.open .modal { transform:translateY(0); }
+  .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+  .modal-title { font-size:17px; font-weight:800; color:#1A0A4A; }
+  .modal-close { background:none; border:none; font-size:20px; color:#aaa; cursor:pointer; padding:4px 8px; border-radius:6px; }
+  .modal-close:hover { background:#F4F2FB; color:#1A0A4A; }
+  .modal-field { margin-bottom:14px; }
+  .modal-field label { display:block; font-size:12.5px; font-weight:600; color:#444; margin-bottom:5px; }
+  .modal-field input, .modal-field select, .modal-field textarea { width:100%; padding:10px 13px; border:1.5px solid #E0DBF0; border-radius:10px; font-size:13.5px; font-family:inherit; color:#1A0A4A; background:#FAFAFA; outline:none; direction:rtl; }
+  .modal-field input:focus, .modal-field select:focus, .modal-field textarea:focus { border-color:#481DBC; box-shadow:0 0 0 3px rgba(72,29,188,.1); background:#fff; }
+  .modal-field textarea { resize:vertical; min-height:70px; }
+  .modal-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; padding-top:16px; border-top:1px solid #F0EEF9; }
+  .modal-btn-cancel { padding:10px 20px; border:1.5px solid #E0DBF0; border-radius:10px; background:#fff; color:#666; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; }
+  .modal-btn-submit { padding:10px 24px; border:none; border-radius:10px; background:#481DBC; color:#fff; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; }
+  .modal-btn-submit:hover { background:#3a169a; }
+  .modal-success { background:#DCFCE7; border:1px solid #BBF7D0; color:#15803D; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:14px; display:none; }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1A0A4A; color:#fff; padding:12px 24px; border-radius:12px; font-size:13px; font-weight:600; z-index:2000; opacity:0; transition:opacity .3s; pointer-events:none; box-shadow:0 8px 30px rgba(0,0,0,.2); }
+  .toast.show { opacity:1; }
+  /* ROW ACTIONS */
+  .row-actions { display:flex; gap:6px; }
+  .action-btn { padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600; font-family:inherit; cursor:pointer; border:1px solid transparent; transition:all .15s; }
+  .action-btn.view { background:#F4F2FB; color:#481DBC; border-color:#D8D3EE; }
+  .action-btn.edit { background:#FFF0E8; color:#FF6A00; border-color:#FFD5BB; }
+  .action-btn.del  { background:#FEF2F2; color:#EF4444; border-color:#FECACA; }
+  .status-select { padding:3px 8px; border:1px solid #E0DBF0; border-radius:6px; font-size:11px; font-family:inherit; color:#555; cursor:pointer; background:#fff; }
+  /* DETAIL PANEL */
+  .detail-panel { position:fixed; left:0; top:0; width:380px; height:100vh; background:#fff; box-shadow:4px 0 30px rgba(0,0,0,.15); z-index:900; transform:translateX(-100%); transition:transform .3s; overflow-y:auto; padding:24px; }
+  .detail-panel.open { transform:translateX(0); }
+  .detail-overlay { position:fixed; inset:0; z-index:899; display:none; }
+  .detail-overlay.open { display:block; }
+  .detail-section { margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid #F0EEF9; }
+  .detail-section:last-child { border-bottom:none; }
+  .detail-label { font-size:11px; color:#aaa; margin-bottom:3px; }
+  .detail-value { font-size:14px; font-weight:600; color:#1A0A4A; }
+  .detail-title { font-size:16px; font-weight:800; color:#1A0A4A; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; }
+</style>
+</head>
+<body>
+
+<script>
+  const user = JSON.parse(localStorage.getItem('madar_user') || 'null');
+  if (!user) window.location.href = 'index.html';
+</script>
+
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div>
+      <div class="sidebar-logo">
+        <div style="background:white;border-radius:10px;padding:6px 12px;display:inline-flex;align-items:center;">
+          <img src="../logo.png" alt="Madar" style="height:32px;">
+        </div>
+      </div>
+      <div class="sidebar-subtitle">لوحة الإدارة</div>
+    </div>
+    <div class="online-dot"></div>
+  </div>
+
+  <div style="padding:8px 0 16px;">
+    <div class="nav-section-label">الرئيسية</div>
+    <a class="nav-item active" onclick="showPage('dashboard',this)">
+      <span class="nav-icon">⊞</span> لوحة التحكم
+    </a>
+
+    <div class="nav-section-label">الأعمال</div>
+    <a class="nav-item" onclick="showPage('merchants',this)"><span class="nav-icon">🏪</span> التجار</a>
+    <a class="nav-item" onclick="showPage('orders',this)"><span class="nav-icon">📋</span> الطلبات <span class="nav-badge">8</span></a>
+    <a class="nav-item" onclick="showPage('finance',this)"><span class="nav-icon">💰</span> المالية</a>
+    <a class="nav-item" onclick="showPage('reports',this)"><span class="nav-icon">📊</span> التقارير</a>
+
+    <div class="nav-section-label">العمليات</div>
+    <a class="nav-item" onclick="showPage('warehouse',this)"><span class="nav-icon">🏭</span> المستودع</a>
+    <a class="nav-item" onclick="showPage('b2b',this)"><span class="nav-icon">🚐</span> النقل الثالث</a>
+    <a class="nav-item" onclick="showPage('lastmile',this)"><span class="nav-icon">🚗</span> آخر ميل</a>
+    <a class="nav-item" onclick="showPage('returns',this)"><span class="nav-icon">↩️</span> المرتجعات</a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="avatar" id="userAvatar">م</div>
+    <div style="min-width:0;">
+      <div class="user-name" id="userName"></div>
+      <div class="user-role" id="userRole"></div>
+    </div>
+    <button class="logout-btn" onclick="logout()" title="تسجيل الخروج">⏻</button>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="pageTitle">المؤشرات الرئيسية</div>
+      <div class="topbar-sub" id="pageSubtitle">آخر تحديث: الآن</div>
+    </div>
+    <div class="topbar-right">
+      <div class="date-filters" id="dateFilters">
+        <button class="filter-btn" onclick="setFilter(0,'اليوم')">اليوم</button>
+        <button class="filter-btn" onclick="setFilter(7,'7 أيام')">7 أيام</button>
+        <button class="filter-btn" onclick="setFilter(14,'14 يوم')">14 يوم</button>
+        <button class="filter-btn active" onclick="setFilter(30,'30 يوم')">30 يوم</button>
+      </div>
+      <div class="date-range">
+        <span>من</span><strong id="dateFrom"></strong>
+        <span>إلى</span><strong id="dateTo"></strong>
+      </div>
+      <button class="refresh-btn" onclick="refreshData()">⟳ تحديث</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+  <!-- ══════════ PAGE: DASHBOARD ══════════ -->
+  <div class="page active" id="page-dashboard">
+
+    <!-- KPI 2-col -->
+    <div class="kpi-grid-2">
+
+      <!-- B2B -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <div>
+            <div class="kpi-card-title"><span class="dot-green"></span>النقل الثالث  B2B</div>
+            <div class="kpi-card-sub" id="b2b-period">آخر 30 يوم</div>
+          </div>
+          <div class="revenue-badge" id="b2b-rev">184,500 ر.س.</div>
+        </div>
+        <div class="kpi-metrics">
+          <div class="kpi-metric">
+            <div class="kpi-metric-label">الطلبات</div>
+            <div class="kpi-metric-value" id="b2b-total">247</div>
+          </div>
+          <div class="kpi-metric">
+            <div class="kpi-metric-label">تم التسليم</div>
+            <div class="kpi-metric-value" id="b2b-delivered">203</div>
+          </div>
+          <div class="kpi-metric">
+            <div class="kpi-metric-label">النجاح</div>
+            <div class="kpi-metric-value" id="b2b-rate">82%</div>
+          </div>
+        </div>
+        <div class="kpi-metrics-2">
+          <div><div class="kpi-sm-label">ملغى</div><div class="kpi-sm-value" id="b2b-cancelled">11</div></div>
+          <div><div class="kpi-sm-label">فشل التسليم</div><div class="kpi-sm-value" id="b2b-failed">19</div></div>
+          <div><div class="kpi-sm-label">مرتجع</div><div class="kpi-sm-value" id="b2b-returned">14</div></div>
+        </div>
+        <div>
+          <div class="prog-label"><span id="b2b-prog-lbl">82%  تم التسليم</span></div>
+          <div class="prog-bg"><div class="prog-fill green" id="b2b-prog" style="width:82%"></div></div>
+        </div>
+        <div class="revenue-row">
+          <span class="revenue-label">إيراد الشحن</span>
+          <span class="revenue-value" id="b2b-rev2">184,500 ر.س.</span>
+        </div>
+      </div>
+
+      <!-- Last-Mile -->
+      <div class="kpi-card">
+        <div class="kpi-card-header">
+          <div>
+            <div class="kpi-card-title"><span class="dot-orange"></span>آخر ميل  Last-Mile</div>
+            <div class="kpi-card-sub" id="lm-period">آخر 30 يوم</div>
+          </div>
+          <div class="revenue-badge" id="lm-rev">67,320 ر.س.</div>
+        </div>
+        <div class="kpi-metrics">
+          <div class="kpi-metric">
+            <div class="kpi-metric-label">الطلبات</div>
+            <div class="kpi-metric-value" id="lm-total">583</div>
+          </div>
+          <div class="kpi-metric">
+            <div class="kpi-metric-label">تم التسليم</div>
+            <div class="kpi-metric-value" id="lm-delivered">489</div>
+          </div>
+          <div class="kpi-metric">
+            <div class="kpi-metric-label">النجاح</div>
+            <div class="kpi-metric-value" id="lm-rate">84%</div>
+          </div>
+        </div>
+        <div class="kpi-metrics-2">
+          <div><div class="kpi-sm-label">ملغى</div><div class="kpi-sm-value" id="lm-cancelled">24</div></div>
+          <div><div class="kpi-sm-label">فشل التسليم</div><div class="kpi-sm-value" id="lm-failed">42</div></div>
+          <div><div class="kpi-sm-label">مرتجع</div><div class="kpi-sm-value" id="lm-returned">28</div></div>
+        </div>
+        <div>
+          <div class="prog-label"><span id="lm-prog-lbl">84%  تم التسليم</span></div>
+          <div class="prog-bg"><div class="prog-fill green" id="lm-prog" style="width:84%"></div></div>
+        </div>
+        <div class="revenue-row">
+          <span class="revenue-label">إيراد الشحن</span>
+          <span class="revenue-value" id="lm-rev2">67,320 ر.س.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini KPIs -->
+    <div class="kpi-grid-4">
+      <div class="mini-kpi">
+        <div class="mini-kpi-label">إجمالي الطلبات<span class="live-badge">مباشر</span></div>
+        <div class="mini-kpi-value" id="mk-total">830</div>
+        <div class="mini-kpi-sub"><span class="trend-up">↑ 12% عن الفترة السابقة</span></div>
+      </div>
+      <div class="mini-kpi">
+        <div class="mini-kpi-label">طلبات اليوم<span class="live-badge">مباشر</span></div>
+        <div class="mini-kpi-value" id="mk-today">23</div>
+        <div class="mini-kpi-sub">آخر تحديث: منذ 3 دقائق</div>
+      </div>
+      <div class="mini-kpi">
+        <div class="mini-kpi-label">قيد التنفيذ<span class="live-badge">مباشر</span></div>
+        <div class="mini-kpi-value" id="mk-active">61</div>
+        <div class="mini-kpi-sub"><span class="trend-down">8 تحتاج متابعة عاجلة</span></div>
+      </div>
+      <div class="mini-kpi">
+        <div class="mini-kpi-label">معدل التسليم<span class="live-badge">مباشر</span></div>
+        <div class="mini-kpi-value" id="mk-rate">83%</div>
+        <div class="mini-kpi-sub"><span class="trend-up">↑ 2% عن الشهر الماضي</span></div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">
+          📈 الطلبات الأسبوعية
+          <span class="chart-sub" id="chart-period-lbl">آخر 30 يوم</span>
+        </div>
+        <canvas id="ordersChart" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">📦 توزيع حالات الطلبات</div>
+        <div class="status-list" id="statusList"></div>
+        <div class="status-total">
+          <span>الإجمالي</span>
+          <strong id="statusTotal" style="color:#1A0A4A;">830 طلب</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders preview -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">آخر الطلبات</div>
+        <div class="table-actions">
+          <button class="add-btn" onclick="showPage('orders', document.querySelectorAll('.nav-item')[3])">عرض الكل</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th><th>التاجر</th><th>المنطقة</th><th>الخدمة</th><th>الحالة</th><th>التاريخ</th><th>القيمة</th>
+          </tr>
+        </thead>
+        <tbody id="recentOrdersBody"></tbody>
+      </table>
+    </div>
+
+  </div><!-- /page-dashboard -->
+
+  <!-- ══════════ PAGE: MERCHANTS ══════════ -->
+  <div class="page" id="page-merchants">
+    <div class="table-card" style="margin-bottom:16px;">
+      <div class="table-header">
+        <div class="table-title">التجار المسجلون</div>
+        <div class="table-actions">
+          <input class="search-input" id="merchantSearch" placeholder="بحث باسم التاجر..." oninput="filterMerchants()" />
+          <select class="select-filter" id="merchantStatusFilter" onchange="filterMerchants()">
+            <option value="">كل الحالات</option>
+            <option value="نشط">نشط</option>
+            <option value="معلق">معلق</option>
+          </select>
+          <button class="add-btn" onclick="openModal('modalAddMerchant')">+ إضافة تاجر</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>المعرّف</th><th>اسم المتجر</th><th>المسؤول</th><th>النوع</th><th>المنطقة</th><th>الطلبات</th><th>الإيراد</th><th>الحالة</th><th>الإجراءات</th></tr>
+        </thead>
+        <tbody id="merchantsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: ORDERS ══════════ -->
+  <div class="page" id="page-orders">
+    <div class="kpi-grid-4" style="margin-bottom:16px;">
+      <div class="mini-kpi"><div class="mini-kpi-label">إجمالي الطلبات</div><div class="mini-kpi-value">830</div><div class="mini-kpi-sub">آخر 30 يوم</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">تم التسليم</div><div class="mini-kpi-value" style="color:#15803D;">692</div><div class="mini-kpi-sub">83.4% معدل النجاح</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">قيد التنفيذ</div><div class="mini-kpi-value" style="color:#1D4ED8;">61</div><div class="mini-kpi-sub">تحتاج متابعة</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">المرتجعات</div><div class="mini-kpi-value" style="color:#EA580C;">42</div><div class="mini-kpi-sub">5.1% معدل الرد</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">جميع الطلبات</div>
+        <div class="table-actions">
+          <input class="search-input" id="orderSearch" placeholder="بحث برقم الطلب أو التاجر..." oninput="filterOrders()" />
+          <select class="select-filter" id="orderStatusFilter" onchange="filterOrders()">
+            <option value="">كل الحالات</option>
+            <option value="تم التسليم">تم التسليم</option>
+            <option value="قيد التنفيذ">قيد التنفيذ</option>
+            <option value="في الطريق">في الطريق</option>
+            <option value="فشل التسليم">فشل التسليم</option>
+            <option value="مرتجع">مرتجع</option>
+            <option value="ملغى">ملغى</option>
+          </select>
+          <select class="select-filter" id="orderServiceFilter" onchange="filterOrders()">
+            <option value="">كل الخدمات</option>
+            <option value="B2B">B2B</option>
+            <option value="آخر ميل">آخر ميل</option>
+          </select>
+          <button class="add-btn" onclick="openModal('modalAddOrder')">+ طلب جديد</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>رقم الطلب</th><th>التاجر</th><th>المستلم</th><th>المنطقة</th><th>الخدمة</th><th>الحالة</th><th>التاريخ</th><th>القيمة</th><th>الإجراءات</th></tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: FINANCE ══════════ -->
+  <div class="page" id="page-finance">
+    <div class="fin-grid">
+      <div class="fin-card">
+        <div class="fin-title">💵 الإيراد الإجمالي</div>
+        <div class="fin-big">251,820</div>
+        <div class="fin-big-sub">ريال سعودي  آخر 30 يوم</div>
+        <div style="margin-top:14px;">
+          <div class="prog-label"><span>تحصيل من الإجمالي</span><span>78%</span></div>
+          <div class="prog-bg"><div class="prog-fill green" style="width:78%"></div></div>
+        </div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-title">🚐 إيراد النقل الثالث</div>
+        <div class="fin-big">184,500</div>
+        <div class="fin-big-sub">247 طلب × متوسط 747 ر.س.</div>
+        <div class="fin-rows" style="margin-top:14px;">
+          <div class="fin-row-item"><span class="fin-row-label">مُحصَّل</span><span class="fin-row-value">152,300 ر.س.</span></div>
+          <div class="fin-row-item"><span class="fin-row-label">معلق</span><span class="fin-row-value">32,200 ر.س.</span></div>
+        </div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-title">🚗 إيراد آخر ميل</div>
+        <div class="fin-big">67,320</div>
+        <div class="fin-big-sub">583 طلب × متوسط 115 ر.س.</div>
+        <div class="fin-rows" style="margin-top:14px;">
+          <div class="fin-row-item"><span class="fin-row-label">مُحصَّل</span><span class="fin-row-value">44,800 ر.س.</span></div>
+          <div class="fin-row-item"><span class="fin-row-label">معلق</span><span class="fin-row-value">22,520 ر.س.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">الفواتير الأخيرة</div>
+        <div class="table-actions">
+          <button class="add-btn" onclick="openModal('modalAddInvoice')">+ إنشاء فاتورة</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>رقم الفاتورة</th><th>التاجر</th><th>الفترة</th><th>عدد الشحنات</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+        <tbody id="invoicesBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: REPORTS ══════════ -->
+  <div class="page" id="page-reports">
+    <div class="kpi-grid-4" style="margin-bottom:16px;">
+      <div class="mini-kpi"><div class="mini-kpi-label">أفضل منطقة</div><div class="mini-kpi-value" style="font-size:18px;">الرياض</div><div class="mini-kpi-sub">312 طلب  37.5%</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">أفضل خدمة</div><div class="mini-kpi-value" style="font-size:18px;">آخر ميل</div><div class="mini-kpi-sub">583 طلب  70.2%</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">متوسط وقت التسليم</div><div class="mini-kpi-value" style="font-size:22px;">1.8</div><div class="mini-kpi-sub">يوم عمل</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">رضا العملاء</div><div class="mini-kpi-value" style="font-size:22px;color:#22C55E;">4.6⭐</div><div class="mini-kpi-sub">من 5  142 تقييم</div></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">توزيع الطلبات حسب المنطقة</div>
+        <canvas id="regionChart" height="160"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">الأداء الشهري</div>
+        <div class="fin-rows">
+          <div class="fin-row-item"><span class="fin-row-label">مارس 2026</span><span class="fin-row-value" style="color:#22C55E;">↑ 24%</span></div>
+          <div class="fin-row-item"><span class="fin-row-label">أبريل 2026</span><span class="fin-row-value" style="color:#22C55E;">↑ 18%</span></div>
+          <div class="fin-row-item"><span class="fin-row-label">مايو 2026</span><span class="fin-row-value" style="color:#22C55E;">↑ 12%</span></div>
+          <div class="fin-row-item"><span class="fin-row-label">أفضل يوم</span><span class="fin-row-value">الأحد</span></div>
+          <div class="fin-row-item"><span class="fin-row-label">أعلى ساعة</span><span class="fin-row-value">10ص  12م</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: WAREHOUSE ══════════ -->
+  <div class="page" id="page-warehouse">
+    <div class="wh-grid">
+      <div class="wh-card"><div class="wh-icon">📦</div><div class="wh-label">إجمالي الوحدات</div><div class="wh-value">4,820</div><div class="wh-sub">في المستودع الرئيسي</div></div>
+      <div class="wh-card"><div class="wh-icon">✅</div><div class="wh-label">جاهز للشحن</div><div class="wh-value" style="color:#15803D;">3,140</div><div class="wh-sub">65% من الإجمالي</div></div>
+      <div class="wh-card"><div class="wh-icon">🔄</div><div class="wh-label">قيد الفرز</div><div class="wh-value" style="color:#C2410C;">892</div><div class="wh-sub">18.5% معالجة</div></div>
+      <div class="wh-card"><div class="wh-icon">⚠️</div><div class="wh-label">بانتظار الاستلام</div><div class="wh-value" style="color:#D97706;">788</div><div class="wh-sub">16.3% قيد الانتظار</div></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">استخدام المستودع</div>
+        <div style="margin-top:10px;display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <div class="prog-label"><span>الطاقة الاستيعابية المستخدمة</span><span>68%</span></div>
+            <div class="prog-bg" style="height:12px;"><div class="prog-fill green" style="width:68%;background:#481DBC;"></div></div>
+          </div>
+          <div>
+            <div class="prog-label"><span>منطقة التبريد</span><span>45%</span></div>
+            <div class="prog-bg" style="height:12px;"><div class="prog-fill green" style="width:45%;background:#06B6D4;"></div></div>
+          </div>
+          <div>
+            <div class="prog-label"><span>الرفوف  منطقة أ</span><span>82%</span></div>
+            <div class="prog-bg" style="height:12px;"><div class="prog-fill green" style="width:82%;background:#22C55E;"></div></div>
+          </div>
+          <div>
+            <div class="prog-label"><span>الرفوف  منطقة ب</span><span>91%</span></div>
+            <div class="prog-bg" style="height:12px;"><div class="prog-fill red" style="width:91%;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">أكثر التجار تخزيناً</div>
+        <div class="status-list" style="margin-top:8px;">
+          <div class="status-row-item"><span class="status-dot-sm" style="background:#481DBC;"></span><span class="status-name-txt">متجر الأمل</span><div class="status-bar-bg"><div class="status-bar-fill" style="width:78%;background:#481DBC;"></div></div><span class="status-count-txt">940</span></div>
+          <div class="status-row-item"><span class="status-dot-sm" style="background:#22C55E;"></span><span class="status-name-txt">نون للتجارة</span><div class="status-bar-bg"><div class="status-bar-fill" style="width:62%;background:#22C55E;"></div></div><span class="status-count-txt">750</span></div>
+          <div class="status-row-item"><span class="status-dot-sm" style="background:#FF6A00;"></span><span class="status-name-txt">سوق جدة</span><div class="status-bar-bg"><div class="status-bar-fill" style="width:48%;background:#FF6A00;"></div></div><span class="status-count-txt">580</span></div>
+          <div class="status-row-item"><span class="status-dot-sm" style="background:#06B6D4;"></span><span class="status-name-txt">مستودع الخليج</span><div class="status-bar-bg"><div class="status-bar-fill" style="width:34%;background:#06B6D4;"></div></div><span class="status-count-txt">410</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: B2B ══════════ -->
+  <div class="page" id="page-b2b">
+    <div class="kpi-grid-4" style="margin-bottom:16px;">
+      <div class="mini-kpi"><div class="mini-kpi-label">إجمالي الرحلات</div><div class="mini-kpi-value">247</div><div class="mini-kpi-sub">آخر 30 يوم</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">تم التسليم</div><div class="mini-kpi-value" style="color:#15803D;">203</div><div class="mini-kpi-sub">82.2%</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">إجمالي الحمولة</div><div class="mini-kpi-value" style="font-size:22px;">8,420</div><div class="mini-kpi-sub">طن متري</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">الإيراد</div><div class="mini-kpi-value" style="font-size:20px;color:#481DBC;">184K</div><div class="mini-kpi-sub">ريال سعودي</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">رحلات النقل الثالث</div>
+        <div class="table-actions">
+          <input class="search-input" placeholder="بحث..." />
+          <select class="select-filter"><option>كل الحالات</option><option>تم التسليم</option><option>في الطريق</option><option>فشل</option></select>
+          <button class="add-btn">+ رحلة جديدة</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>رقم الرحلة</th><th>التاجر</th><th>من</th><th>إلى</th><th>الحمولة (طن)</th><th>السائق</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+        <tbody id="b2bBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: LAST-MILE ══════════ -->
+  <div class="page" id="page-lastmile">
+    <div class="kpi-grid-4" style="margin-bottom:16px;">
+      <div class="mini-kpi"><div class="mini-kpi-label">إجمالي التوصيلات</div><div class="mini-kpi-value">583</div><div class="mini-kpi-sub">آخر 30 يوم</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">تم التسليم</div><div class="mini-kpi-value" style="color:#15803D;">489</div><div class="mini-kpi-sub">83.9%</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">متوسط وقت التسليم</div><div class="mini-kpi-value" style="font-size:22px;">4.2</div><div class="mini-kpi-sub">ساعة</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">المناديب النشطون</div><div class="mini-kpi-value">18</div><div class="mini-kpi-sub">من 24 مندوب</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">توصيلات آخر ميل</div>
+        <div class="table-actions">
+          <input class="search-input" placeholder="بحث..." />
+          <select class="select-filter"><option>كل الحالات</option><option>تم التسليم</option><option>في الطريق</option><option>فشل</option><option>مرتجع</option></select>
+          <button class="add-btn">+ توصيلة جديدة</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>رقم الشحنة</th><th>التاجر</th><th>المستلم</th><th>المنطقة</th><th>المندوب</th><th>الحالة</th><th>الوقت</th><th>القيمة</th></tr></thead>
+        <tbody id="lastmileBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE: RETURNS ══════════ -->
+  <div class="page" id="page-returns">
+    <div class="kpi-grid-4" style="margin-bottom:16px;">
+      <div class="mini-kpi"><div class="mini-kpi-label">إجمالي المرتجعات</div><div class="mini-kpi-value" style="color:#EA580C;">42</div><div class="mini-kpi-sub">آخر 30 يوم</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">تمت المعالجة</div><div class="mini-kpi-value" style="color:#15803D;">31</div><div class="mini-kpi-sub">73.8%</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">قيد المراجعة</div><div class="mini-kpi-value" style="color:#D97706;">8</div><div class="mini-kpi-sub">تحتاج قرار</div></div>
+      <div class="mini-kpi"><div class="mini-kpi-label">خسائر المرتجعات</div><div class="mini-kpi-value" style="font-size:20px;color:#B91C1C;">6,840</div><div class="mini-kpi-sub">ريال سعودي</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">سجل المرتجعات</div>
+        <div class="table-actions">
+          <input class="search-input" placeholder="بحث..." />
+          <select class="select-filter"><option>كل الأسباب</option><option>رفض الاستلام</option><option>عنوان خاطئ</option><option>غياب المستلم</option><option>تالف</option></select>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>رقم المرتجع</th><th>رقم الأصلي</th><th>التاجر</th><th>السبب</th><th>الخدمة</th><th>القيمة</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+        <tbody id="returnsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════ MODALS ═══════════════════════════════ -->
+
+<!-- Modal: Add Merchant -->
+<div class="modal-overlay" id="modalAddMerchant" onclick="closeModalOnBg(event,'modalAddMerchant')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🏪 إضافة تاجر جديد</div>
+      <button class="modal-close" onclick="closeModal('modalAddMerchant')">✕</button>
+    </div>
+    <div class="modal-success" id="merchantSuccess">✅ تم إضافة التاجر بنجاح!</div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>اسم المتجر</label><input id="m_store" placeholder="متجر الأمل"/></div>
+      <div class="modal-field"><label>اسم المسؤول</label><input id="m_name" placeholder="محمد العمري"/></div>
+    </div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>البريد الإلكتروني</label><input id="m_email" type="email" placeholder="merchant@store.com" style="direction:ltr;text-align:right;"/></div>
+      <div class="modal-field"><label>رقم الجوال</label><input id="m_phone" placeholder="05XXXXXXXX" style="direction:ltr;text-align:right;"/></div>
+    </div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>نوع النشاط</label><select id="m_type"><option>تجارة إلكترونية</option><option>بيع بالتجزئة</option><option>بيع بالجملة</option><option>موردين</option><option>مطاعم</option></select></div>
+      <div class="modal-field"><label>المنطقة</label><select id="m_region"><option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة المكرمة</option><option>المدينة المنورة</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeModal('modalAddMerchant')">إلغاء</button>
+      <button class="modal-btn-submit" onclick="submitAddMerchant()">إضافة التاجر</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Order -->
+<div class="modal-overlay" id="modalAddOrder" onclick="closeModalOnBg(event,'modalAddOrder')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📋 طلب شحن جديد</div>
+      <button class="modal-close" onclick="closeModal('modalAddOrder')">✕</button>
+    </div>
+    <div class="modal-success" id="orderSuccess">✅ تم إنشاء الطلب بنجاح!</div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>التاجر</label><select id="o_merchant"><option>متجر الأمل</option><option>نون للتجارة</option><option>مستودع الخليج</option><option>سوق جدة</option><option>دار الأزياء</option><option>مطبخ الشيف</option></select></div>
+      <div class="modal-field"><label>نوع الخدمة</label><select id="o_service"><option>آخر ميل</option><option>B2B</option></select></div>
+    </div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>اسم المستلم</label><input id="o_recipient" placeholder="اسم المستلم"/></div>
+      <div class="modal-field"><label>رقم الجوال</label><input id="o_phone" placeholder="05XXXXXXXX" style="direction:ltr;text-align:right;"/></div>
+    </div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>منطقة التسليم</label><select id="o_region"><option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة المكرمة</option><option>المدينة المنورة</option></select></div>
+      <div class="modal-field"><label>قيمة الشحنة (ر.س.)</label><input id="o_value" type="number" placeholder="0"/></div>
+    </div>
+    <div class="modal-field"><label>وصف المحتوى</label><textarea id="o_desc" placeholder="وصف مختصر للشحنة..."></textarea></div>
+    <div class="modal-field"><label>الوزن التقريبي (كجم)</label><input id="o_weight" type="number" placeholder="0"/></div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeModal('modalAddOrder')">إلغاء</button>
+      <button class="modal-btn-submit" onclick="submitAddOrder()">إنشاء الطلب</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Invoice -->
+<div class="modal-overlay" id="modalAddInvoice" onclick="closeModalOnBg(event,'modalAddInvoice')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">💰 إنشاء فاتورة</div>
+      <button class="modal-close" onclick="closeModal('modalAddInvoice')">✕</button>
+    </div>
+    <div class="modal-success" id="invoiceSuccess">✅ تم إنشاء الفاتورة بنجاح!</div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>التاجر</label><select id="inv_merchant"><option>متجر الأمل</option><option>نون للتجارة</option><option>مستودع الخليج</option><option>الفيصلية للتجارة</option></select></div>
+      <div class="modal-field"><label>الفترة</label><select id="inv_period"><option>مايو 2026</option><option>أبريل 2026</option><option>مارس 2026</option></select></div>
+    </div>
+    <div class="modal-row-2">
+      <div class="modal-field"><label>عدد الشحنات</label><input id="inv_count" type="number" placeholder="0"/></div>
+      <div class="modal-field"><label>المبلغ (ر.س.)</label><input id="inv_amount" type="number" placeholder="0"/></div>
+    </div>
+    <div class="modal-field"><label>ملاحظات</label><textarea id="inv_notes" placeholder="ملاحظات اختيارية..."></textarea></div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="closeModal('modalAddInvoice')">إلغاء</button>
+      <button class="modal-btn-submit" onclick="submitAddInvoice()">إنشاء الفاتورة</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Panel -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <div id="detailContent"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════ JAVASCRIPT ═══════════════════════════════ -->
+<script>
+
+/* ─────────────────────── DATA ─────────────────────── */
+
+const PERIODS = {
+  0:  { label:'اليوم',   factor: 0.03 },
+  7:  { label:'7 أيام',  factor: 0.22 },
+  14: { label:'14 يوم',  factor: 0.48 },
+  30: { label:'30 يوم',  factor: 1.00 },
+};
+
+const BASE = {
+  b2b:  { total:247, delivered:203, failed:19, returned:14, cancelled:11, rev:184500 },
+  lm:   { total:583, delivered:489, failed:42, returned:28, cancelled:24, rev:67320 },
+};
+
+const MERCHANTS = [
+  { id:'MAD-10021', store:'متجر الأمل التجاري', name:'محمد العمري', type:'تجارة إلكترونية', region:'الرياض',  orders:142, rev:38200, status:'نشط' },
+  { id:'MAD-10034', store:'نون للتجارة',        name:'عبدالله الحربي', type:'بيع بالجملة', region:'جدة',    orders:98,  rev:27400, status:'نشط' },
+  { id:'MAD-10056', store:'سوق جدة للعطور',     name:'فيصل القحطاني', type:'بيع بالتجزئة', region:'جدة',   orders:74,  rev:19800, status:'نشط' },
+  { id:'MAD-10078', store:'مستودع الخليج',       name:'أحمد الشمري',  type:'موردين',       region:'الدمام', orders:63,  rev:41500, status:'نشط' },
+  { id:'MAD-10092', store:'دار الأزياء',         name:'ريم العتيبي',  type:'بيع بالتجزئة', region:'الرياض', orders:51,  rev:12300, status:'نشط' },
+  { id:'MAD-10105', store:'مطبخ الشيف',          name:'سلطان الدوسري',type:'مطاعم',        region:'الرياض', orders:44,  rev:8900,  status:'نشط' },
+  { id:'MAD-10118', store:'تقنية المستقبل',      name:'وليد النجدي',  type:'تجارة إلكترونية',region:'مكة',  orders:38,  rev:15600, status:'نشط' },
+  { id:'MAD-10133', store:'البيت الأخضر',        name:'هند الزهراني', type:'بيع بالتجزئة', region:'المدينة',orders:29,  rev:6200,  status:'معلق' },
+  { id:'MAD-10147', store:'متجر السعادة',        name:'ناصر العنزي',  type:'تجارة إلكترونية',region:'الرياض',orders:22,  rev:5800,  status:'نشط' },
+  { id:'MAD-10159', store:'الفيصلية للتجارة',   name:'خالد المطيري', type:'بيع بالجملة',  region:'الدمام', orders:17,  rev:22100, status:'نشط' },
+  { id:'MAD-10172', store:'جروب السوق الحديث',  name:'علي الغامدي',  type:'موردين',       region:'جدة',    orders:14,  rev:9400,  status:'معلق' },
+  { id:'MAD-10185', store:'أكاديمية الألعاب',   name:'ياسر الرشيد',  type:'تجارة إلكترونية',region:'الرياض',orders:8,   rev:3200,  status:'نشط' },
+];
+
+const STATUSES = [
+  { name:'تم التسليم', count:692, color:'#22C55E', pill:'pill-delivered' },
+  { name:'قيد التنفيذ', count:61,  color:'#1D4ED8', pill:'pill-pending'   },
+  { name:'في الطريق',  count:35,  color:'#7C3AED', pill:'pill-transit'   },
+  { name:'فشل التسليم',count:61,  color:'#EF4444', pill:'pill-failed'    },
+  { name:'مرتجع',      count:42,  color:'#EA580C', pill:'pill-returned'  },
+  { name:'ملغى',       count:35,  color:'#9CA3AF', pill:'pill-cancelled' },
+];
+
+const ORDERS = [
+  { id:'ORD-8831', merchant:'متجر الأمل',    recipient:'سعد المالكي',   region:'الرياض',  service:'آخر ميل', status:'تم التسليم', date:'2026-05-30', value:145 },
+  { id:'ORD-8830', merchant:'نون للتجارة',   recipient:'حسن العسيري',   region:'جدة',     service:'آخر ميل', status:'في الطريق',  date:'2026-05-30', value:89  },
+  { id:'ORD-8829', merchant:'متجر الأمل',    recipient:'نورة السالم',   region:'الرياض',  service:'آخر ميل', status:'قيد التنفيذ',date:'2026-05-29', value:220 },
+  { id:'ORD-8828', merchant:'مستودع الخليج', recipient:'متجر الخليج',   region:'الدمام',  service:'B2B',      status:'تم التسليم', date:'2026-05-29', value:2400},
+  { id:'ORD-8827', merchant:'سوق جدة',       recipient:'عمر البحراني',  region:'جدة',     service:'آخر ميل', status:'فشل التسليم',date:'2026-05-28', value:130 },
+  { id:'ORD-8826', merchant:'دار الأزياء',   recipient:'منال الشهري',   region:'مكة',     service:'آخر ميل', status:'مرتجع',      date:'2026-05-28', value:340 },
+  { id:'ORD-8825', merchant:'نون للتجارة',   recipient:'مركز الرياض',   region:'الرياض',  service:'B2B',      status:'تم التسليم', date:'2026-05-27', value:1800},
+  { id:'ORD-8824', merchant:'تقنية المستقبل',recipient:'يوسف الفريدي', region:'مكة',     service:'آخر ميل', status:'تم التسليم', date:'2026-05-27', value:175 },
+  { id:'ORD-8823', merchant:'مطبخ الشيف',    recipient:'ليلى المنصور',  region:'الرياض',  service:'آخر ميل', status:'ملغى',       date:'2026-05-26', value:65  },
+  { id:'ORD-8822', merchant:'مستودع الخليج', recipient:'شركة النماء',   region:'الدمام',  service:'B2B',      status:'في الطريق',  date:'2026-05-26', value:3200},
+  { id:'ORD-8821', merchant:'متجر السعادة',  recipient:'ريان المصري',   region:'الرياض',  service:'آخر ميل', status:'تم التسليم', date:'2026-05-25', value:95  },
+  { id:'ORD-8820', merchant:'الفيصلية',      recipient:'مجموعة النخبة', region:'الدمام',  service:'B2B',      status:'تم التسليم', date:'2026-05-25', value:5600},
+  { id:'ORD-8819', merchant:'دار الأزياء',   recipient:'رانيا الصالح',  region:'جدة',     service:'آخر ميل', status:'تم التسليم', date:'2026-05-24', value:290 },
+  { id:'ORD-8818', merchant:'متجر الأمل',    recipient:'طلال المزيد',   region:'المدينة', service:'آخر ميل', status:'قيد التنفيذ',date:'2026-05-24', value:185 },
+  { id:'ORD-8817', merchant:'نون للتجارة',   recipient:'شركة المدار',   region:'الرياض',  service:'B2B',      status:'فشل التسليم',date:'2026-05-23', value:1100},
+];
+
+const B2B_DATA = [
+  { id:'B2B-0441', merchant:'مستودع الخليج', from:'الدمام', to:'الرياض',  load:12.4, driver:'خالد سعد',     status:'تم التسليم', date:'2026-05-30' },
+  { id:'B2B-0440', merchant:'نون للتجارة',   from:'الرياض', to:'جدة',     load:8.2,  driver:'فهد العمر',    status:'في الطريق',  date:'2026-05-30' },
+  { id:'B2B-0439', merchant:'الفيصلية',      from:'الدمام', to:'الرياض',  load:18.7, driver:'محمد الشيخ',   status:'تم التسليم', date:'2026-05-29' },
+  { id:'B2B-0438', merchant:'متجر الأمل',    from:'الرياض', to:'مكة',     load:5.1,  driver:'عبدالرحمن علي',status:'تم التسليم', date:'2026-05-28' },
+  { id:'B2B-0437', merchant:'تقنية المستقبل',from:'جدة',    to:'المدينة', load:3.8,  driver:'ياسر قاسم',    status:'فشل التسليم',date:'2026-05-27' },
+  { id:'B2B-0436', merchant:'مستودع الخليج', from:'الدمام', to:'جدة',     load:22.0, driver:'خالد سعد',     status:'تم التسليم', date:'2026-05-26' },
+  { id:'B2B-0435', merchant:'نون للتجارة',   from:'الرياض', to:'الدمام',  load:9.5,  driver:'فهد العمر',    status:'تم التسليم', date:'2026-05-25' },
+  { id:'B2B-0434', merchant:'الفيصلية',      from:'جدة',    to:'الرياض',  load:14.2, driver:'محمد الشيخ',   status:'تم التسليم', date:'2026-05-24' },
+];
+
+const LM_DATA = [
+  { id:'LM-22481', merchant:'متجر الأمل',    recipient:'سعد المالكي',   region:'الرياض',  driver:'ماجد علي',    status:'تم التسليم', time:'10:24 ص', value:145 },
+  { id:'LM-22480', merchant:'نون للتجارة',   recipient:'حسن العسيري',   region:'جدة',     driver:'وائل صالح',   status:'في الطريق',  time:'11:05 ص', value:89  },
+  { id:'LM-22479', merchant:'دار الأزياء',   recipient:'منال الشهري',   region:'مكة',     driver:'تركي محمد',   status:'مرتجع',      time:'09:30 ص', value:340 },
+  { id:'LM-22478', merchant:'مطبخ الشيف',    recipient:'ليلى المنصور',  region:'الرياض',  driver:'ماجد علي',    status:'تم التسليم', time:'08:15 ص', value:65  },
+  { id:'LM-22477', merchant:'متجر السعادة',  recipient:'ريان المصري',   region:'الرياض',  driver:'أنور حسن',    status:'تم التسليم', time:'12:40 م', value:95  },
+  { id:'LM-22476', merchant:'سوق جدة',       recipient:'عمر البحراني',  region:'جدة',     driver:'وائل صالح',   status:'فشل التسليم',time:'02:10 م', value:130 },
+  { id:'LM-22475', merchant:'تقنية المستقبل',recipient:'يوسف الفريدي', region:'مكة',     driver:'خليل ناصر',   status:'تم التسليم', time:'03:55 م', value:175 },
+  { id:'LM-22474', merchant:'متجر الأمل',    recipient:'نورة السالم',   region:'الرياض',  driver:'ماجد علي',    status:'قيد التنفيذ',time:'',       value:220 },
+];
+
+const RETURNS_DATA = [
+  { id:'RET-0201', orig:'ORD-8826', merchant:'دار الأزياء',   reason:'رفض الاستلام', service:'آخر ميل', value:340, status:'تمت المعالجة', date:'2026-05-29' },
+  { id:'RET-0200', orig:'ORD-8827', merchant:'سوق جدة',       reason:'غياب المستلم', service:'آخر ميل', value:130, status:'قيد المراجعة',  date:'2026-05-28' },
+  { id:'RET-0199', orig:'ORD-8817', merchant:'نون للتجارة',   reason:'عنوان خاطئ',  service:'B2B',      value:1100,status:'تمت المعالجة', date:'2026-05-24' },
+  { id:'RET-0198', orig:'LM-22479', merchant:'دار الأزياء',   reason:'بضاعة تالفة', service:'آخر ميل', value:340, status:'قيد المراجعة',  date:'2026-05-30' },
+  { id:'RET-0197', orig:'B2B-0437', merchant:'تقنية المستقبل',reason:'عنوان خاطئ',  service:'B2B',      value:1840,status:'تمت المعالجة', date:'2026-05-27' },
+  { id:'RET-0196', orig:'ORD-8823', merchant:'مطبخ الشيف',    reason:'ملغى من التاجر',service:'آخر ميل',value:65,  status:'تمت المعالجة', date:'2026-05-26' },
+];
+
+const INVOICES = [
+  { id:'INV-0088', merchant:'مستودع الخليج', period:'مايو 2026',  count:63, amount:41500, status:'مُحصَّل' },
+  { id:'INV-0087', merchant:'متجر الأمل',    period:'مايو 2026',  count:142,amount:38200, status:'مُحصَّل' },
+  { id:'INV-0086', merchant:'نون للتجارة',   period:'مايو 2026',  count:98, amount:27400, status:'معلق'   },
+  { id:'INV-0085', merchant:'الفيصلية',      period:'مايو 2026',  count:17, amount:22100, status:'معلق'   },
+  { id:'INV-0084', merchant:'سوق جدة',       period:'أبريل 2026', count:74, amount:19800, status:'مُحصَّل' },
+  { id:'INV-0083', merchant:'تقنية المستقبل',period:'أبريل 2026', count:38, amount:15600, status:'مُحصَّل' },
+];
+
+/* ─────────────────────── INIT ─────────────────────── */
+
+let currentDays = 30;
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadUser();
+  setDates(30);
+  renderDashboard(30);
+  renderMerchants();
+  renderOrders();
+  renderB2B();
+  renderLastMile();
+  renderReturns();
+  renderInvoices();
+  renderStatusList(830);
+  renderChart(30);
+});
+
+function loadUser() {
+  const u = JSON.parse(localStorage.getItem('madar_user') || 'null');
+  if (!u) return;
+  document.getElementById('userName').textContent  = u.name || u.firstName || '';
+  document.getElementById('userRole').textContent  = u.role || 'مدير';
+  document.getElementById('userAvatar').textContent = ((u.firstName || u.name || 'م')[0]).toUpperCase();
+}
+
+/* ─────────────────────── DATE & FILTER ─────────────────────── */
+
+function setDates(days) {
+  const today = new Date('2026-05-31');
+  const from  = new Date(today);
+  from.setDate(today.getDate() - (days === 0 ? 0 : days));
+  const fmt = d => `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+  document.getElementById('dateFrom').textContent = fmt(from);
+  document.getElementById('dateTo').textContent   = fmt(today);
+}
+
+function setFilter(days, label) {
+  currentDays = days;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  setDates(days);
+  renderDashboard(days);
+  renderChart(days);
+  const sub = days === 0 ? 'اليوم فقط' : `آخر ${label}`;
+  document.getElementById('chart-period-lbl').textContent = sub;
+}
+
+function refreshData() {
+  const btn = document.querySelector('.refresh-btn');
+  btn.textContent = '⟳ جاري...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = '⟳ تحديث';
+    btn.disabled = false;
+    const now = new Date();
+    document.getElementById('pageSubtitle').textContent = `آخر تحديث: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  }, 800);
+}
+
+/* ─────────────────────── DASHBOARD DATA ─────────────────────── */
+
+function scaleVal(base, days) {
+  const f = days === 0 ? 0.03 : days === 7 ? 0.22 : days === 14 ? 0.48 : 1;
+  return Math.round(base * f);
+}
+function fmtNum(n) { return n.toLocaleString('ar-SA'); }
+function fmtSAR(n) { return fmtNum(Math.round(n)) + ' ر.س.'; }
+
+function renderDashboard(days) {
+  const b2b = BASE.b2b, lm = BASE.lm;
+  const f = days === 0 ? 0.03 : days === 7 ? 0.22 : days === 14 ? 0.48 : 1;
+  const period = days === 0 ? 'اليوم' : `آخر ${days} يوم`;
+
+  const b2bT = scaleVal(b2b.total, days);
+  const b2bD = scaleVal(b2b.delivered, days);
+  const b2bRate = b2bT ? Math.round(b2bD/b2bT*100) : 0;
+  const b2bRev = Math.round(b2b.rev * f);
+
+  document.getElementById('b2b-period').textContent    = period;
+  document.getElementById('b2b-total').textContent     = fmtNum(b2bT);
+  document.getElementById('b2b-delivered').textContent = fmtNum(b2bD);
+  document.getElementById('b2b-rate').textContent      = b2bRate + '%';
+  document.getElementById('b2b-cancelled').textContent = scaleVal(b2b.cancelled, days);
+  document.getElementById('b2b-failed').textContent    = scaleVal(b2b.failed, days);
+  document.getElementById('b2b-returned').textContent  = scaleVal(b2b.returned, days);
+  document.getElementById('b2b-prog').style.width      = b2bRate + '%';
+  document.getElementById('b2b-prog-lbl').textContent  = b2bRate + '%  تم التسليم';
+  document.getElementById('b2b-rev').textContent       = fmtSAR(b2bRev);
+  document.getElementById('b2b-rev2').textContent      = fmtSAR(b2bRev);
+
+  const lmT = scaleVal(lm.total, days);
+  const lmD = scaleVal(lm.delivered, days);
+  const lmRate = lmT ? Math.round(lmD/lmT*100) : 0;
+  const lmRev = Math.round(lm.rev * f);
+
+  document.getElementById('lm-period').textContent    = period;
+  document.getElementById('lm-total').textContent     = fmtNum(lmT);
+  document.getElementById('lm-delivered').textContent = fmtNum(lmD);
+  document.getElementById('lm-rate').textContent      = lmRate + '%';
+  document.getElementById('lm-cancelled').textContent = scaleVal(lm.cancelled, days);
+  document.getElementById('lm-failed').textContent    = scaleVal(lm.failed, days);
+  document.getElementById('lm-returned').textContent  = scaleVal(lm.returned, days);
+  document.getElementById('lm-prog').style.width      = lmRate + '%';
+  document.getElementById('lm-prog-lbl').textContent  = lmRate + '%  تم التسليم';
+  document.getElementById('lm-rev').textContent       = fmtSAR(lmRev);
+  document.getElementById('lm-rev2').textContent      = fmtSAR(lmRev);
+
+  const totalOrders = b2bT + lmT;
+  const todayOrders = days === 0 ? totalOrders : Math.round(totalOrders / (days||1));
+  const active = scaleVal(61+35, days);
+  const rate   = totalOrders ? Math.round((b2bD+lmD)/totalOrders*100) : 0;
+
+  animateNum('mk-total', totalOrders);
+  animateNum('mk-today', days === 0 ? totalOrders : Math.min(23, Math.round(totalOrders/days)));
+  animateNum('mk-active', active);
+  document.getElementById('mk-rate').textContent = rate + '%';
+
+  // recent orders
+  const recentBody = document.getElementById('recentOrdersBody');
+  recentBody.innerHTML = ORDERS.slice(0,8).map(o => `
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.merchant}</td>
+      <td>${o.region}</td>
+      <td><span style="font-size:11px;font-weight:600;color:#481DBC;">${o.service}</span></td>
+      <td><span class="pill ${pillClass(o.status)}">${o.status}</span></td>
+      <td style="color:#aaa;">${o.date}</td>
+      <td style="font-weight:700;">${o.value.toLocaleString()} ر.س.</td>
+    </tr>`).join('');
+}
+
+function animateNum(id, target) {
+  const el = document.getElementById(id);
+  const start = 0, dur = 600;
+  const t0 = performance.now();
+  function step(t) {
+    const p = Math.min((t-t0)/dur, 1);
+    el.textContent = Math.round(start + (target-start) * p).toLocaleString('ar-SA');
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ─────────────────────── STATUS LIST ─────────────────────── */
+
+function renderStatusList(total) {
+  const list = document.getElementById('statusList');
+  list.innerHTML = STATUSES.map(s => `
+    <div class="status-row-item">
+      <span class="status-dot-sm" style="background:${s.color};"></span>
+      <span class="status-name-txt">${s.name}</span>
+      <div class="status-bar-bg">
+        <div class="status-bar-fill" style="width:${Math.round(s.count/total*100)}%;background:${s.color};"></div>
+      </div>
+      <span class="status-count-txt">${s.count}</span>
+    </div>`).join('');
+  document.getElementById('statusTotal').textContent = total.toLocaleString('ar-SA') + ' طلب';
+}
+
+/* ─────────────────────── CHART ─────────────────────── */
+
+let chartInstance = null;
+
+function renderChart(days) {
+  const canvas = document.getElementById('ordersChart');
+  const ctx    = canvas.getContext('2d');
+  const W      = canvas.parentElement.clientWidth - 40;
+  canvas.width  = W;
+  canvas.height = 140;
+  ctx.clearRect(0, 0, W, 140);
+
+  const weeks = days >= 28 ? 4 : days >= 14 ? 2 : days >= 7 ? 1 : 1;
+  const labels = [];
+  const b2bData = [];
+  const lmData  = [];
+
+  const baseDate = new Date('2026-05-31');
+  const step = days === 0 ? 1 : Math.ceil(days / (days >= 14 ? 8 : 5));
+  const pts = days === 0 ? 1 : Math.ceil(days / step);
+
+  const perDay_b2b = BASE.b2b.total / 30;
+  const perDay_lm  = BASE.lm.total  / 30;
+
+  for (let i = pts - 1; i >= 0; i--) {
+    const d = new Date(baseDate);
+    d.setDate(d.getDate() - i * step);
+    labels.push(`${d.getDate()}/${d.getMonth()+1}`);
+    const v_b2b = Math.round(perDay_b2b * step * (0.6 + Math.random() * 0.8));
+    const v_lm  = Math.round(perDay_lm  * step * (0.6 + Math.random() * 0.8));
+    b2bData.push(v_b2b);
+    lmData.push(v_lm);
+  }
+
+  const maxVal = Math.max(...b2bData, ...lmData);
+  const PAD = { top:10, right:10, bottom:30, left:10 };
+  const chartW = W - PAD.left - PAD.right;
+  const chartH = 140 - PAD.top - PAD.bottom;
+  const n = labels.length;
+  const barW = Math.floor(chartW / n * 0.35);
+  const gap  = Math.floor(chartW / n);
+
+  // grid lines
+  ctx.strokeStyle = '#F0EEF9';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = PAD.top + chartH - (chartH / 4 * i);
+    ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(W - PAD.right, y); ctx.stroke();
+  }
+
+  // bars
+  labels.forEach((lbl, i) => {
+    const x = PAD.left + i * gap + gap * 0.1;
+    const h_b2b = Math.round((b2bData[i] / maxVal) * chartH);
+    const h_lm  = Math.round((lmData[i]  / maxVal) * chartH);
+
+    // B2B bar
+    ctx.fillStyle = '#481DBC';
+    ctx.beginPath();
+    ctx.roundRect(x, PAD.top + chartH - h_b2b, barW, h_b2b, [4,4,0,0]);
+    ctx.fill();
+
+    // LM bar
+    ctx.fillStyle = '#FF6A00';
+    ctx.beginPath();
+    ctx.roundRect(x + barW + 3, PAD.top + chartH - h_lm, barW, h_lm, [4,4,0,0]);
+    ctx.fill();
+
+    // label
+    ctx.fillStyle = '#bbb';
+    ctx.font = '10px Segoe UI';
+    ctx.textAlign = 'center';
+    ctx.fillText(lbl, x + barW + 1.5, 140 - 8);
+  });
+
+  // legend
+  ctx.fillStyle = '#481DBC'; ctx.fillRect(PAD.left, 4, 10, 8);
+  ctx.fillStyle = '#555';    ctx.font = '11px Segoe UI'; ctx.textAlign = 'right';
+  ctx.fillText('B2B', PAD.left + 44, 12);
+  ctx.fillStyle = '#FF6A00'; ctx.fillRect(PAD.left + 54, 4, 10, 8);
+  ctx.fillStyle = '#555';
+  ctx.fillText('آخر ميل', PAD.left + 110, 12);
+}
+
+/* ─────────────────────── MERCHANTS TABLE ─────────────────────── */
+
+function renderMerchants(data) {
+  const rows = (data || MERCHANTS).map(m => `
+    <tr>
+      <td style="color:#aaa;font-size:12px;">${m.id}</td>
+      <td><strong>${m.store}</strong></td>
+      <td style="color:#666;">${m.name}</td>
+      <td style="color:#888;font-size:12px;">${m.type}</td>
+      <td>${m.region}</td>
+      <td style="font-weight:700;">${m.orders}</td>
+      <td style="font-weight:700;">${m.rev.toLocaleString()} ر.س.</td>
+      <td><span class="pill ${m.status==='نشط'?'pill-active':'pill-inactive'}">${m.status}</span></td>
+      <td class="row-actions">
+        <button class="action-btn view" onclick="viewMerchant('${m.id}')">عرض</button>
+      </td>
+    </tr>`).join('');
+  document.getElementById('merchantsBody').innerHTML = rows;
+}
+
+function filterMerchants() {
+  const q  = document.getElementById('merchantSearch').value.trim().toLowerCase();
+  const st = document.getElementById('merchantStatusFilter').value;
+  renderMerchants(MERCHANTS.filter(m =>
+    (!q  || m.store.toLowerCase().includes(q) || m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q)) &&
+    (!st || m.status === st)
+  ));
+}
+
+/* ─────────────────────── ORDERS TABLE ─────────────────────── */
+
+function pillClass(s) {
+  const map = {'تم التسليم':'pill-delivered','قيد التنفيذ':'pill-pending','في الطريق':'pill-transit','فشل التسليم':'pill-failed','مرتجع':'pill-returned','ملغى':'pill-cancelled'};
+  return map[s] || 'pill-pending';
+}
+
+function renderOrders(data) {
+  const rows = (data || ORDERS).map(o => `
+    <tr ondblclick="viewOrder('${o.id}')">
+      <td><strong>${o.id}</strong></td>
+      <td>${o.merchant}</td>
+      <td>${o.recipient}</td>
+      <td>${o.region}</td>
+      <td><span style="font-size:11px;font-weight:700;color:#481DBC;">${o.service}</span></td>
+      <td><span class="pill ${pillClass(o.status)}">${o.status}</span></td>
+      <td style="color:#aaa;">${o.date}</td>
+      <td style="font-weight:700;">${o.value.toLocaleString()} ر.س.</td>
+      <td class="row-actions">
+        <button class="action-btn view" onclick="viewOrder('${o.id}')">عرض</button>
+        <button class="action-btn del" onclick="deleteOrder('${o.id}')">حذف</button>
+      </td>
+    </tr>`).join('');
+  document.getElementById('ordersBody').innerHTML = rows;
+}
+
+function filterOrders() {
+  const q  = document.getElementById('orderSearch').value.trim().toLowerCase();
+  const st = document.getElementById('orderStatusFilter').value;
+  const sv = document.getElementById('orderServiceFilter').value;
+  renderOrders(ORDERS.filter(o =>
+    (!q  || o.id.toLowerCase().includes(q) || o.merchant.toLowerCase().includes(q)) &&
+    (!st || o.status === st) &&
+    (!sv || o.service === sv)
+  ));
+}
+
+/* ─────────────────────── B2B TABLE ─────────────────────── */
+
+function renderB2B() {
+  document.getElementById('b2bBody').innerHTML = B2B_DATA.map(r => `
+    <tr>
+      <td><strong>${r.id}</strong></td>
+      <td>${r.merchant}</td>
+      <td>${r.from}</td>
+      <td>${r.to}</td>
+      <td style="font-weight:700;">${r.load}</td>
+      <td style="color:#666;">${r.driver}</td>
+      <td><span class="pill ${pillClass(r.status)}">${r.status}</span></td>
+      <td style="color:#aaa;">${r.date}</td>
+    </tr>`).join('');
+}
+
+/* ─────────────────────── LAST-MILE TABLE ─────────────────────── */
+
+function renderLastMile() {
+  document.getElementById('lastmileBody').innerHTML = LM_DATA.map(r => `
+    <tr>
+      <td><strong>${r.id}</strong></td>
+      <td>${r.merchant}</td>
+      <td>${r.recipient}</td>
+      <td>${r.region}</td>
+      <td style="color:#666;">${r.driver}</td>
+      <td><span class="pill ${pillClass(r.status)}">${r.status}</span></td>
+      <td style="color:#aaa;">${r.time}</td>
+      <td style="font-weight:700;">${r.value} ر.س.</td>
+    </tr>`).join('');
+}
+
+/* ─────────────────────── RETURNS TABLE ─────────────────────── */
+
+function renderReturns() {
+  document.getElementById('returnsBody').innerHTML = RETURNS_DATA.map(r => `
+    <tr>
+      <td><strong style="color:#EA580C;">${r.id}</strong></td>
+      <td style="color:#aaa;">${r.orig}</td>
+      <td>${r.merchant}</td>
+      <td><span style="font-size:12px;color:#666;">${r.reason}</span></td>
+      <td style="font-size:12px;font-weight:600;color:#481DBC;">${r.service}</td>
+      <td style="font-weight:700;">${r.value.toLocaleString()} ر.س.</td>
+      <td><span class="pill ${r.status==='تمت المعالجة'?'pill-delivered':'pill-pending'}">${r.status}</span></td>
+      <td style="color:#aaa;">${r.date}</td>
+    </tr>`).join('');
+}
+
+/* ─────────────────────── INVOICES TABLE ─────────────────────── */
+
+function renderInvoices() {
+  document.getElementById('invoicesBody').innerHTML = INVOICES.map(inv => `
+    <tr>
+      <td><strong>${inv.id}</strong></td>
+      <td>${inv.merchant}</td>
+      <td style="color:#aaa;">${inv.period}</td>
+      <td style="font-weight:700;">${inv.count}</td>
+      <td style="font-weight:700;">${inv.amount.toLocaleString()} ر.س.</td>
+      <td><span class="pill ${inv.status==='مُحصَّل'?'pill-delivered':'pill-pending'}">${inv.status}</span></td>
+    </tr>`).join('');
+}
+
+/* ─────────────────────── REGION CHART ─────────────────────── */
+
+function renderRegionChart() {
+  const canvas = document.getElementById('regionChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth - 40;
+  canvas.width = W; canvas.height = 160;
+  ctx.clearRect(0, 0, W, 160);
+
+  const regions = [
+    { name:'الرياض', count:312, color:'#481DBC' },
+    { name:'جدة',    count:186, color:'#FF6A00' },
+    { name:'الدمام', count:142, color:'#22C55E' },
+    { name:'مكة',    count:112, color:'#06B6D4' },
+    { name:'المدينة',count:78,  color:'#8B5CF6' },
+  ];
+  const max = 312;
+  const PAD = { top:10, right:10, bottom:30, left:70 };
+  const chartW = W - PAD.left - PAD.right;
+  const chartH = 160 - PAD.top - PAD.bottom;
+  const barH = Math.floor(chartH / regions.length * 0.55);
+  const rowH = chartH / regions.length;
+
+  regions.forEach((r, i) => {
+    const y = PAD.top + i * rowH + (rowH - barH) / 2;
+    const w = Math.round((r.count / max) * chartW);
+
+    ctx.fillStyle = '#F0EEF9';
+    ctx.beginPath(); ctx.roundRect(PAD.left, y, chartW, barH, 4); ctx.fill();
+
+    ctx.fillStyle = r.color;
+    ctx.beginPath(); ctx.roundRect(PAD.left, y, w, barH, 4); ctx.fill();
+
+    ctx.fillStyle = '#555'; ctx.font = '12px Segoe UI'; ctx.textAlign = 'right';
+    ctx.fillText(r.name, PAD.left - 8, y + barH/2 + 4);
+
+    ctx.fillStyle = '#333'; ctx.textAlign = 'left';
+    ctx.fillText(r.count, PAD.left + w + 6, y + barH/2 + 4);
+  });
+}
+
+/* ─────────────────────── PAGE NAVIGATION ─────────────────────── */
+
+const PAGE_TITLES = {
+  dashboard: 'المؤشرات الرئيسية',
+  merchants: 'إدارة التجار',
+  orders:    'إدارة الطلبات',
+  finance:   'المالية والفواتير',
+  reports:   'التقارير والإحصائيات',
+  warehouse: 'إدارة المستودع',
+  b2b:       'النقل الثالث  B2B',
+  lastmile:  'آخر ميل  Last-Mile',
+  returns:   'المرتجعات',
+};
+
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('pageTitle').textContent = PAGE_TITLES[id] || id;
+  if (id === 'reports') setTimeout(renderRegionChart, 50);
+  event && event.preventDefault();
+}
+
+/* ─────────────────────── LOGOUT ─────────────────────── */
+
+function logout() {
+  localStorage.removeItem('madar_user');
+  window.location.href = 'index.html';
+}
+
+/* ─── MODAL SYSTEM ─── */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOnBg(e, id) { if (e.target.id === id) closeModal(id); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ─── ADD MERCHANT ─── */
+function submitAddMerchant() {
+  const store = document.getElementById('m_store').value.trim();
+  const name  = document.getElementById('m_name').value.trim();
+  const email = document.getElementById('m_email').value.trim();
+  const phone = document.getElementById('m_phone').value.trim();
+  const type  = document.getElementById('m_type').value;
+  const region = document.getElementById('m_region').value;
+  if (!store || !name || !email) { showToast('⚠️ يرجى ملء الحقول المطلوبة'); return; }
+  const id = 'MAD-' + String(Math.floor(10000+Math.random()*90000));
+  MERCHANTS.unshift({ id, store, name, type, region, orders:0, rev:0, status:'نشط' });
+  renderMerchants();
+  document.getElementById('merchantSuccess').style.display = 'block';
+  ['m_store','m_name','m_email','m_phone'].forEach(i => document.getElementById(i).value = '');
+  setTimeout(() => { document.getElementById('merchantSuccess').style.display='none'; closeModal('modalAddMerchant'); showToast('✅ تم إضافة التاجر '+store); }, 1200);
+}
+
+/* ─── ADD ORDER ─── */
+function submitAddOrder() {
+  const merchant   = document.getElementById('o_merchant').value;
+  const service    = document.getElementById('o_service').value;
+  const recipient  = document.getElementById('o_recipient').value.trim();
+  const phone      = document.getElementById('o_phone').value.trim();
+  const region     = document.getElementById('o_region').value;
+  const value      = parseInt(document.getElementById('o_value').value) || 0;
+  const desc       = document.getElementById('o_desc').value.trim();
+  if (!recipient) { showToast('⚠️ أدخل اسم المستلم'); return; }
+  const today = new Date('2026-05-31');
+  const id = 'ORD-' + String(Math.floor(8000+Math.random()*999));
+  const newOrder = { id, merchant, recipient, region, service, status:'قيد التنفيذ', date: today.toISOString().split('T')[0], value };
+  ORDERS.unshift(newOrder);
+  STATUSES.find(s=>s.name==='قيد التنفيذ').count++;
+  renderOrders();
+  renderStatusList(ORDERS.length + 750);
+  document.getElementById('orderSuccess').style.display = 'block';
+  ['o_recipient','o_phone','o_value','o_desc','o_weight'].forEach(i => document.getElementById(i).value = '');
+  setTimeout(() => { document.getElementById('orderSuccess').style.display='none'; closeModal('modalAddOrder'); showToast('✅ تم إنشاء الطلب '+id); }, 1200);
+}
+
+/* ─── ADD INVOICE ─── */
+function submitAddInvoice() {
+  const merchant = document.getElementById('inv_merchant').value;
+  const period   = document.getElementById('inv_period').value;
+  const count    = parseInt(document.getElementById('inv_count').value) || 0;
+  const amount   = parseInt(document.getElementById('inv_amount').value) || 0;
+  if (!count || !amount) { showToast('⚠️ أدخل عدد الشحنات والمبلغ'); return; }
+  const id = 'INV-00' + String(Math.floor(89+Math.random()*10));
+  INVOICES.unshift({ id, merchant, period, count, amount, status:'معلق' });
+  renderInvoices();
+  document.getElementById('invoiceSuccess').style.display = 'block';
+  ['inv_count','inv_amount','inv_notes'].forEach(i => document.getElementById(i).value = '');
+  setTimeout(() => { document.getElementById('invoiceSuccess').style.display='none'; closeModal('modalAddInvoice'); showToast('✅ تم إنشاء الفاتورة '+id); }, 1200);
+}
+
+/* ─── DETAIL PANEL ─── */
+function openDetail(html) {
+  document.getElementById('detailContent').innerHTML = html;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+}
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+function viewOrder(id) {
+  const o = ORDERS.find(x => x.id === id);
+  if (!o) return;
+  const steps = ['قيد التنفيذ','في الطريق','تم التسليم'];
+  const ci = steps.indexOf(o.status);
+  const timeline = ['استلام الطلب','تجهيز الشحنة','في الطريق للمستلم','تم التسليم'];
+  const tlHtml = timeline.map((s,i) => {
+    const done = (o.status==='تم التسليم') ? true : i < ci+1;
+    return `<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:${done?'#481DBC':'#E0DBF0'};display:flex;align-items:center;justify-content:center;color:${done?'#fff':'#bbb'};font-size:13px;flex-shrink:0;">${done?'✓':'○'}</div>
+      <div style="padding-top:4px;font-size:13px;color:${done?'#1A0A4A':'#bbb'};font-weight:${done?'600':'400'};">${s}</div>
+    </div>`;
+  }).join('');
+  openDetail(`
+    <div class="detail-title">تفاصيل الطلب <button class="modal-close" onclick="closeDetail()">✕</button></div>
+    <div class="detail-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:18px;font-weight:800;color:#1A0A4A;">${o.id}</div>
+        <span class="pill ${pillClass(o.status)}">${o.status}</span>
+      </div>
+      <div style="font-size:12px;color:#aaa;">${o.date}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">التاجر</div><div class="detail-value">${o.merchant}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">المستلم</div><div class="detail-value">${o.recipient || ''}</div>
+      <div class="detail-label" style="margin-top:8px;">المنطقة</div><div class="detail-value">${o.region}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">الخدمة</div><div class="detail-value">${o.service}</div>
+      <div class="detail-label" style="margin-top:8px;">القيمة</div><div class="detail-value">${o.value.toLocaleString()} ر.س.</div>
+    </div>
+    <div class="detail-section">
+      <div style="font-size:13px;font-weight:700;color:#1A0A4A;margin-bottom:12px;">تتبع الشحنة</div>
+      ${tlHtml}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;">
+      <div style="font-size:12px;font-weight:600;color:#444;margin-bottom:4px;">تغيير الحالة</div>
+      <select onchange="changeOrderStatus('${o.id}',this.value)" style="padding:8px 12px;border:1.5px solid #E0DBF0;border-radius:8px;font-family:inherit;font-size:13px;color:#1A0A4A;cursor:pointer;">
+        <option ${o.status==='قيد التنفيذ'?'selected':''}>قيد التنفيذ</option>
+        <option ${o.status==='في الطريق'?'selected':''}>في الطريق</option>
+        <option ${o.status==='تم التسليم'?'selected':''}>تم التسليم</option>
+        <option ${o.status==='فشل التسليم'?'selected':''}>فشل التسليم</option>
+        <option ${o.status==='مرتجع'?'selected':''}>مرتجع</option>
+        <option ${o.status==='ملغى'?'selected':''}>ملغى</option>
+      </select>
+    </div>
+  `);
+}
+
+function viewMerchant(id) {
+  const m = MERCHANTS.find(x => x.id === id);
+  if (!m) return;
+  openDetail(`
+    <div class="detail-title">ملف التاجر <button class="modal-close" onclick="closeDetail()">✕</button></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #F0EEF9;">
+      <div style="width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#481DBC,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;">${m.store[0]}</div>
+      <div><div style="font-size:16px;font-weight:800;color:#1A0A4A;">${m.store}</div><div style="font-size:12px;color:#aaa;">${m.id}</div></div>
+    </div>
+    <div class="detail-section"><div class="detail-label">المسؤول</div><div class="detail-value">${m.name}</div></div>
+    <div class="detail-section"><div class="detail-label">نوع النشاط</div><div class="detail-value">${m.type}</div></div>
+    <div class="detail-section"><div class="detail-label">المنطقة</div><div class="detail-value">${m.region}</div></div>
+    <div class="detail-section">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+        <div style="background:#F4F2FB;border-radius:10px;padding:12px;">
+          <div style="font-size:11px;color:#aaa;margin-bottom:4px;">الطلبات</div>
+          <div style="font-size:22px;font-weight:800;color:#1A0A4A;">${m.orders}</div>
+        </div>
+        <div style="background:#F4F2FB;border-radius:10px;padding:12px;">
+          <div style="font-size:11px;color:#aaa;margin-bottom:4px;">الإيراد</div>
+          <div style="font-size:16px;font-weight:800;color:#481DBC;">${m.rev.toLocaleString()} ر.س.</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section"><div class="detail-label">الحالة</div><div class="detail-value"><span class="pill ${m.status==='نشط'?'pill-active':'pill-inactive'}">${m.status}</span></div></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button onclick="toggleMerchantStatus('${m.id}')" style="flex:1;padding:10px;border:1.5px solid #E0DBF0;border-radius:10px;background:#fff;color:#481DBC;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">${m.status==='نشط'?'تعليق الحساب':'تفعيل الحساب'}</button>
+      <button onclick="closeDetail()" style="flex:1;padding:10px;border:none;border-radius:10px;background:#481DBC;color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">إغلاق</button>
+    </div>
+  `);
+}
+
+function changeOrderStatus(id, newStatus) {
+  const o = ORDERS.find(x => x.id === id);
+  if (o) { o.status = newStatus; renderOrders(); renderDashboard(currentDays); showToast('✅ تم تحديث حالة '+id+' إلى '+newStatus); closeDetail(); }
+}
+
+function toggleMerchantStatus(id) {
+  const m = MERCHANTS.find(x => x.id === id);
+  if (m) { m.status = m.status === 'نشط' ? 'معلق' : 'نشط'; renderMerchants(); showToast('تم تحديث حالة '+m.store); closeDetail(); }
+}
+
+function deleteOrder(id) {
+  if (!confirm('هل تريد حذف الطلب ' + id + '؟')) return;
+  const i = ORDERS.findIndex(x => x.id === id);
+  if (i > -1) { ORDERS.splice(i, 1); renderOrders(); showToast('🗑️ تم حذف الطلب '+id); }
+}
+
+</script>
+</body>
+</html>

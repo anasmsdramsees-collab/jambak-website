@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مدار | شريكك اللوجستي المتكامل في المملكة العربية السعودية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="base.css"/>
+
+  <!-- Inline SVG sprite -->
+  <svg style="display:none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="ic-truck"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+      <symbol id="ic-warehouse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+      <symbol id="ic-globe"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+      <symbol id="ic-map-pin"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="ic-zap"       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+      <symbol id="ic-signal"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M7.76 7.76a6 6 0 0 0 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></symbol>
+      <symbol id="ic-package"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+      <symbol id="ic-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+      <symbol id="ic-check"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+      <symbol id="ic-arrow"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+      <symbol id="ic-users"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+      <symbol id="ic-star"      viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+      <symbol id="ic-chevron"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></symbol>
+      <symbol id="ic-phone"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+      <symbol id="ic-book"      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+      <symbol id="ic-code"      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+      <symbol id="ic-x"         viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></symbol>
+      <symbol id="ic-fb"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+      <symbol id="ic-li"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+      <symbol id="ic-ig"        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></symbol>
+      <symbol id="ic-wa"        viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></symbol>
+    </defs>
+  </svg>
+
+  <style>
+    /* ── NAV DROPDOWN ── */
+    .nav-item-dd { position: relative; }
+    .nav-item-dd > a { display: flex; align-items: center; gap: 4px; }
+    .nav-item-dd > a svg { width: 14px; height: 14px; transition: transform .2s; }
+    .nav-item-dd:hover > a svg { transform: rotate(180deg); }
+    .dropdown {
+      position: absolute; top: 100%; right: 0;
+      padding-top: 10px;
+      min-width: 230px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .18s; z-index: 200;
+    }
+    .dropdown-inner {
+      background: var(--white); border-radius: var(--radius-md);
+      box-shadow: 0 12px 40px rgba(72,29,188,.18);
+      border: 1.5px solid var(--gray-mid);
+      padding: 8px;
+    }
+    .nav-item-dd:hover .dropdown { opacity: 1; pointer-events: auto; }
+    .dropdown a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      font-size: 13px; font-weight: 700; color: var(--text-mid);
+      transition: var(--transition);
+    }
+    .dropdown a:hover { background: var(--purple-light); color: var(--purple); }
+    .dropdown a svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .dropdown-sep { height: 1px; background: var(--gray-mid); margin: 6px 0; }
+
+    /* ── HERO ── */
+    .hero {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 80px 64px 0; min-height: 600px;
+      position: relative; overflow: hidden; background: var(--white);
+    }
+    .hero::after {
+      content: ''; position: absolute;
+      left: 0; top: 0; bottom: 0; width: 46%;
+      background: var(--purple-light);
+      clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%);
+      z-index: 0;
+    }
+    .hero-text { flex: 1; max-width: 520px; position: relative; z-index: 1; }
+    .hero-text h1 { font-size: 46px; font-weight: 900; line-height: 1.25; color: var(--text); margin-bottom: 20px; }
+    .hero-text h1 em { font-style: normal; color: var(--orange); }
+    .hero-text p { font-size: 17px; color: var(--text-mid); line-height: 1.75; margin-bottom: 36px; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .hero-visual { flex: 0 0 48%; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+    .hero-photo-wrap {
+      width: 100%; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 24px 64px rgba(72,29,188,.25);
+    }
+    .hero-photo-wrap img { width: 100%; height: auto; display: block; }
+
+    .hero-tag { position: absolute; background: var(--white); border-radius: var(--radius-lg); padding: 13px 16px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 10px; animation: float 3s ease-in-out infinite; }
+    .hero-tag.t1 { bottom: 56px; left: -24px; }
+    .hero-tag.t2 { top: 30px; right: -24px; animation-delay: 1.5s; }
+    .htag-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .htag-icon svg { width: 20px; height: 20px; }
+    .htag-icon.orange { background: var(--orange-light); color: var(--orange); }
+    .htag-icon.purple { background: var(--purple-light); color: var(--purple); }
+    .htag-info h5 { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 1px; }
+    .htag-info p  { font-size: 11px; color: var(--text-light); }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+    /* ── DELIVERY FLOW BAR ── */
+    .delivery-bar { display: flex; align-items: center; justify-content: center; padding: 28px 64px; background: var(--white); }
+    .delivery-bar svg { width: min(700px,90vw); height: 80px; }
+
+    /* ── SERVICES GRID ── */
+    .services-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0; row-gap: 0; }
+    .svc-item { display: flex; gap: 20px; align-items: flex-start; padding: 38px 40px; border-bottom: 1px solid var(--gray-mid); }
+    .svc-item:nth-child(odd)  { border-left: 1px solid var(--gray-mid); }
+    .svc-item:nth-last-child(-n+2) { border-bottom: 0; }
+    .svc-icon { width: 52px; height: 52px; min-width: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+    .svc-icon svg { width: 26px; height: 26px; }
+    .svc-text h3 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .svc-text p  { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+    /* ── STATS ── */
+    .stats-wrap { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; background: var(--gray-mid); border-radius: var(--radius-xl); overflow: hidden; }
+
+    /* ── PAGES SHOWCASE ── */
+    .pages-showcase { padding: 72px 64px; background: var(--bg); }
+    .pages-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+    .page-card {
+      background: var(--white); border-radius: var(--radius-md);
+      padding: 24px 20px; box-shadow: var(--shadow-sm);
+      text-decoration: none; color: inherit;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      border: 2px solid transparent; display: flex; flex-direction: column; gap: 12px;
+    }
+    .page-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--purple-light); }
+    .page-card.featured-page { border-color: var(--orange); }
+    .pc-icon { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; }
+    .pc-icon svg { width: 22px; height: 22px; }
+    .pc-icon.purple { background: var(--purple-light); color: var(--purple); }
+    .pc-icon.orange { background: rgba(255,106,0,.1); color: var(--orange); }
+    .pc-icon.green  { background: rgba(46,125,50,.1); color: #2E7D32; }
+    .pc-icon.yellow { background: rgba(255,165,0,.12); color: #b07800; }
+    .page-card h3 { font-size: 15px; font-weight: 900; color: var(--text); }
+    .page-card p  { font-size: 12px; color: var(--text-light); line-height: 1.5; flex: 1; }
+    .page-card .pc-link { font-size: 12px; font-weight: 700; color: var(--orange); display: flex; align-items: center; gap: 4px; }
+    .page-card .pc-link svg { width: 12px; height: 12px; }
+
+    /* ── CLIENT TYPE CARDS ── */
+    .client-cards { display: grid; grid-template-columns: 1fr 1fr; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); }
+    .c-card { padding: 56px 48px; display: flex; flex-direction: column; justify-content: space-between; min-height: 340px; }
+    .c-card.dark  { background: var(--purple); }
+    .c-card.light { background: var(--white); border: 1.5px solid var(--gray-mid); }
+    .c-card h2 { font-size: 28px; font-weight: 900; margin-bottom: 14px; }
+    .c-card.dark h2  { color: var(--white); }
+    .c-card.light h2 { color: var(--text); }
+    .c-card > p { font-size: 15px; line-height: 1.75; margin-bottom: 28px; }
+    .c-card.dark  > p { color: rgba(255,255,255,.72); }
+    .c-card.light > p { color: var(--text-mid); }
+
+    /* ── HOW IT WORKS ── */
+    .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .step-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius-xl); padding: 40px 30px; text-align: center; transition: var(--transition); }
+    .step-card:hover { background: rgba(255,255,255,.14); transform: translateY(-6px); }
+    .step-num { width: 52px; height: 52px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: var(--white); margin: 0 auto 20px; box-shadow: 0 4px 18px rgba(255,106,0,.4); }
+    .step-card h3 { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .step-card p  { font-size: 14px; color: rgba(255,255,255,.75); line-height: 1.75; }
+
+    /* ── TESTIMONIALS ── */
+    .testi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .testi-card { background: var(--white); padding: 26px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+    .testi-stars { display: flex; gap: 3px; margin-bottom: 12px; }
+    .testi-stars svg { width: 14px; height: 14px; fill: #FFA500; color: #FFA500; }
+    .testi-card p { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 16px; }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .testi-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: var(--white); flex-shrink: 0; }
+    .testi-author strong { font-size: 13px; display: block; font-weight: 900; }
+    .testi-author span   { font-size: 11px; color: var(--text-light); }
+
+    /* ── TRACK BOX ── */
+    .track-box { background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); padding: 56px; display: flex; align-items: center; gap: 56px; }
+    .track-content { flex: 1; }
+    .track-content h2 { font-size: 30px; font-weight: 900; margin-bottom: 12px; }
+    .track-content p  { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 28px; }
+    .track-form { display: flex; gap: 10px; }
+    .track-visual { flex: 0 0 260px; }
+    .track-svg-box { width: 260px; height: 170px; background: linear-gradient(135deg, var(--purple-light), var(--orange-light)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; position: relative; }
+    .track-svg-box svg.truck-icon { width: 64px; height: 64px; color: var(--purple); }
+    .track-dots { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 7px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--gray-mid); }
+    .dot.on { background: var(--orange); box-shadow: 0 0 0 3px rgba(255,106,0,.2); }
+
+    /* ── INTEGRATIONS ── */
+    .integ-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 14px; margin-top: 48px; }
+    .integ-card { background: var(--white); border: 1.5px solid var(--gray-mid); border-radius: var(--radius-lg); padding: 24px 14px; text-align: center; transition: var(--transition); cursor: pointer; text-decoration: none; display: block; }
+    .integ-card:hover { border-color: var(--orange); box-shadow: 0 6px 22px rgba(255,106,0,.12); transform: translateY(-4px); }
+    .integ-card .ic-wrap { width: 48px; height: 48px; border-radius: 12px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+    .integ-card .ic-wrap svg { width: 24px; height: 24px; }
+    .integ-card p { font-size: 12px; font-weight: 700; color: var(--text-mid); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .hero { flex-direction: column; gap: 40px; padding: 60px 28px 40px; }
+      .hero::after { display: none; }
+      .hero-text { text-align: center; }
+      .hero-text h1 { font-size: 34px; }
+      .hero-tag.t1 { bottom: 10px; left: 0; }
+      .hero-tag.t2 { top: 10px; right: 0; }
+      .services-grid { grid-template-columns: 1fr; }
+      .svc-item:nth-child(odd) { border-left: none; }
+      .svc-item { padding: 28px 20px; }
+      .stats-wrap { grid-template-columns: repeat(2,1fr); }
+      .client-cards { grid-template-columns: 1fr; }
+      .track-box { flex-direction: column; padding: 32px; }
+      .track-visual { display: none; }
+      .integ-grid { grid-template-columns: repeat(3,1fr); }
+      .steps-grid { grid-template-columns: 1fr; }
+      .pages-grid { grid-template-columns: repeat(2,1fr); }
+      .testi-row  { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .pages-grid { grid-template-columns: 1fr 1fr; }
+      .pages-showcase { padding: 48px 20px; }
+    }
+  /* ── TRACKING RESULT ── */
+  .track-timeline { display:flex; flex-direction:column; gap:0; margin-top:4px; }
+  .track-step { display:flex; align-items:flex-start; gap:14px; position:relative; padding-bottom:18px; }
+  .track-step:last-child { padding-bottom:0; }
+  .track-step-dot { width:16px; height:16px; border-radius:50%; flex-shrink:0; margin-top:2px; border:2px solid #ddd; background:#fff; position:relative; z-index:1; }
+  .track-step-dot.done { background:#481DBC; border-color:#481DBC; }
+  .track-step-dot.current { background:#FF6A00; border-color:#FF6A00; box-shadow:0 0 0 4px rgba(255,106,0,.15); }
+  .track-step::before { content:''; position:absolute; right:7px; top:18px; width:2px; height:calc(100% - 10px); background:#E5E7EB; }
+  .track-step:last-child::before { display:none; }
+  .track-step.done::before { background:#481DBC; }
+  .track-step-info { flex:1; }
+  .track-step-label { font-size:13.5px; font-weight:700; color:#1A0A4A; }
+  .track-step-label.dim { color:#aaa; font-weight:500; }
+  .track-step-time { font-size:11.5px; color:#888; margin-top:2px; }
+  .track-id-badge { display:inline-flex; align-items:center; gap:6px; background:#F0EBFF; color:#481DBC; font-size:12px; font-weight:700; padding:5px 12px; border-radius:20px; margin-bottom:14px; }
+  .track-not-found { color:#c0392b; font-size:14px; font-weight:600; padding:12px 0; }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="nav">
+  <div class="nav-logo">
+    <img src="logo.png" alt="Madar" style="height:42px;object-fit:contain;"/>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">الرئيسية</a></li>
+
+    <li class="nav-item-dd">
+      <a href="#">الخدمات <svg><use href="#ic-chevron"/></svg></a>
+      <div class="dropdown"><div class="dropdown-inner">
+        <a href="#services"><svg><use href="#ic-truck"/></svg> النقل البري</a>
+        <a href="warehousing.html"><svg><use href="#ic-warehouse"/></svg> التخزين الذكي</a>
+        <a href="#scm"><svg><use href="#ic-globe"/></svg> سلاسل التوريد</a>
+        <a href="lastmile.html"><svg><use href="#ic-map-pin"/></svg> توصيل آخر ميل</a>
+      </div></div>
+    </li>
+
+    <li class="nav-item-dd">
+      <a href="#">للعملاء <svg><use href="#ic-chevron"/></svg></a>
+      <div class="dropdown"><div class="dropdown-inner">
+        <a href="#clients"><svg><use href="#ic-users"/></svg> أنواع العملاء</a>
+        <a href="#pricing"><svg><use href="#ic-briefcase"/></svg> التسعير</a>
+        <a href="#integrations"><svg><use href="#ic-code"/></svg> التكاملات</a>
+        <a href="track.html"><svg><use href="#ic-map-pin"/></svg> تتبع الشحنة</a>
+      </div></div>
+    </li>
+
+    <li class="nav-item-dd">
+      <a href="#">الشركة <svg><use href="#ic-chevron"/></svg></a>
+      <div class="dropdown"><div class="dropdown-inner">
+        <a href="#about"><svg><use href="#ic-users"/></svg> من نحن</a>
+        <a href="#contact"><svg><use href="#ic-phone"/></svg> تواصل معنا</a>
+      </div></div>
+    </li>
+
+    <li><a href="app.html"><svg style="width:14px;height:14px;vertical-align:-2px;margin-left:4px"><use href="#ic-phone"/></svg>التطبيق</a></li>
+    <li><a href="track.html" class="highlight">تتبع شحنتك</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#contact" class="btn btn-ghost btn-sm">تواصل معنا</a>
+    <a href="merchant-register.html" class="btn btn-primary btn-sm btn-pill">ابدأ الآن</a>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="قائمة">
+    <span class="hb-bar"></span><span class="hb-bar"></span><span class="hb-bar"></span>
+  </button>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mobile-nav-backdrop" id="mob-backdrop"></div>
+<div class="mobile-nav-overlay" id="mob-nav">
+  <div class="mno-header">
+    <img src="logo.png" alt="Madar" style="height:36px;object-fit:contain;"/>
+    <button class="mno-close" id="mob-close">✕</button>
+  </div>
+  <ul class="mno-links">
+    <li><a href="index.html" class="active">الرئيسية</a></li>
+    <li><span class="mno-group-label">الخدمات</span></li>
+    <ul class="mno-sub">
+      <li><a href="#services">النقل البري الداخلي</a></li>
+      <li><a href="#warehousing">التخزين والمستودعات</a></li>
+      <li><a href="#scm">سلاسل التوريد</a></li>
+      <li><a href="#lastmile">توصيل آخر ميل</a></li>
+    </ul>
+    <li><span class="mno-group-label">للعملاء</span></li>
+    <ul class="mno-sub">
+      <li><a href="#pricing">التسعير</a></li>
+      <li><a href="#integrations">التكاملات</a></li>
+      <li><a href="#track">تتبع الشحنة</a></li>
+    </ul>
+    <li><a href="#about">من نحن</a></li>
+    <li><a href="#contact">تواصل معنا</a></li>
+  </ul>
+  <div class="mno-actions">
+    <a href="merchant-register.html" class="btn-primary">ابدأ الآن</a>
+    <a href="#contact">تواصل معنا</a>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="hero-text">
+    <span class="sec-tag orange" style="margin-bottom:16px">الشريك اللوجستي المتكامل في المملكة 🇸🇦</span>
+    <h1>كل شيء <em>في مداره.</em></h1>
+    <p style="font-size:15px;color:var(--purple);font-weight:700;margin-bottom:8px;letter-spacing:.5px">Everything in Its Orbit</p>
+    <p>مدار تربطك بحلول لوجستية متكاملة  نقل بري، تخزين، سلاسل توريد، وتوصيل آخر ميل  مع تتبع لحظي وشفافية كاملة على مدار الساعة.</p>
+    <div class="hero-btns">
+      <a href="merchant-register.html" class="btn btn-primary btn-lg btn-pill">ابدأ الشراكة الآن</a>
+      <a href="#services" class="btn btn-outline btn-lg">اكتشف خدماتنا</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-photo-wrap">
+      <img src="ChatGPT Image May 17, 2026, 01_08_42 AM.png" alt="مدار  مستودعات ولوجستيات متكاملة"/>
+    </div>
+    <div class="hero-tag t1">
+      <div class="htag-icon orange"><svg><use href="#ic-package"/></svg></div>
+      <div class="htag-info">
+        <h5>تم التسليم بنجاح!</h5>
+        <p>الرياض · منذ دقيقتين</p>
+        <span class="badge green">✓ مكتمل</span>
+      </div>
+    </div>
+    <div class="hero-tag t2">
+      <div class="htag-icon purple"><svg><use href="#ic-signal"/></svg></div>
+      <div class="htag-info">
+        <h5>MDR-2026-00841</h5>
+        <p>الشحنة في الطريق إليك</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FLOW BAR ══ -->
+<div class="delivery-bar">
+  <svg viewBox="0 0 700 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Warehouse -->
+    <g stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 65 L20 38 L40 24 L60 38 L60 65 Z"/><rect x="30" y="50" width="10" height="15"/><path d="M14 42 L40 24 L66 42"/>
+    </g>
+    <!-- Arrow 1 -->
+    <path d="M80 40 L118 40 M105 29 L118 40 L105 51" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Truck -->
+    <g stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="135" y="26" width="100" height="38" rx="4"/><rect x="235" y="34" width="38" height="30" rx="4"/>
+      <circle cx="155" cy="64" r="9"/><circle cx="255" cy="64" r="9"/>
+      <line x1="235" y1="48" x2="273" y2="48"/><rect x="145" y="33" width="40" height="20" rx="3"/>
+    </g>
+    <!-- Arrow 2 -->
+    <path d="M290 40 L328 40 M315 29 L328 40 L315 51" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Box / sorting -->
+    <g stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M360 56 L360 32 L380 22 L400 32 L400 56 Z"/><line x1="360" y1="32" x2="400" y2="32"/><line x1="380" y1="22" x2="380" y2="56"/>
+    </g>
+    <!-- Arrow 3 -->
+    <path d="M420 40 L458 40 M445 29 L458 40 L445 51" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Delivery person -->
+    <g stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="500" cy="24" r="8"/><line x1="500" y1="32" x2="500" y2="52"/><line x1="500" y1="40" x2="488" y2="48"/><line x1="500" y1="40" x2="512" y2="48"/><line x1="500" y1="52" x2="490" y2="65"/><line x1="500" y1="52" x2="510" y2="65"/>
+    </g>
+    <!-- Arrow 4 -->
+    <path d="M530 40 L568 40 M555 29 L568 40 L555 51" stroke="#FF6A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- House / delivery -->
+    <g stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M600 65 L600 40 L620 26 L640 40 L640 65 Z"/><rect x="610" y="50" width="10" height="15"/><path d="M594 44 L620 26 L646 44"/>
+    </g>
+    <!-- check -->
+    <circle cx="660" cy="35" r="9" fill="#2E7D32" opacity=".9"/>
+    <polyline points="655,35 659,40 666,30" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</div>
+
+<!-- ══ SERVICES ══ -->
+<section class="section" id="services">
+  <div class="sec-header center">
+    <span class="sec-tag orange">خدماتنا</span>
+    <h2 class="sec-title">أربعة محاور  حل لوجستي واحد متكامل</h2>
+    <p class="sec-sub">مدار تجمع كل ما تحتاجه في شريك لوجستي واحد  بدون تعقيد، بدون موردين متعددين.</p>
+  </div>
+  <div class="services-grid">
+    <div class="svc-item" id="land-transport">
+      <div class="svc-icon icon-box purple"><svg><use href="#ic-truck"/></svg></div>
+      <div class="svc-text">
+        <h3>النقل البري الداخلي</h3>
+        <p>شحن حمولة كاملة (FTL) أو جزئية (LTL) بتغطية كاملة لجميع مناطق المملكة  مع تتبع GPS لحظي وتسليم في المواعيد المحددة بموجب SLA.</p>
+      </div>
+    </div>
+    <div class="svc-item" id="warehousing">
+      <div class="svc-icon icon-box orange"><svg><use href="#ic-warehouse"/></svg></div>
+      <div class="svc-text">
+        <h3>التخزين والمستودعات</h3>
+        <p>مستودع مُدار بالكامل في الرياض مع نظام WMS سحابي من اليوم الأول  استلام، تخزين، تجهيز، شحن، ومعالجة المرتجعات.</p>
+      </div>
+    </div>
+    <div class="svc-item" id="scm">
+      <div class="svc-icon icon-box yellow"><svg><use href="#ic-globe"/></svg></div>
+      <div class="svc-text">
+        <h3>إدارة سلاسل التوريد</h3>
+        <p>استشارات وإدارة متكاملة لسلسلة التوريد  تصميم، إدارة موردين، تخطيط الطلب  بخبرة محلية في السوق السعودي واستعداد للتوسع الخليجي.</p>
+      </div>
+    </div>
+    <div class="svc-item" id="lastmile">
+      <div class="svc-icon icon-box green"><svg><use href="#ic-map-pin"/></svg></div>
+      <div class="svc-text">
+        <h3>توصيل آخر ميل</h3>
+        <p>توصيل في نفس اليوم أو اليوم التالي للأفراد والشركات  مع تطبيق مندوب ذكي، إرسال تلقائي، ورابط تتبع للعميل. الرياض (Y1) ← جدة والدمام (Y2).</p>
+        <a href="merchant-register.html" class="btn btn-primary btn-sm" style="margin-top:16px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;">ابدأ خدمة آخر ميل <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-icon icon-box purple"><svg><use href="#ic-zap"/></svg></div>
+      <div class="svc-text">
+        <h3>تحصيل مالي وفواتير إلكترونية</h3>
+        <p>فواتير إلكترونية متوافقة مع ZATCA وفق نظام هيئة الزكاة والضريبة  مع تقارير مالية شهرية وإدارة مستحقات شفافة.</p>
+      </div>
+    </div>
+    <div class="svc-item">
+      <div class="svc-icon icon-box orange"><svg><use href="#ic-signal"/></svg></div>
+      <div class="svc-text">
+        <h3>بوابة العميل الذكية</h3>
+        <p>لوحة تحكم موحدة لإدارة شحناتك، تتبع الأداء، واستعراض التقارير والفواتير  في مكان واحد، على مدار الساعة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<section class="section bg-gray" style="padding-top:0">
+  <div class="sec-header center" style="padding-top:88px">
+    <h2 class="sec-title">أرقامنا تعكس التزامنا</h2>
+    <p class="sec-sub">نبني ثقتنا رقماً بعد رقم  مع كل شحنة ومع كل عميل</p>
+  </div>
+  <div class="stats-wrap">
+    <div class="stat-box">
+      <div class="stat-num"><b>98</b>%</div>
+      <div class="stat-lbl">نسبة التسليم في الموعد</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num"><b>13</b>+</div>
+      <div class="stat-lbl">منطقة مغطاة في المملكة</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num"><b>4</b></div>
+      <div class="stat-lbl">خدمات متكاملة في شريك واحد</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num"><b>24</b>/7</div>
+      <div class="stat-lbl">تتبع ودعم مستمر</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGES SHOWCASE ══ -->
+<div class="pages-showcase" id="about">
+  <div class="sec-header center">
+    <span class="sec-tag purple">اكتشف مدار</span>
+    <h2 class="sec-title">كل ما تحتاجه في مكان واحد</h2>
+    <p class="sec-sub">تصفح خدمات ومحاور مدار اللوجستية واختر ما يناسب عملك</p>
+  </div>
+  <div class="pages-grid">
+    <a href="#land-transport" class="page-card">
+      <div class="pc-icon purple"><svg><use href="#ic-truck"/></svg></div>
+      <h3>النقل البري</h3>
+      <p>FTL · LTL · شحن سريع لجميع مناطق المملكة مع SLA واضح</p>
+      <span class="pc-link">اعرف المزيد <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#track" class="page-card featured-page">
+      <div class="pc-icon orange"><svg><use href="#ic-map-pin"/></svg></div>
+      <h3>تتبع الشحنة</h3>
+      <p>تابع شحنتك لحظة بلحظة بإدخال رقم التتبع مباشرة</p>
+      <span class="pc-link">تتبع الآن <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#warehousing" class="page-card">
+      <div class="pc-icon green"><svg><use href="#ic-warehouse"/></svg></div>
+      <h3>التخزين الذكي</h3>
+      <p>مستودعات في الرياض مع WMS سحابي وتجهيز وشحن تلقائي</p>
+      <span class="pc-link">اعرف المزيد <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#scm" class="page-card">
+      <div class="pc-icon purple"><svg><use href="#ic-globe"/></svg></div>
+      <h3>سلاسل التوريد</h3>
+      <p>إدارة وتصميم سلسلة التوريد بخبرة سعودية وجاهزية خليجية</p>
+      <span class="pc-link">اعرف المزيد <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#lastmile" class="page-card featured-page">
+      <div class="pc-icon orange"><svg><use href="#ic-zap"/></svg></div>
+      <h3>آخر ميل</h3>
+      <p>توصيل نفس اليوم واليوم التالي  B2C وB2B في الرياض أولاً</p>
+      <span class="pc-link">اعرف المزيد <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#integrations" class="page-card">
+      <div class="pc-icon yellow"><svg><use href="#ic-code"/></svg></div>
+      <h3>التكاملات</h3>
+      <p>ربط تلقائي مع Salla وZid وShopify وأنظمة ERP</p>
+      <span class="pc-link">اعرف المزيد <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#pricing" class="page-card">
+      <div class="pc-icon purple"><svg><use href="#ic-briefcase"/></svg></div>
+      <h3>التسعير</h3>
+      <p>خطط مرنة تبدأ من 4,200 ريال  مصممة حسب حجم عملك</p>
+      <span class="pc-link">اعرف المزيد <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+    <a href="#contact" class="page-card">
+      <div class="pc-icon green"><svg><use href="#ic-phone"/></svg></div>
+      <h3>تواصل معنا</h3>
+      <p>نبدأ بمكالمة اكتشاف مجانية لنفهم احتياجاتك اللوجستية</p>
+      <span class="pc-link">احجز الآن <svg><use href="#ic-arrow"/></svg></span>
+    </a>
+  </div>
+</div>
+
+<!-- ══ CLIENT TYPES ══ -->
+<section class="section" id="clients">
+  <div class="sec-header center">
+    <span class="sec-tag purple">قطاعاتنا</span>
+    <h2 class="sec-title">شريك لوجستي لكل قطاع</h2>
+  </div>
+  <div class="client-cards">
+    <div class="c-card dark">
+      <div>
+        <h2>الشركات والمصانع</h2>
+        <p>نخدم المصانع والشركات الكبرى بحلول نقل FTL وإدارة سلاسل التوريد واستشارات الـSCM  مع لوحة تحكم مؤسسية ومدير حساب مخصص.</p>
+      </div>
+      <a href="merchant-register.html" class="btn btn-white">ابدأ معنا الآن ←</a>
+    </div>
+    <div class="c-card light">
+      <div>
+        <h2>التجارة الإلكترونية والتجزئة</h2>
+        <p>حلول تخزين وتوصيل آخر ميل مدمجة مع منصات Salla وZid وShopify  لتنمية مبيعاتك بدون الاهتمام بلوجستيات التوصيل.</p>
+      </div>
+      <a href="merchant-register.html" class="btn btn-primary">ابدأ معنا الآن ←</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARTNERS ══ -->
+<section class="section bg-gray" style="padding-top:48px;padding-bottom:48px">
+  <p class="partners-label">موثوق به من قِبل شركاء رائدين في المملكة العربية السعودية</p>
+  <div class="partners-logos">
+    <div class="partner-item"><svg height="28" viewBox="0 0 100 32" fill="none"><text x="0" y="24" font-family="Cairo,sans-serif" font-size="18" font-weight="900" fill="#3d7f15">Salla سلة</text></svg></div>
+    <div class="partner-item"><svg height="28" viewBox="0 0 80 32" fill="none"><text x="0" y="24" font-family="Cairo,sans-serif" font-size="22" font-weight="900" fill="#3b5bdb">Zid زد</text></svg></div>
+    <div class="partner-item"><svg height="28" viewBox="0 0 130 32" fill="none"><text x="0" y="24" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="#232F3E">amazon</text></svg></div>
+    <div class="partner-item"><svg height="28" viewBox="0 0 130 32" fill="none"><text x="0" y="24" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#96bf48">Shopify</text></svg></div>
+    <div class="partner-item"><svg height="28" viewBox="0 0 120 32" fill="none"><text x="0" y="24" font-family="Cairo,sans-serif" font-size="16" font-weight="900" fill="#1a1a1a">noon نون</text></svg></div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="section bg-purple">
+  <div class="sec-header center">
+    <span class="sec-tag white">كيف تعمل مدار؟</span>
+    <h2 class="sec-title light">3 خطوات بسيطة وتبدأ!</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,.72)">ابدأ رحلتك اللوجستية مع مدار في أيام معدودة بدون تعقيدات</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">١</div>
+      <h3>مكالمة اكتشاف مجانية</h3>
+      <p>30 دقيقة نفهم فيها احتياجاتك اللوجستية  حجم الشحنات والمناطق والخدمات المطلوبة</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">٢</div>
+      <h3>عرض سعر مخصص</h3>
+      <p>خلال 3 أيام عمل نقدم لك عرضاً مصمماً خصيصاً لعملك  بسعر تنافسي وشروط واضحة</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">٣</div>
+      <h3>انطلق مع مدار</h3>
+      <p>14 يوم إعداد وتكامل  بعدها تبدأ شحناتك الأولى مع فريق مخصص ودعم على مدار الساعة</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="section" id="pricing">
+  <div style="display:flex;align-items:center;gap:60px;flex-wrap:wrap">
+    <div style="flex:1;min-width:280px">
+      <span class="sec-tag orange">التسعير</span>
+      <h2 class="sec-title">أسعار مرنة لكل حجم أعمال</h2>
+      <p class="sec-sub">خطط تبدأ من 4,200 ريال شهرياً مع إمكانية التخصيص الكامل  حسب حجم الشحنات، عدد المناطق، والخدمات المطلوبة.</p>
+      <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border:1.5px solid var(--gray-mid);border-radius:var(--radius-md)">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:20px;height:20px"><use href="#ic-truck"/></svg></div>
+          <div><strong style="font-size:13px;color:var(--text)">Starter Orbit</strong><br/><span style="font-size:12px;color:var(--text-light)">10 بالتات + 200 توصيل / شهر  من 4,200 ريال</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border:1.5px solid var(--orange);border-radius:var(--radius-md);background:var(--orange-light)">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,106,0,.15);color:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:20px;height:20px"><use href="#ic-warehouse"/></svg></div>
+          <div><strong style="font-size:13px;color:var(--text)">Retail Route ⭐ الأكثر طلباً</strong><br/><span style="font-size:12px;color:var(--text-light)">رحلتان أسبوعيتان + 25 بالتة + مدير حساب  من 9,800 ريال</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border:1.5px solid var(--gray-mid);border-radius:var(--radius-md)">
+          <div style="width:40px;height:40px;border-radius:10px;background:var(--purple-light);color:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:20px;height:20px"><use href="#ic-globe"/></svg></div>
+          <div><strong style="font-size:13px;color:var(--text)">Industrial Axis</strong><br/><span style="font-size:12px;color:var(--text-light)">FTL + 60 بالتة + استشارات SCM  من 18,500 ريال</span></div>
+        </div>
+      </div>
+      <a href="#contact" class="btn btn-outline" style="margin-top:28px">احصل على عرض مخصص ←</a>
+    </div>
+    <div style="flex:0 0 380px;height:280px;background:linear-gradient(135deg,var(--purple-light),var(--orange-light));border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+      <svg style="width:90px;height:90px;color:var(--purple);opacity:.4" viewBox="0 0 24 24"><use href="#ic-briefcase"/></svg>
+      <div style="position:absolute;bottom:24px;right:24px;background:var(--white);padding:12px 16px;border-radius:var(--radius-md);box-shadow:var(--shadow-md);font-size:11px;color:var(--text-mid);font-weight:700">−18% عند الجمع بين 3 خدمات أو أكثر</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TRACK BOX ══ -->
+<section class="section bg-gray" id="track">
+  <div class="track-box">
+    <div class="track-content">
+      <span class="sec-tag purple">تتبع الشحنة</span>
+      <h2>تتبع شحنتك الآن</h2>
+      <p>تابع شحناتك أولاً بأول وابقَ على اطلاع بكل خطوة في رحلة توصيل طلبك</p>
+      <div class="track-form">
+        <input class="input-field" type="text" id="trackNum" placeholder="أدخل رقم الشحنة  مثال: MDR-00841" style="max-width:360px" onkeydown="if(event.key==='Enter')doTrack()"/>
+        <button class="btn btn-primary" onclick="doTrack()">تتبع الآن</button>
+      </div>
+      <div id="track-result" style="margin-top:24px;display:none;"></div>
+    </div>
+    <div class="track-visual">
+      <div class="track-svg-box">
+        <svg class="truck-icon" viewBox="0 0 24 24"><use href="#ic-truck"/></svg>
+        <div class="track-dots">
+          <div class="dot on"></div><div class="dot on"></div>
+          <div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INTEGRATIONS ══ -->
+<section class="section" id="integrations">
+  <div class="sec-header center">
+    <span class="sec-tag purple">التكاملات</span>
+    <h2 class="sec-title">اربط أنظمتك بمدار</h2>
+    <p class="sec-sub">مدار يتكامل مع أشهر منصات التجارة الإلكترونية وأنظمة الإدارة في المنطقة</p>
+  </div>
+  <div class="integ-grid">
+    <a href="#contact" class="integ-card"><div class="ic-wrap" style="background:#f0f9eb;color:#5a8a1e"><svg><use href="#ic-warehouse"/></svg></div><p>سلة Salla</p></a>
+    <a href="#contact" class="integ-card"><div class="ic-wrap" style="background:#f4f0f9;color:#3b5bdb"><svg><use href="#ic-warehouse"/></svg></div><p>زد Zid</p></a>
+    <a href="#contact" class="integ-card"><div class="ic-wrap" style="background:#f0f9eb;color:#96bf48"><svg><use href="#ic-code"/></svg></div><p>Shopify</p></a>
+    <a href="#contact" class="integ-card"><div class="ic-wrap" style="background:#fff8ed;color:#c07200"><svg><use href="#ic-warehouse"/></svg></div><p>WooCommerce</p></a>
+    <a href="#contact" class="integ-card"><div class="ic-wrap" style="background:#fff0f5;color:#e0005a"><svg><use href="#ic-globe"/></svg></div><p>Amazon KSA</p></a>
+    <a href="#contact" class="integ-card"><div class="ic-wrap" style="background:var(--purple-light);color:var(--purple)"><svg><use href="#ic-code"/></svg></div><p>API مخصص</p></a>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="section bg-gray">
+  <div class="sec-header center">
+    <span class="sec-tag orange">آراء العملاء</span>
+    <h2 class="sec-title">ماذا قال شركاؤنا؟</h2>
+  </div>
+  <div class="testi-row">
+    <div class="testi-card">
+      <div class="testi-stars"><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg></div>
+      <p>«مدار حلّت لنا مشكلة التخزين والتوصيل في خطوة واحدة  بدل ما نتعامل مع ٣ موردين مختلفين، دلوقتي كل شيء في شريك واحد موثوق.»</p>
+      <div class="testi-author"><div class="testi-av" style="background:var(--purple)">م</div><div><strong>محمد الغامدي</strong><span>مدير عمليات  شركة تجزئة بالرياض</span></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg></div>
+      <p>«الشفافية في التتبع والتسليم في الوقت المحدد غيّرا نظرتنا للوجستيات تماماً  نسبة 98% تسليم في الموعد ليست مجرد وعد، هي واقع نعيشه.»</p>
+      <div class="testi-author"><div class="testi-av" style="background:var(--orange)">ن</div><div><strong>نورة السبيعي</strong><span>مديرة سلسلة التوريد  شركة FMCG بجدة</span></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg><svg><use href="#ic-star"/></svg></div>
+      <p>«ربطنا متجر Salla بمدار في يوم واحد وبدأنا الشحن التلقائي من نفس الأسبوع  الإجراءات بسيطة والدعم سريع ومحترف جداً.»</p>
+      <div class="testi-author"><div class="testi-av" style="background:#2E7D32">ع</div><div><strong>عبدالرحمن الشمري</strong><span>صاحب متجر إلكتروني  الدمام</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA BAND ══ -->
+<div class="cta-band" id="contact">
+  <div>
+    <h2>ابدأ شراكتك مع مدار اليوم</h2>
+    <p>احجز مكالمة اكتشاف مجانية مع فريقنا  ونبدأ نبني لك الحل اللوجستي الأمثل</p>
+    <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
+      <a href="tel:+96650xxxxxxx" class="btn btn-primary btn-pill">📞 تواصل معنا الآن</a>
+      <a href="https://wa.me/96650xxxxxxx" class="btn btn-outline" style="gap:6px"><svg style="width:16px;height:16px;flex-shrink:0"><use href="#ic-wa"/></svg> واتساب</a>
+    </div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text-mid);display:flex;flex-direction:column;gap:4px">
+      <span>✉ info@madar-logistics.sa</span>
+      <span>🌐 madar-logistics.sa</span>
+    </div>
+  </div>
+  <svg width="200" height="80" viewBox="0 0 300 80" fill="none" style="opacity:.3;flex-shrink:0">
+    <g stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="10" y="22" width="90" height="40" rx="4"/><rect x="100" y="30" width="34" height="32" rx="4"/>
+      <circle cx="28" cy="62" r="8"/><circle cx="86" cy="62" r="8"/><circle cx="120" cy="62" r="8"/>
+      <line x1="100" y1="44" x2="134" y2="44"/><rect x="18" y="30" width="36" height="20" rx="3"/>
+    </g>
+    <g stroke="#FF6A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="160" y="28" width="70" height="34" rx="4"/><rect x="230" y="34" width="28" height="28" rx="4"/>
+      <circle cx="176" cy="62" r="8"/><circle cx="222" cy="62" r="8"/><circle cx="248" cy="62" r="8"/>
+      <line x1="230" y1="46" x2="258" y2="46"/>
+    </g>
+  </svg>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="f-logo-wrap"><img src="logo.png" alt="Madar" style="height:40px;object-fit:contain;"/></div>
+      <p>مدار للحلول اللوجستية  الشريك اللوجستي المتكامل في المملكة العربية السعودية. نقل بري، تخزين، سلاسل توريد، وتوصيل آخر ميل في مكان واحد.</p>
+      <div class="social-row">
+        <a href="#" class="social-btn"><svg><use href="#ic-x"/></svg></a>
+        <a href="#" class="social-btn"><svg><use href="#ic-fb"/></svg></a>
+        <a href="#" class="social-btn"><svg><use href="#ic-li"/></svg></a>
+        <a href="#" class="social-btn"><svg><use href="#ic-ig"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>الخدمات</h4>
+      <ul>
+        <li><a href="#services">النقل البري</a></li>
+        <li><a href="#warehousing">التخزين الذكي</a></li>
+        <li><a href="#scm">سلاسل التوريد</a></li>
+        <li><a href="#lastmile">توصيل آخر ميل</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>للعملاء</h4>
+      <ul>
+        <li><a href="#clients">أنواع العملاء</a></li>
+        <li><a href="#pricing">التسعير</a></li>
+        <li><a href="#integrations">التكاملات</a></li>
+        <li><a href="#track">تتبع الشحنة</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>الشركة</h4>
+      <ul>
+        <li><a href="#about">من نحن</a></li>
+        <li><a href="#contact">تواصل معنا</a></li>
+        <li><a href="#">سياسة الخصوصية</a></li>
+        <li><a href="#">الشروط والأحكام</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 مدار للحلول اللوجستية. جميع الحقوق محفوظة.</span>
+    <div class="footer-btm-links">
+      <a href="#">سياسة الخصوصية</a>
+      <a href="#">الشروط والأحكام</a>
+      <a href="#contact">تواصل معنا</a>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobNav    = document.getElementById('mob-nav');
+  const mobBack   = document.getElementById('mob-backdrop');
+  const mobClose  = document.getElementById('mob-close');
+
+  function openMob()  { mobNav.classList.add('open'); mobBack.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMob() { mobNav.classList.remove('open'); mobBack.classList.remove('open'); document.body.style.overflow=''; }
+
+  hamburger.addEventListener('click', openMob);
+  mobClose.addEventListener('click', closeMob);
+  mobBack.addEventListener('click', closeMob);
+
+  // Close mobile nav on link click
+  mobNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+</script>
+
+<script>
+/* ── SHIPMENT TRACKER ── */
+const DEMO_ORDERS = {
+  'MDR-00841': { status: 2, recipient: 'أحمد الشمري', region: 'الرياض' },
+  'MDR-00920': { status: 3, recipient: 'نورة السالم',  region: 'جدة' },
+  'MDR-01001': { status: 4, recipient: 'سعد المالكي',  region: 'الدمام' },
+  'MDR-00755': { status: 1, recipient: 'منال الشهري',  region: 'مكة' },
+};
+const STEPS = [
+  { label: 'تم استلام الطلب',       time: 'الأحد، 28 مايو  09:14' },
+  { label: 'جاري التجهيز والتعبئة', time: 'الأحد، 28 مايو  11:30' },
+  { label: 'تم استلام الشحنة بالمستودع', time: 'الإثنين، 29 مايو  08:00' },
+  { label: 'في الطريق إلى المستلم', time: 'الإثنين، 29 مايو  13:45' },
+  { label: 'تم التسليم بنجاح',       time: 'الإثنين، 29 مايو  17:22' },
+];
+
+function doTrack() {
+  const num = document.getElementById('trackNum').value.trim().toUpperCase();
+  const box = document.getElementById('track-result');
+  box.style.display = 'block';
+
+  // Check localStorage orders first (if merchant is logged in)
+  const merchant = JSON.parse(localStorage.getItem('madar_merchant') || 'null');
+  let order = null;
+  if (merchant) {
+    const orders = JSON.parse(localStorage.getItem('madar_orders_' + merchant.id) || '[]');
+    order = orders.find(o => o.id === num);
+  }
+
+  const demo = DEMO_ORDERS[num];
+  const statusIdx = order
+    ? (['قيد التنفيذ','جاري التجهيز','في الطريق','وصل للعميل','تم التسليم'].indexOf(order.status))
+    : (demo ? demo.status : -1);
+
+  if (statusIdx === -1 && !demo && !order) {
+    box.innerHTML = `<div class="track-not-found">لم يتم العثور على شحنة بهذا الرقم  تأكد من الرقم أو تواصل معنا</div>`;
+    return;
+  }
+
+  const finalIdx = statusIdx >= 0 ? statusIdx : 2;
+  const info = order || demo || {};
+  let html = `<div class="track-id-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ${num}</div>`;
+  if (info.recipient) html += `<div style="font-size:13px;color:#555;margin-bottom:12px;">المستلم: <strong>${info.recipient}</strong> · ${info.region||''}</div>`;
+  html += `<div class="track-timeline">`;
+  STEPS.forEach((s, i) => {
+    const cls = i < finalIdx ? 'done' : i === finalIdx ? 'current' : '';
+    html += `<div class="track-step ${cls}">
+      <div class="track-step-dot ${cls}"></div>
+      <div class="track-step-info">
+        <div class="track-step-label ${i > finalIdx ? 'dim' : ''}">${s.label}</div>
+        ${i <= finalIdx ? `<div class="track-step-time">${s.time}</div>` : ''}
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  box.innerHTML = html;
+}
+</script>
+</body>
+</html>

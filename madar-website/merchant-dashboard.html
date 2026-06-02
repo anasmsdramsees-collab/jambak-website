@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدار  لوحة التاجر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Tajawal','Segoe UI',sans-serif; background:#F4F2FB; display:flex; height:100vh; overflow:hidden; direction:rtl; }
+
+/* ── SIDEBAR ── */
+.sidebar { width:224px; background:#1A0A4A; color:#fff; display:flex; flex-direction:column; flex-shrink:0; height:100vh; overflow-y:auto; }
+.sb-head { padding:18px 16px 12px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:10px; }
+.sb-logo { }
+.sb-sub { font-size:10px; color:rgba(255,255,255,.4); margin-top:2px; }
+.online { width:8px; height:8px; background:#22C55E; border-radius:50%; margin-right:auto; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
+.store-pill { margin:10px 10px 0; background:rgba(72,29,188,.3); border:1px solid rgba(72,29,188,.45); border-radius:10px; padding:10px 12px; }
+.store-name { font-size:12px; font-weight:700; color:#fff; }
+.store-id   { font-size:10px; color:rgba(255,255,255,.38); margin-top:2px; }
+.nav-sec { font-size:9.5px; color:rgba(255,255,255,.28); padding:14px 16px 5px; letter-spacing:1.2px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 14px; font-size:13px; color:rgba(255,255,255,.6); cursor:pointer; border-radius:8px; margin:1px 8px; transition:all .15s; text-decoration:none; }
+.nav-item:hover { background:rgba(255,255,255,.07); color:#fff; }
+.nav-item.active { background:#481DBC; color:#fff; font-weight:700; }
+.nav-icon { font-size:15px; width:20px; text-align:center; flex-shrink:0; }
+.sb-foot { margin-top:auto; padding:14px 16px; border-top:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:10px; }
+.avatar { width:34px; height:34px; background:#481DBC; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0; }
+.u-name { font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; }
+.u-role { font-size:10.5px; color:rgba(255,255,255,.38); }
+.logout { margin-right:auto; background:none; border:none; color:rgba(255,255,255,.35); cursor:pointer; font-size:16px; padding:4px; }
+.logout:hover { color:#FF6A00; }
+
+/* ── MAIN ── */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+.topbar { background:#fff; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #E8E4F5; flex-shrink:0; gap:12px; }
+.tb-title { font-size:17px; font-weight:800; color:#1A0A4A; }
+.tb-sub   { font-size:12px; color:#aaa; margin-top:1px; }
+.tb-right { display:flex; align-items:center; gap:8px; }
+.filter-btn { padding:5px 13px; border-radius:20px; border:1px solid #D8D3EE; background:#fff; font-size:12px; color:#666; cursor:pointer; font-family:inherit; transition:all .15s; }
+.filter-btn:hover  { border-color:#481DBC; color:#481DBC; }
+.filter-btn.active { background:#1A0A4A; color:#fff; border-color:#1A0A4A; font-weight:700; }
+.date-range { display:flex; align-items:center; gap:5px; font-size:12px; color:#777; background:#F4F2FB; padding:5px 11px; border-radius:8px; border:1px solid #E0DBF0; white-space:nowrap; }
+.primary-btn { padding:8px 18px; background:#481DBC; border:none; border-radius:10px; font-size:13px; font-weight:700; color:#fff; cursor:pointer; font-family:inherit; transition:background .2s; white-space:nowrap; }
+.primary-btn:hover { background:#3a169a; }
+
+.content { flex:1; overflow-y:auto; padding:20px 24px; }
+
+/* ── PAGE SYSTEM ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── CARDS ── */
+.card { background:#fff; border-radius:14px; padding:20px; border:1px solid #EAE6F5; box-shadow:0 1px 6px rgba(72,29,188,.05); }
+.card-title { font-size:14px; font-weight:800; color:#1A0A4A; margin-bottom:4px; }
+.card-sub   { font-size:11px; color:#bbb; margin-bottom:14px; }
+
+/* ── WELCOME BANNER ── */
+.welcome { background:linear-gradient(135deg,#1A0A4A,#481DBC); border-radius:16px; padding:22px 24px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; color:#fff; }
+.w-title { font-size:18px; font-weight:800; margin-bottom:3px; }
+.w-sub   { font-size:13px; color:rgba(255,255,255,.65); }
+.w-id    { font-size:11px; color:rgba(255,255,255,.45); margin-top:6px; }
+.w-btns  { display:flex; gap:10px; }
+.w-btn   { padding:9px 18px; border-radius:10px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; border:none; transition:all .2s; }
+.w-btn.solid   { background:#fff; color:#481DBC; }
+.w-btn.solid:hover { background:#EDE8FF; }
+.w-btn.outline { background:rgba(255,255,255,.12); color:#fff; border:1.5px solid rgba(255,255,255,.3); }
+.w-btn.outline:hover { background:rgba(255,255,255,.2); }
+
+/* ── KPI GRID ── */
+.kpi4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:16px; }
+.kpi2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.kpi-card { background:#fff; border-radius:12px; padding:16px 18px; border:1px solid #EAE6F5; }
+.kpi-icon  { font-size:22px; margin-bottom:8px; }
+.kpi-lbl   { font-size:12px; color:#888; margin-bottom:4px; display:flex; align-items:center; justify-content:space-between; }
+.kpi-val   { font-size:30px; font-weight:800; color:#1A0A4A; line-height:1; margin-bottom:3px; }
+.kpi-small { font-size:20px; }
+.kpi-note  { font-size:11px; color:#aaa; }
+.badge-live { font-size:10px; padding:2px 7px; border-radius:10px; background:#FFF0E8; color:#FF6A00; font-weight:700; }
+.badge-ok   { font-size:10px; padding:2px 7px; border-radius:10px; background:#F0FDF4; color:#16a34a; font-weight:700; }
+
+/* ── GRID LAYOUTS ── */
+.row-2     { display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; }
+.row-2-eq  { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.row-3     { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+
+/* ── TABLE ── */
+.tbl-wrap { background:#fff; border-radius:14px; border:1px solid #EAE6F5; overflow:hidden; margin-bottom:16px; }
+.tbl-head { padding:14px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #F0EEF9; gap:10px; flex-wrap:wrap; }
+.tbl-title { font-size:14px; font-weight:800; color:#1A0A4A; }
+.tbl-acts  { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.s-input  { padding:7px 12px; border:1.5px solid #E0DBF0; border-radius:8px; font-size:13px; font-family:inherit; color:#1A0A4A; background:#FAFAFA; outline:none; width:190px; direction:rtl; }
+.s-input:focus { border-color:#481DBC; }
+.s-select { padding:7px 10px; border:1.5px solid #E0DBF0; border-radius:8px; font-size:12px; font-family:inherit; color:#555; background:#fff; cursor:pointer; outline:none; }
+table { width:100%; border-collapse:collapse; }
+th { font-size:11px; color:#aaa; font-weight:600; text-align:right; padding:10px 20px; background:#FAFAFA; border-bottom:1px solid #F0EEF9; white-space:nowrap; }
+td { font-size:13px; color:#333; padding:11px 20px; border-bottom:1px solid #F9F7FF; vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#FDFCFF; }
+.pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; white-space:nowrap; }
+.p-delivered { background:#F0FDF4; color:#15803D; }
+.p-pending   { background:#EFF6FF; color:#1D4ED8; }
+.p-transit   { background:#FFF7ED; color:#C2410C; }
+.p-failed    { background:#FEF2F2; color:#B91C1C; }
+.p-returned  { background:#FFF4ED; color:#EA580C; }
+.p-cancelled { background:#F3F4F6; color:#6B7280; }
+.p-paid      { background:#F0FDF4; color:#15803D; }
+.p-unpaid    { background:#FEF2F2; color:#B91C1C; }
+.p-review    { background:#FFF8E8; color:#D97706; }
+
+/* ── PROGRESS ── */
+.prog-row { display:flex; justify-content:space-between; font-size:12px; color:#888; margin-bottom:4px; }
+.prog-bg  { height:7px; background:#F0EEF9; border-radius:4px; overflow:hidden; margin-bottom:10px; }
+.prog-fill { height:100%; border-radius:4px; transition:width .6s ease; }
+
+/* ── ACTION BTNS ── */
+.act-btn { padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600; font-family:inherit; cursor:pointer; border:1px solid transparent; transition:all .15s; }
+.act-view { background:#F4F2FB; color:#481DBC; border-color:#D8D3EE; }
+.act-track { background:#FFF0E8; color:#FF6A00; border-color:#FFD5BB; }
+
+/* ── TRACKING TIMELINE ── */
+.timeline { display:flex; flex-direction:column; gap:0; }
+.tl-step { display:flex; gap:14px; }
+.tl-left { display:flex; flex-direction:column; align-items:center; }
+.tl-dot  { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; font-weight:700; }
+.tl-dot.done    { background:#481DBC; color:#fff; }
+.tl-dot.current { background:#FF6A00; color:#fff; box-shadow:0 0 0 4px rgba(255,106,0,.2); }
+.tl-dot.pending { background:#F0EEF9; color:#ccc; border:2px solid #E0DBF0; }
+.tl-line { width:2px; flex:1; background:#E0DBF0; margin:4px 0; min-height:24px; }
+.tl-line.done { background:#481DBC; }
+.tl-content { padding-bottom:20px; }
+.tl-title { font-size:13px; font-weight:700; color:#1A0A4A; margin-bottom:2px; }
+.tl-sub   { font-size:11px; color:#aaa; }
+
+/* ── FINANCE ── */
+.fin-big { font-size:36px; font-weight:900; color:#1A0A4A; }
+.fin-note { font-size:12px; color:#aaa; margin-top:2px; }
+.fin-row { display:flex; justify-content:space-between; font-size:13px; padding:10px 0; border-bottom:1px solid #F5F3FF; }
+.fin-row:last-child { border-bottom:none; }
+.fin-lbl { color:#888; }
+.fin-val { font-weight:700; color:#1A0A4A; }
+
+/* ── SETTINGS FORM ── */
+.settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.sf { margin-bottom:14px; }
+.sf label { display:block; font-size:12.5px; font-weight:600; color:#444; margin-bottom:5px; }
+.sf input, .sf select, .sf textarea { width:100%; padding:10px 13px; border:1.5px solid #E0DBF0; border-radius:10px; font-size:13.5px; font-family:inherit; color:#1A0A4A; background:#FAFAFA; outline:none; direction:rtl; }
+.sf input:focus, .sf select:focus, .sf textarea:focus { border-color:#481DBC; box-shadow:0 0 0 3px rgba(72,29,188,.1); background:#fff; }
+.sf textarea { min-height:80px; resize:vertical; }
+.save-btn { padding:11px 28px; background:#481DBC; border:none; border-radius:10px; font-size:14px; font-weight:700; color:#fff; cursor:pointer; font-family:inherit; transition:background .2s; }
+.save-btn:hover { background:#3a169a; }
+.settings-success { background:#DCFCE7; border:1px solid #BBF7D0; color:#15803D; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:14px; display:none; }
+
+/* ── MODAL ── */
+.m-overlay { position:fixed; inset:0; background:rgba(10,5,30,.52); z-index:1000; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .2s; }
+.m-overlay.open { opacity:1; pointer-events:all; }
+.modal { background:#fff; border-radius:18px; padding:28px; width:100%; max-width:520px; box-shadow:0 24px 80px rgba(0,0,0,.25); transform:translateY(20px); transition:transform .25s; max-height:90vh; overflow-y:auto; }
+.m-overlay.open .modal { transform:translateY(0); }
+.m-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.m-title { font-size:17px; font-weight:800; color:#1A0A4A; }
+.m-close { background:none; border:none; font-size:20px; color:#aaa; cursor:pointer; padding:4px 8px; border-radius:6px; }
+.m-close:hover { background:#F4F2FB; color:#1A0A4A; }
+.m-field { margin-bottom:13px; }
+.m-field label { display:block; font-size:12.5px; font-weight:600; color:#444; margin-bottom:5px; }
+.m-field input, .m-field select, .m-field textarea { width:100%; padding:10px 13px; border:1.5px solid #E0DBF0; border-radius:10px; font-size:13.5px; font-family:inherit; color:#1A0A4A; background:#FAFAFA; outline:none; direction:rtl; }
+.m-field input:focus, .m-field select:focus { border-color:#481DBC; box-shadow:0 0 0 3px rgba(72,29,188,.1); background:#fff; }
+.m-field textarea { min-height:70px; resize:vertical; }
+.m-field input[type=email], .m-field input[type=tel], .m-field input[type=number] { direction:ltr; text-align:right; }
+.m-row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.m-foot { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; padding-top:16px; border-top:1px solid #F0EEF9; }
+.m-cancel { padding:10px 20px; border:1.5px solid #E0DBF0; border-radius:10px; background:#fff; color:#666; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; }
+.m-submit { padding:10px 24px; border:none; border-radius:10px; background:#481DBC; color:#fff; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; }
+.m-submit:hover { background:#3a169a; }
+.m-success { background:#DCFCE7; border:1px solid #BBF7D0; color:#15803D; border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:14px; display:none; }
+.m-steps { display:flex; gap:6px; margin-bottom:20px; }
+.step-pill { flex:1; text-align:center; padding:6px; border-radius:8px; font-size:11px; font-weight:700; background:#F4F2FB; color:#aaa; border:1px solid #E0DBF0; transition:all .2s; }
+.step-pill.active { background:#481DBC; color:#fff; border-color:#481DBC; }
+.step-pill.done   { background:#F0FDF4; color:#15803D; border-color:#BBF7D0; }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1A0A4A; color:#fff; padding:12px 24px; border-radius:12px; font-size:13px; font-weight:700; z-index:2000; opacity:0; transition:opacity .3s; pointer-events:none; box-shadow:0 8px 30px rgba(0,0,0,.2); }
+.toast.show { opacity:1; }
+
+/* ── SUPPORT ── */
+.support-item { display:flex; align-items:center; gap:12px; padding:14px; background:#F4F2FB; border-radius:12px; border:1px solid #E0DBF0; margin-bottom:10px; cursor:pointer; transition:all .15s; }
+.support-item:hover { border-color:#481DBC; }
+.sup-icon { font-size:22px; flex-shrink:0; }
+.sup-name { font-size:13px; font-weight:700; color:#1A0A4A; }
+.sup-sub  { font-size:11px; color:#aaa; }
+.sup-badge { margin-right:auto; font-size:11px; font-weight:700; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:#D8D3EE; border-radius:3px; }
+.sidebar::-webkit-scrollbar-thumb { background:rgba(255,255,255,.14); }
+
+/* ── WMS STYLES ── */
+.wms-badge { display:inline-flex;align-items:center;gap:5px;background:rgba(255,106,0,.15);color:#FF6A00;border:1px solid rgba(255,106,0,.3);border-radius:12px;padding:2px 8px;font-size:9.5px;font-weight:700;margin-right:auto; }
+.inv-type-pill { display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700; }
+.inv-normal { background:#EFF6FF;color:#1D4ED8; }
+.inv-cold   { background:#F0F9FF;color:#0369A1; }
+.inv-fragile{ background:#FFF7ED;color:#C2410C; }
+.inv-gift   { background:#FDF4FF;color:#7E22CE; }
+.loc-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:8px; }
+.loc-cell { border-radius:10px;padding:12px 10px;text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent; }
+.loc-empty { background:#F9F7FF;border-color:#E0DBF0;color:#ccc; }
+.loc-low   { background:#FFF7ED;border-color:#FED7AA;color:#C2410C; }
+.loc-med   { background:#FFF8E8;border-color:#FDE68A;color:#92400E; }
+.loc-full  { background:#F0FDF4;border-color:#BBF7D0;color:#15803D; }
+.loc-name  { font-size:11px;font-weight:800;color:#1A0A4A;margin-bottom:3px; }
+.loc-items { font-size:10px; }
+.recv-card { border:2px solid #E0DBF0;border-radius:12px;padding:16px;margin-bottom:12px;transition:all .2s; }
+.recv-card:hover { border-color:#481DBC;background:#FDFCFF; }
+.recv-status { display:inline-block;padding:3px 9px;border-radius:10px;font-size:10.5px;font-weight:700; }
+.rs-pending { background:#FFF7ED;color:#C2410C; }
+.rs-arrived { background:#EFF6FF;color:#1D4ED8; }
+.rs-stored  { background:#F0FDF4;color:#15803D; }
+.wms-kpi { background:linear-gradient(135deg,#1A0A4A,#481DBC);border-radius:14px;padding:18px 20px;color:#fff;position:relative;overflow:hidden; }
+.wms-kpi::after { content:'';position:absolute;top:-20px;left:-20px;width:80px;height:80px;background:rgba(255,255,255,.04);border-radius:50%; }
+</style>
+</head>
+<body>
+
+<script>
+  const merchant = JSON.parse(localStorage.getItem('madar_merchant') || 'null');
+  if (!merchant) window.location.href = 'merchant-login.html';
+</script>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sb-head">
+    <div>
+      <div class="sb-logo">
+        <div style="background:white;border-radius:10px;padding:6px 12px;display:inline-flex;align-items:center;">
+          <img src="logo.png" alt="Madar" style="height:32px;">
+        </div>
+      </div>
+      <div class="sb-sub">بوابة التجار</div>
+    </div>
+    <div class="online"></div>
+  </div>
+
+  <div class="store-pill">
+    <div class="store-name" id="storeName"></div>
+    <div class="store-id"   id="storeId"></div>
+  </div>
+
+  <div style="padding:6px 0 16px;">
+    <div class="nav-sec">الرئيسية</div>
+    <a class="nav-item active" onclick="nav('home',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>لوحة التحكم</a>
+
+    <div class="nav-sec">شحناتي</div>
+    <a class="nav-item" onclick="nav('orders',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></span>طلباتي</a>
+    <a class="nav-item" onclick="nav('shipments',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>شحناتي</a>
+    <a class="nav-item" onclick="nav('track',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>تتبع الشحنة</a>
+    <a class="nav-item" onclick="nav('returns',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>المرتجعات</a>
+
+    <!-- WMS SECTION  shown only for storage merchants -->
+    <div class="nav-sec" id="wms-nav-sec" style="display:none;">المخزن <span class="wms-badge">WMS</span></div>
+    <a class="nav-item" id="wms-nav-overview" onclick="nav('wms-home',this)" style="display:none;">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 2v20M2 9h20"/></svg></span>نظرة عامة</a>
+    <a class="nav-item" id="wms-nav-inventory" onclick="nav('wms-inventory',this)" style="display:none;">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="7.5 4.21 12 6.81 16.5 4.21"/><polyline points="7.5 19.79 7.5 14.6 3 12"/><polyline points="21 12 16.5 14.6 16.5 19.79"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>مخزوني</a>
+    <a class="nav-item" id="wms-nav-receive" onclick="nav('wms-receive',this)" style="display:none;">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></span>استقبال بضاعة</a>
+    <a class="nav-item" id="wms-nav-ship" onclick="nav('wms-ship',this)" style="display:none;">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>شحن من المخزن</a>
+    <a class="nav-item" id="wms-nav-locations" onclick="nav('wms-locations',this)" style="display:none;">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></span>المواقع</a>
+    <a class="nav-item" id="wms-nav-reports" onclick="nav('wms-reports',this)" style="display:none;">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>تقارير المخزون</a>
+
+    <div class="nav-sec">الحساب</div>
+    <a class="nav-item" onclick="nav('finance',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg></span>ماليتي</a>
+    <a class="nav-item" onclick="nav('invoices',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></span>فواتيري</a>
+    <a class="nav-item" onclick="nav('settings',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>إعدادات المتجر</a>
+    <a class="nav-item" onclick="nav('support',this)">
+      <span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>الدعم</a>
+  </div>
+
+  <div class="sb-foot">
+    <div class="avatar" id="sbAvatar">م</div>
+    <div style="min-width:0;">
+      <div class="u-name" id="sbName"></div>
+      <div class="u-role" id="sbRegion"></div>
+    </div>
+    <button class="logout" onclick="logout()" title="خروج">⏻</button>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="tb-title" id="pgTitle">لوحة التحكم</div>
+      <div class="tb-sub"   id="pgSub">مرحباً بك في مدار</div>
+    </div>
+    <div class="tb-right">
+      <button class="filter-btn" onclick="setDays(0,this)">اليوم</button>
+      <button class="filter-btn" onclick="setDays(7,this)">7 أيام</button>
+      <button class="filter-btn active" onclick="setDays(30,this)">30 يوم</button>
+      <div class="date-range">من <strong id="dFrom"></strong> إلى <strong id="dTo"></strong></div>
+      <button class="primary-btn" onclick="openModal('m-neworder')">+ طلب شحن جديد</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ══ PAGE: HOME ══ -->
+  <div class="page active" id="page-home">
+    <div class="welcome">
+      <div>
+        <div class="w-title" id="wName">أهلاً </div>
+        <div class="w-sub"   id="wStore"></div>
+        <div class="w-id"    id="wId"></div>
+      </div>
+      <div class="w-btns">
+        <button class="w-btn solid"   onclick="openModal('m-neworder')">+ طلب شحن جديد</button>
+        <button class="w-btn outline" onclick="nav('track', document.querySelectorAll('.nav-item')[3])">تتبع شحنة</button>
+      </div>
+    </div>
+
+    <div class="kpi4">
+      <div class="kpi-card">
+        <div class="kpi-lbl" style="margin-bottom:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:4px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          إجمالي الطلبات<span class="badge-live">مباشر</span>
+        </div>
+        <div class="kpi-val" id="h-total">142</div>
+        <div class="kpi-note"><span style="color:#22C55E;font-weight:600;">↑ 14%</span> عن الشهر الماضي</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl" style="margin-bottom:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:4px;"><polyline points="20 6 9 17 4 12"/></svg>
+          تم التسليم<span class="badge-ok">ناجح</span>
+        </div>
+        <div class="kpi-val" id="h-del">118</div>
+        <div class="kpi-note">83.1% معدل النجاح</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl" style="margin-bottom:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:4px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+          قيد التنفيذ
+        </div>
+        <div class="kpi-val" id="h-active">12</div>
+        <div class="kpi-note">تحتاج متابعة</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl" style="margin-bottom:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:4px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+          إجمالي الفواتير
+        </div>
+        <div class="kpi-val kpi-small" id="h-rev">38,200</div>
+        <div class="kpi-note">ريال سعودي</div>
+      </div>
+    </div>
+
+    <!-- WMS storage KPI  shown only for storage merchants -->
+    <div id="wms-storage-kpi" style="display:none;margin-bottom:16px;">
+      <div style="background:linear-gradient(135deg,#FF6A00,#ee0979);border-radius:14px;padding:16px 20px;color:#fff;display:flex;align-items:center;gap:16px;cursor:pointer;" onclick="nav('wms-home',document.getElementById('wms-nav-overview'))">
+        <div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 2v20M2 9h20"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px;">بوابة المخزن (WMS)</div>
+          <div style="font-size:16px;font-weight:800;">247 وحدة مخزّنة  38 SKU  68% مساحة مستخدمة</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;background:rgba(255,255,255,.15);padding:8px 16px;border-radius:10px;white-space:nowrap;">
+          إدارة المخزن ←
+        </div>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="tbl-wrap" style="margin-bottom:0;">
+        <div class="tbl-head">
+          <div class="tbl-title">آخر الطلبات</div>
+          <button class="act-btn act-view" onclick="nav('orders',document.querySelectorAll('.nav-item')[1])">عرض الكل</button>
+        </div>
+        <table><thead><tr><th>رقم الطلب</th><th>المستلم</th><th>المنطقة</th><th>الخدمة</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+        <tbody id="home-recent"></tbody></table>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">توزيع الحالات</div>
+        <div class="card-sub">آخر 30 يوم</div>
+        <div id="home-dist"></div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid #F0EEF9;display:flex;justify-content:space-between;font-size:12px;color:#aaa;">
+          <span>الإجمالي</span><strong style="color:#1A0A4A;">142 طلب</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: ORDERS ══ -->
+  <div class="page" id="page-orders">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">إجمالي الطلبات</div><div class="kpi-val">142</div><div class="kpi-note">آخر 30 يوم</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">تم التسليم</div><div class="kpi-val" style="color:#15803D;">118</div><div class="kpi-note">83.1%</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">قيد التنفيذ</div><div class="kpi-val" style="color:#1D4ED8;">12</div><div class="kpi-note">نشطة الآن</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">المرتجعات</div><div class="kpi-val" style="color:#EA580C;">7</div><div class="kpi-note">4.9%</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div class="tbl-title">جميع طلباتي</div>
+        <div class="tbl-acts">
+          <input class="s-input" id="ord-search" placeholder="بحث برقم الطلب أو المستلم..." oninput="filterOrders()">
+          <select class="s-select" id="ord-status" onchange="filterOrders()">
+            <option value="">كل الحالات</option>
+            <option>تم التسليم</option><option>قيد التنفيذ</option>
+            <option>في الطريق</option><option>فشل التسليم</option>
+            <option>مرتجع</option><option>ملغى</option>
+          </select>
+          <select class="s-select" id="ord-service" onchange="filterOrders()">
+            <option value="">كل الخدمات</option>
+            <option>آخر ميل</option><option>B2B</option>
+          </select>
+          <button class="primary-btn" onclick="openModal('m-neworder')">+ طلب جديد</button>
+        </div>
+      </div>
+      <table><thead><tr><th>رقم الطلب</th><th>المستلم</th><th>الجوال</th><th>المنطقة</th><th>الخدمة</th><th>الحالة</th><th>التاريخ</th><th>القيمة</th><th></th></tr></thead>
+      <tbody id="orders-body"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: SHIPMENTS ══ -->
+  <div class="page" id="page-shipments">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">نشطة الآن</div><div class="kpi-val" style="color:#1D4ED8;">12</div><div class="kpi-note">شحنة قيد التنفيذ</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">في الطريق</div><div class="kpi-val" style="color:#C2410C;">5</div><div class="kpi-note">مع المندوب</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">متوسط التسليم</div><div class="kpi-val kpi-small">4.2</div><div class="kpi-note">ساعة للشحنة</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">معدل الإنجاز</div><div class="kpi-val kpi-small" style="color:#22C55E;">83%</div><div class="kpi-note">من الإجمالي</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div class="tbl-title">شحناتي النشطة</div>
+        <div class="tbl-acts">
+          <input class="s-input" placeholder="بحث برقم الشحنة..." id="ship-search" oninput="filterShipments()">
+          <select class="s-select" id="ship-status" onchange="filterShipments()">
+            <option value="">كل الحالات</option>
+            <option>قيد التنفيذ</option><option>في الطريق</option><option>تم التسليم</option>
+          </select>
+        </div>
+      </div>
+      <table><thead><tr><th>رقم الشحنة</th><th>المستلم</th><th>المنطقة</th><th>المندوب</th><th>الحالة</th><th>التوقع</th><th>القيمة</th><th></th></tr></thead>
+      <tbody id="shipments-body"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: TRACK ══ -->
+  <div class="page" id="page-track">
+    <div class="card" style="max-width:600px;margin:0 auto 20px;">
+      <div class="card-title" style="font-size:16px;margin-bottom:4px;">تتبع الشحنة</div>
+      <div class="card-sub">أدخل رقم الطلب أو الشحنة لمعرفة حالتها الآن</div>
+      <div style="display:flex;gap:10px;margin-bottom:0;">
+        <input class="s-input" id="track-input" style="flex:1;width:auto;" placeholder="مثال: ORD-8831 أو LM-22481" oninput="liveTrack()">
+        <button class="primary-btn" onclick="doTrack()">تتبع الآن</button>
+      </div>
+    </div>
+    <div id="track-result" style="max-width:600px;margin:0 auto;"></div>
+    <div id="track-suggestions" style="max-width:600px;margin:0 auto;"></div>
+  </div>
+
+  <!-- ══ PAGE: RETURNS ══ -->
+  <div class="page" id="page-returns">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">إجمالي المرتجعات</div><div class="kpi-val" style="color:#EA580C;">7</div><div class="kpi-note">آخر 30 يوم</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">تمت المعالجة</div><div class="kpi-val" style="color:#15803D;">5</div><div class="kpi-note">71.4%</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">قيد المراجعة</div><div class="kpi-val" style="color:#D97706;">2</div><div class="kpi-note">بانتظار القرار</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">تكلفة المرتجعات</div><div class="kpi-val kpi-small" style="color:#B91C1C;">1,240</div><div class="kpi-note">ريال سعودي</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div class="tbl-title">سجل المرتجعات</div>
+        <div class="tbl-acts">
+          <select class="s-select" id="ret-reason" onchange="filterReturns()">
+            <option value="">كل الأسباب</option>
+            <option>رفض الاستلام</option><option>غياب المستلم</option>
+            <option>عنوان خاطئ</option><option>بضاعة تالفة</option>
+          </select>
+        </div>
+      </div>
+      <table><thead><tr><th>رقم المرتجع</th><th>رقم الطلب</th><th>السبب</th><th>الخدمة</th><th>القيمة</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+      <tbody id="returns-body"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: FINANCE ══ -->
+  <div class="page" id="page-finance">
+    <div class="row-3">
+      <div class="card">
+        <div class="card-title">إجمالي الفواتير</div>
+        <div style="margin:14px 0 4px;"><div class="fin-big">38,200</div><div class="fin-note">ريال سعودي  آخر 30 يوم</div></div>
+        <div style="margin-top:14px;">
+          <div class="prog-row"><span>نسبة التحصيل</span><span>76%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:76%;background:#481DBC;"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">مُحصَّل</div>
+        <div style="margin:14px 0 4px;"><div class="fin-big" style="color:#15803D;">29,040</div><div class="fin-note">تم الدفع</div></div>
+        <div class="fin-row"><span class="fin-lbl">آخر ميل</span><span class="fin-val">12,600 ر.س.</span></div>
+        <div class="fin-row"><span class="fin-lbl">B2B</span><span class="fin-val">16,440 ر.س.</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">مستحق</div>
+        <div style="margin:14px 0 4px;"><div class="fin-big" style="color:#D97706;">9,160</div><div class="fin-note">بانتظار التحصيل</div></div>
+        <div class="fin-row"><span class="fin-lbl">فاتورة مايو</span><span class="fin-val">9,160 ر.س.</span></div>
+        <div class="fin-row"><span class="fin-lbl">تاريخ الاستحقاق</span><span class="fin-val">15 يونيو 2026</span></div>
+      </div>
+    </div>
+    <div class="row-2-eq">
+      <div class="card">
+        <div class="card-title">تكاليف الخدمات</div>
+        <div class="card-sub">آخر 30 يوم</div>
+        <div class="fin-row"><span class="fin-lbl">تكلفة آخر ميل (98 شحنة)</span><span class="fin-val">15,680 ر.س.</span></div>
+        <div class="fin-row"><span class="fin-lbl">تكلفة B2B (44 رحلة)</span><span class="fin-val">18,920 ر.س.</span></div>
+        <div class="fin-row"><span class="fin-lbl">رسوم التخزين</span><span class="fin-val">2,100 ر.س.</span></div>
+        <div class="fin-row"><span class="fin-lbl">رسوم المرتجعات</span><span class="fin-val">1,500 ر.س.</span></div>
+        <div style="margin-top:12px;padding-top:12px;border-top:2px solid #EDE8FF;display:flex;justify-content:space-between;">
+          <span style="font-weight:800;color:#1A0A4A;font-size:14px;">الإجمالي</span>
+          <span style="font-weight:800;color:#481DBC;font-size:18px;">38,200 ر.س.</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">الأداء الشهري</div>
+        <div class="card-sub">مقارنة آخر 3 أشهر</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px;">
+          <div>
+            <div class="prog-row"><span>مارس 2026</span><span style="font-weight:700;color:#1A0A4A;">31,400 ر.س.</span></div>
+            <div class="prog-bg"><div class="prog-fill" style="width:82%;background:#D8D3EE;"></div></div>
+          </div>
+          <div>
+            <div class="prog-row"><span>أبريل 2026</span><span style="font-weight:700;color:#1A0A4A;">35,800 ر.س.</span></div>
+            <div class="prog-bg"><div class="prog-fill" style="width:94%;background:#8B6FE8;"></div></div>
+          </div>
+          <div>
+            <div class="prog-row"><span>مايو 2026</span><span style="font-weight:700;color:#481DBC;">38,200 ر.س.</span></div>
+            <div class="prog-bg"><div class="prog-fill" style="width:100%;background:#481DBC;"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:#F0FDF4;border-radius:8px;padding:10px 14px;font-size:13px;color:#15803D;font-weight:700;">
+          ↑ +6.7% نمو عن الشهر الماضي
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: INVOICES ══ -->
+  <div class="page" id="page-invoices">
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div class="tbl-title">فواتيري</div>
+        <div class="tbl-acts">
+          <select class="s-select" id="inv-status" onchange="filterInvoices()">
+            <option value="">كل الحالات</option>
+            <option value="مُحصَّل">مُحصَّل</option>
+            <option value="معلق">معلق</option>
+          </select>
+        </div>
+      </div>
+      <table><thead><tr><th>رقم الفاتورة</th><th>الفترة</th><th>عدد الشحنات</th><th>المبلغ</th><th>تاريخ الإصدار</th><th>الحالة</th><th></th></tr></thead>
+      <tbody id="invoices-body"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: SETTINGS ══ -->
+  <div class="page" id="page-settings">
+    <div class="kpi2" style="max-width:800px;">
+      <div class="card">
+        <div class="card-title">معلومات المتجر</div>
+        <div class="card-sub">يمكنك تعديل بيانات متجرك وحفظها</div>
+        <div class="settings-success" id="settings-ok">تم حفظ التعديلات بنجاح!</div>
+        <div class="settings-grid">
+          <div class="sf"><label>اسم المتجر</label><input id="s-store" /></div>
+          <div class="sf"><label>نوع النشاط</label>
+            <select id="s-type">
+              <option>تجارة إلكترونية</option><option>بيع بالتجزئة</option>
+              <option>بيع بالجملة</option><option>مطاعم</option><option>موردين</option>
+            </select>
+          </div>
+          <div class="sf"><label>الخدمة</label>
+            <select id="s-service">
+              <option>شحن</option><option>تخزين</option><option>شحن وتخزين</option>
+            </select>
+          </div>
+          <div class="sf"><label>المنطقة</label>
+            <select id="s-region">
+              <option>الرياض</option><option>جدة</option><option>الدمام</option>
+              <option>مكة المكرمة</option><option>المدينة المنورة</option>
+            </select>
+          </div>
+          <div class="sf"><label>رقم الجوال</label><input id="s-phone" style="direction:ltr;text-align:right;" /></div>
+        </div>
+        <div class="sf"><label>البريد الإلكتروني</label><input id="s-email" type="email" style="direction:ltr;text-align:right;" /></div>
+        <div class="sf"><label>عنوان المتجر</label><textarea id="s-address" rows="2"></textarea></div>
+        <div style="margin-top:6px;">
+          <button class="save-btn" onclick="saveSettings()">حفظ التعديلات</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">تغيير كلمة المرور</div>
+        <div class="card-sub">يجب أن تكون 6 أحرف على الأقل</div>
+        <div class="settings-success" id="pass-ok">تم تغيير كلمة المرور!</div>
+        <div class="sf"><label>كلمة المرور الحالية</label><input id="s-old-pass" type="password" /></div>
+        <div class="sf"><label>كلمة المرور الجديدة</label><input id="s-new-pass" type="password" /></div>
+        <div class="sf"><label>تأكيد كلمة المرور الجديدة</label><input id="s-confirm-pass" type="password" /></div>
+        <button class="save-btn" style="background:#1A0A4A;" onclick="changePass()">تحديث كلمة المرور</button>
+        <hr style="margin:20px 0;border:none;border-top:1px solid #F0EEF9;">
+        <div class="card-title" style="margin-bottom:8px;">منطقة الخطر</div>
+        <button onclick="if(confirm('هل أنت متأكد من تسجيل الخروج من جميع الأجهزة؟')){logout()}" style="width:100%;padding:10px;border:1.5px solid #FECACA;border-radius:10px;background:#FEF2F2;color:#B91C1C;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">تسجيل الخروج من جميع الأجهزة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: SUPPORT ══ -->
+  <div class="page" id="page-support">
+    <div class="kpi2" style="max-width:700px;">
+      <div class="card">
+        <div class="card-title">تواصل معنا</div>
+        <div class="card-sub">فريق مدار جاهز لمساعدتك</div>
+        <div class="support-item" onclick="showToast('جاري فتح واتساب...')">
+          <div class="sup-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div><div class="sup-name">واتساب الدعم</div><div class="sup-sub">ردود فورية  9ص إلى 9م</div></div>
+          <span class="sup-badge" style="color:#22C55E;">متاح الآن</span>
+        </div>
+        <div class="support-item" onclick="showToast('سيتم فتح بريدك الإلكتروني')">
+          <div class="sup-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="sup-name">البريد الإلكتروني</div><div class="sup-sub">support@madarlogistic.com</div></div>
+          <span class="sup-badge" style="color:#aaa;">خلال 24 ساعة</span>
+        </div>
+        <div class="support-item" onclick="showToast('920-XXX-XXXX')">
+          <div class="sup-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A0A4A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="sup-name">الهاتف</div><div class="sup-sub">920-XXX-XXXX  أيام العمل</div></div>
+          <span class="sup-badge" style="color:#aaa;">9ص - 6م</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">أرسل رسالة</div>
+        <div class="card-sub">سنرد عليك خلال 24 ساعة</div>
+        <div class="sf"><label>الموضوع</label>
+          <select id="sup-subject">
+            <option>مشكلة في شحنة</option><option>استفسار عن فاتورة</option>
+            <option>طلب تغيير عنوان</option><option>شكوى</option><option>أخرى</option>
+          </select>
+        </div>
+        <div class="sf"><label>رقم الطلب (اختياري)</label><input id="sup-order" placeholder="ORD-XXXX" style="direction:ltr;text-align:right;" /></div>
+        <div class="sf"><label>الرسالة</label><textarea id="sup-msg" rows="4" placeholder="اكتب رسالتك هنا..."></textarea></div>
+        <button class="save-btn" onclick="sendSupport()">إرسال الرسالة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ══   WMS PAGES (storage merchants only)  ══ -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- ══ WMS HOME ══ -->
+  <div class="page" id="page-wms-home">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="wms-kpi">
+        <div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:6px;">إجمالي المنتجات</div>
+        <div style="font-size:32px;font-weight:900;line-height:1;">247</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;">وحدة مخزّنة</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">منتجات نشطة</div>
+        <div class="kpi-val" style="color:#481DBC;">38</div>
+        <div class="kpi-note">SKU مختلفة</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">إنذار نفاد</div>
+        <div class="kpi-val" style="color:#EA580C;">4</div>
+        <div class="kpi-note">تحتاج إعادة تعبئة</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">مساحة مستخدمة</div>
+        <div class="kpi-val kpi-small">68%</div>
+        <div class="kpi-note">من الحصة المخصصة</div>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <!-- Recent Inventory Activity -->
+      <div class="tbl-wrap" style="margin-bottom:0;">
+        <div class="tbl-head">
+          <div class="tbl-title">آخر حركات المخزون</div>
+          <button class="act-btn act-view" onclick="nav('wms-inventory',document.getElementById('wms-nav-inventory'))">عرض الكل</button>
+        </div>
+        <table>
+          <thead><tr><th>المنتج</th><th>النوع</th><th>الكمية</th><th>الحركة</th><th>التاريخ</th></tr></thead>
+          <tbody id="wms-recent-body"></tbody>
+        </table>
+      </div>
+      <!-- Storage Usage -->
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-title">استخدام المخزن</div>
+        <div class="card-sub">حسب نوع التخزين</div>
+        <div id="wms-usage-bars"></div>
+        <div style="margin-top:14px;padding:12px;background:#F4F2FB;border-radius:10px;">
+          <div style="font-size:12px;color:#481DBC;font-weight:700;">رسوم التخزين الشهرية</div>
+          <div style="font-size:22px;font-weight:900;color:#1A0A4A;margin-top:4px;">2,100 <span style="font-size:13px;font-weight:400;color:#aaa;">ر.س.</span></div>
+          <div style="font-size:11px;color:#888;margin-top:2px;">يستحق: 15 يونيو 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Receiving -->
+    <div class="card" style="margin-top:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <div class="card-title">طلبات استقبال قادمة</div>
+          <div class="card-sub" style="margin-bottom:0;">بضاعة متوقع وصولها للمستودع</div>
+        </div>
+        <button class="primary-btn" onclick="openModal('m-newrecv')">+ طلب استقبال جديد</button>
+      </div>
+      <div id="wms-pending-recv"></div>
+    </div>
+  </div>
+
+  <!-- ══ WMS INVENTORY ══ -->
+  <div class="page" id="page-wms-inventory">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">إجمالي الوحدات</div><div class="kpi-val">247</div><div class="kpi-note">في المخزن الآن</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">إجمالي SKUs</div><div class="kpi-val" style="color:#481DBC;">38</div><div class="kpi-note">منتج مختلف</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">إنذار نفاد</div><div class="kpi-val" style="color:#EA580C;">4</div><div class="kpi-note">كمية منخفضة</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">قيمة المخزون</div><div class="kpi-val kpi-small">84,500</div><div class="kpi-note">ريال سعودي</div></div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <div class="tbl-title">جميع المنتجات</div>
+        <div class="tbl-acts">
+          <input class="s-input" id="inv-search" placeholder="بحث باسم المنتج أو SKU..." oninput="filterInventory()">
+          <select class="s-select" id="inv-type" onchange="filterInventory()">
+            <option value="">كل الأنواع</option>
+            <option>عادي</option><option>مبرد</option><option>هش</option><option>هدايا</option>
+          </select>
+          <select class="s-select" id="inv-status-f" onchange="filterInventory()">
+            <option value="">كل الحالات</option>
+            <option>متوفر</option><option>منخفض</option><option>نافد</option>
+          </select>
+          <button class="primary-btn" onclick="openModal('m-newrecv')">+ استقبال بضاعة</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>SKU</th><th>اسم المنتج</th><th>النوع</th><th>الكمية</th><th>الموقع</th><th>الحد الأدنى</th><th>الحالة</th><th>آخر تحديث</th><th></th></tr></thead>
+        <tbody id="inventory-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ WMS RECEIVE ══ -->
+  <div class="page" id="page-wms-receive">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">انتظار الاستقبال</div><div class="kpi-val" style="color:#C2410C;">2</div><div class="kpi-note">شحنة قادمة</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">وصلت للمخزن</div><div class="kpi-val" style="color:#1D4ED8;">1</div><div class="kpi-note">قيد التخزين</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">مكتملة هذا الشهر</div><div class="kpi-val" style="color:#15803D;">8</div><div class="kpi-note">عملية استقبال</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">إجمالي الوحدات المستقبَلة</div><div class="kpi-val kpi-small">124</div><div class="kpi-note">هذا الشهر</div></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:15px;font-weight:800;color:#1A0A4A;">طلبات الاستقبال</div>
+      <button class="primary-btn" onclick="openModal('m-newrecv')">+ طلب استقبال جديد</button>
+    </div>
+    <div id="receive-list"></div>
+  </div>
+
+  <!-- ══ WMS SHIP FROM WAREHOUSE ══ -->
+  <div class="page" id="page-wms-ship">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">شحنات من المخزن</div><div class="kpi-val">31</div><div class="kpi-note">هذا الشهر</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">معدل الدقة</div><div class="kpi-val" style="color:#15803D;">99.1%</div><div class="kpi-note">تجهيز مطابق</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">وحدات شُحنت</div><div class="kpi-val kpi-small">89</div><div class="kpi-note">هذا الشهر</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">متوسط وقت التجهيز</div><div class="kpi-val kpi-small">2.4</div><div class="kpi-note">ساعة / طلب</div></div>
+    </div>
+    <div class="row-2">
+      <!-- Ship form -->
+      <div class="card">
+        <div class="card-title">إنشاء طلب شحن من المخزن</div>
+        <div class="card-sub">اختر المنتجات من مخزونك وأرسلها للعميل</div>
+        <div class="m-field"><label>اختر المنتج</label>
+          <select id="ship-product" onchange="updateShipQty()">
+            <option value="">اختر منتجاً...</option>
+          </select>
+        </div>
+        <div class="m-row2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="m-field"><label>الكمية</label><input id="ship-qty" type="number" min="1" placeholder="1" /></div>
+          <div class="m-field"><label>المتوفر في المخزن</label><input id="ship-avail" readonly style="background:#F4F2FB;color:#481DBC;font-weight:700;" /></div>
+        </div>
+        <div class="m-field"><label>اسم المستلم</label><input id="ship-recv-name" placeholder="الاسم الكامل" /></div>
+        <div class="m-row2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="m-field"><label>جوال المستلم</label><input id="ship-recv-phone" type="tel" placeholder="05XXXXXXXX" /></div>
+          <div class="m-field"><label>المنطقة</label>
+            <select id="ship-recv-region">
+              <option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة المكرمة</option><option>المدينة المنورة</option>
+            </select>
+          </div>
+        </div>
+        <div class="m-field"><label>عنوان التسليم</label><input id="ship-recv-addr" placeholder="الحي، المدينة، الشارع" /></div>
+        <div class="m-field"><label>التغليف</label>
+          <select id="ship-pkg">
+            <option value="عادي">عادي</option>
+            <option value="هدية">هدية</option>
+            <option value="علامة تجارية">علامة تجارية</option>
+            <option value="واقي">واقي (هش)</option>
+          </select>
+        </div>
+        <button class="primary-btn" style="width:100%;margin-top:4px;" onclick="submitWarehouseShip()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          إرسال طلب الشحن</button>
+      </div>
+      <!-- Recent warehouse shipments -->
+      <div class="tbl-wrap" style="margin-bottom:0;">
+        <div class="tbl-head"><div class="tbl-title">آخر الشحنات من المخزن</div></div>
+        <table>
+          <thead><tr><th>رقم الطلب</th><th>المنتج</th><th>الكمية</th><th>المستلم</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+          <tbody id="wms-shipments-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ WMS LOCATIONS ══ -->
+  <div class="page" id="page-wms-locations">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">إجمالي المواقع</div><div class="kpi-val">48</div><div class="kpi-note">رف / موقع</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">مشغولة</div><div class="kpi-val" style="color:#481DBC;">33</div><div class="kpi-note">68.8%</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">فارغة</div><div class="kpi-val" style="color:#15803D;">15</div><div class="kpi-note">متاحة</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">تحتاج مراجعة</div><div class="kpi-val" style="color:#EA580C;">2</div><div class="kpi-note">كمية منخفضة</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:4px;">خريطة المستودع</div>
+      <div class="card-sub">مستودع مدار  الرياض  منطقة أ</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#F0FDF4;border:2px solid #BBF7D0;display:inline-block;"></span>ممتلئ</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#FFF8E8;border:2px solid #FDE68A;display:inline-block;"></span>منخفض</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#FFF7ED;border:2px solid #FED7AA;display:inline-block;"></span>شبه فارغ</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:3px;background:#F9F7FF;border:2px solid #E0DBF0;display:inline-block;"></span>فارغ</span>
+      </div>
+      <div id="loc-grid-container"></div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:16px;">
+      <div class="tbl-head"><div class="tbl-title">تفاصيل المواقع</div></div>
+      <table>
+        <thead><tr><th>الموقع</th><th>المنتج</th><th>الكمية</th><th>السعة</th><th>الحالة</th><th>آخر نشاط</th></tr></thead>
+        <tbody id="locations-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ WMS REPORTS ══ -->
+  <div class="page" id="page-wms-reports">
+    <div class="kpi4" style="margin-bottom:16px;">
+      <div class="kpi-card"><div class="kpi-lbl">معدل دوران المخزون</div><div class="kpi-val kpi-small">3.2x</div><div class="kpi-note">هذا الشهر</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">دقة الجرد</div><div class="kpi-val" style="color:#15803D;">99.4%</div><div class="kpi-note">مطابقة الفعلي للنظام</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">وحدات استُقبلت</div><div class="kpi-val">124</div><div class="kpi-note">هذا الشهر</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">وحدات شُحنت</div><div class="kpi-val">89</div><div class="kpi-note">هذا الشهر</div></div>
+    </div>
+
+    <div class="row-2">
+      <!-- Movement chart -->
+      <div class="card">
+        <div class="card-title">حركة المخزون</div>
+        <div class="card-sub">استقبال مقابل شحن  آخر 6 أشهر</div>
+        <canvas id="wms-movement-chart" height="180"></canvas>
+      </div>
+      <!-- Top products -->
+      <div class="card">
+        <div class="card-title">أكثر المنتجات حركةً</div>
+        <div class="card-sub">حسب عدد الوحدات المشحونة</div>
+        <div id="wms-top-products"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">سجل الحركات التفصيلي</div>
+      <div class="tbl-acts" style="margin-bottom:12px;flex-wrap:wrap;gap:8px;display:flex;">
+        <select class="s-select" id="rep-type" onchange="filterMovements()">
+          <option value="">كل الحركات</option>
+          <option value="استقبال">استقبال</option>
+          <option value="شحن">شحن</option>
+          <option value="تعديل">تعديل</option>
+        </select>
+        <select class="s-select" id="rep-month" onchange="filterMovements()">
+          <option value="">كل الأشهر</option>
+          <option>مايو 2026</option><option>أبريل 2026</option><option>مارس 2026</option>
+        </select>
+      </div>
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr>
+          <th style="font-size:11px;color:#aaa;font-weight:600;text-align:right;padding:10px 14px;background:#FAFAFA;border-bottom:1px solid #F0EEF9;">المنتج</th>
+          <th style="font-size:11px;color:#aaa;font-weight:600;text-align:right;padding:10px 14px;background:#FAFAFA;border-bottom:1px solid #F0EEF9;">نوع الحركة</th>
+          <th style="font-size:11px;color:#aaa;font-weight:600;text-align:right;padding:10px 14px;background:#FAFAFA;border-bottom:1px solid #F0EEF9;">الكمية</th>
+          <th style="font-size:11px;color:#aaa;font-weight:600;text-align:right;padding:10px 14px;background:#FAFAFA;border-bottom:1px solid #F0EEF9;">الرصيد بعد</th>
+          <th style="font-size:11px;color:#aaa;font-weight:600;text-align:right;padding:10px 14px;background:#FAFAFA;border-bottom:1px solid #F0EEF9;">التاريخ</th>
+          <th style="font-size:11px;color:#aaa;font-weight:600;text-align:right;padding:10px 14px;background:#FAFAFA;border-bottom:1px solid #F0EEF9;">المرجع</th>
+        </tr></thead>
+        <tbody id="movements-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ══ MODAL: NEW ORDER ══ -->
+<div class="m-overlay" id="m-neworder" onclick="bgClose(event,'m-neworder')">
+<div class="modal">
+  <div class="m-head">
+    <div class="m-title">طلب شحن جديد</div>
+    <button class="m-close" onclick="closeModal('m-neworder')">✕</button>
+  </div>
+  <div class="m-steps">
+    <div class="step-pill active" id="step1-lbl">1 · الخدمة</div>
+    <div class="step-pill" id="step2-lbl">2 · المستلم</div>
+    <div class="step-pill" id="step3-lbl">3 · الشحنة</div>
+  </div>
+  <div class="m-success" id="order-ok">تم إنشاء الطلب بنجاح!</div>
+
+  <!-- Step 1 -->
+  <div id="order-s1">
+    <div class="m-row2">
+      <div class="m-field"><label>نوع الخدمة</label>
+        <select id="no-service">
+          <option value="آخر ميل">آخر ميل  توصيل للعميل النهائي</option>
+          <option value="B2B">B2B  نقل بين المستودعات</option>
+        </select>
+      </div>
+      <div class="m-field"><label>المنطقة</label>
+        <select id="no-region">
+          <option>الرياض</option><option>جدة</option><option>الدمام</option>
+          <option>مكة المكرمة</option><option>المدينة المنورة</option>
+        </select>
+      </div>
+    </div>
+    <div class="m-field"><label>عنوان الاستلام (مستودعك)</label>
+      <input id="no-pickup" placeholder="مثال: حي السلام، الرياض" />
+    </div>
+    <div class="m-foot">
+      <button class="m-cancel" onclick="closeModal('m-neworder')">إلغاء</button>
+      <button class="m-submit" onclick="orderStep(2)">التالي ←</button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div id="order-s2" style="display:none;">
+    <div class="m-row2">
+      <div class="m-field"><label>اسم المستلم</label><input id="no-name" placeholder="الاسم الكامل" /></div>
+      <div class="m-field"><label>رقم الجوال</label><input id="no-phone" type="tel" placeholder="05XXXXXXXX" /></div>
+    </div>
+    <div class="m-field"><label>عنوان التسليم</label><input id="no-address" placeholder="الحي، المدينة، الشارع" /></div>
+    <div class="m-field"><label>ملاحظات للمندوب (اختياري)</label><textarea id="no-notes" rows="2" placeholder="مثال: الطابق الثاني، الشقة 12"></textarea></div>
+    <div class="m-foot">
+      <button class="m-cancel" onclick="orderStep(1)">← السابق</button>
+      <button class="m-submit" onclick="orderStep(3)">التالي ←</button>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div id="order-s3" style="display:none;">
+    <div class="m-row2">
+      <div class="m-field"><label>وصف المحتوى</label><input id="no-desc" placeholder="مثال: ملابس، إلكترونيات..." /></div>
+      <div class="m-field"><label>الوزن التقريبي (كجم)</label><input id="no-weight" type="number" placeholder="0.5" /></div>
+    </div>
+    <div class="m-row2">
+      <div class="m-field"><label>قيمة الشحنة (ر.س.)</label><input id="no-value" type="number" placeholder="150" /></div>
+      <div class="m-field"><label>الدفع عند الاستلام؟</label>
+        <select id="no-cod"><option value="لا">لا  مدفوع مسبقاً</option><option value="نعم">نعم  COD</option></select>
+      </div>
+    </div>
+    <div style="background:#F4F2FB;border-radius:10px;padding:12px 14px;font-size:13px;color:#481DBC;margin-bottom:4px;">
+      سيتم تأكيد الطلب وإرسال رقم التتبع على جوالك خلال 15 دقيقة
+    </div>
+    <div class="m-foot">
+      <button class="m-cancel" onclick="orderStep(2)">← السابق</button>
+      <button class="m-submit" onclick="submitOrder()">تأكيد الطلب</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ MODAL: NEW RECEIVING REQUEST ══ -->
+<div class="m-overlay" id="m-newrecv" onclick="bgClose(event,'m-newrecv')">
+<div class="modal">
+  <div class="m-head">
+    <div class="m-title">طلب استقبال بضاعة</div>
+    <button class="m-close" onclick="closeModal('m-newrecv')">✕</button>
+  </div>
+  <div class="m-success" id="recv-ok">تم إرسال طلب الاستقبال بنجاح! سنتواصل معك لتأكيد الموعد</div>
+  <div class="m-field"><label>اسم المنتج / البضاعة</label><input id="rv-name" placeholder="مثال: ملابس شتوية، أجهزة إلكترونية..." /></div>
+  <div class="m-row2">
+    <div class="m-field"><label>الكمية المتوقعة</label><input id="rv-qty" type="number" min="1" placeholder="50" /></div>
+    <div class="m-field"><label>وحدة القياس</label>
+      <select id="rv-unit">
+        <option>قطعة</option><option>كرتون</option><option>طرد</option><option>كيلو</option><option>لتر</option>
+      </select>
+    </div>
+  </div>
+  <div class="m-row2">
+    <div class="m-field"><label>نوع التخزين</label>
+      <select id="rv-type">
+        <option value="عادي">عادي</option>
+        <option value="مبرد">مبرد (ثلاجة)</option>
+        <option value="هش">هش / قابل للكسر</option>
+        <option value="هدايا">هدايا / تغليف خاص</option>
+      </select>
+    </div>
+    <div class="m-field"><label>تاريخ الوصول المتوقع</label>
+      <input id="rv-date" type="date" style="direction:ltr;text-align:right;" />
+    </div>
+  </div>
+  <div class="m-field"><label>الحد الأدنى للمخزون (إنذار نفاد)</label>
+    <input id="rv-min" type="number" min="0" placeholder="10" />
+  </div>
+  <div class="m-field"><label>ملاحظات خاصة (اختياري)</label>
+    <textarea id="rv-notes" rows="2" placeholder="مثال: تحتاج تبريد، هشة، قابلة للاشتعال..."></textarea>
+  </div>
+  <div class="m-foot">
+    <button class="m-cancel" onclick="closeModal('m-newrecv')">إلغاء</button>
+    <button class="m-submit" onclick="submitReceiving()">إرسال الطلب</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ SCRIPT ═══ -->
+<script>
+/* ─── DATA ─── */
+const M = JSON.parse(localStorage.getItem('madar_merchant') || 'null');
+
+const ORDERS_DATA = [
+  { id:'ORD-8831', recipient:'سعد المالكي',    phone:'0512340001', region:'الرياض',  service:'آخر ميل', status:'تم التسليم', date:'2026-05-30', value:145 },
+  { id:'ORD-8829', recipient:'نورة السالم',    phone:'0512340002', region:'الرياض',  service:'آخر ميل', status:'قيد التنفيذ',date:'2026-05-29', value:220 },
+  { id:'ORD-8828', recipient:'شركة الخليج',   phone:'0512340003', region:'الدمام',  service:'B2B',      status:'تم التسليم', date:'2026-05-29', value:2400},
+  { id:'ORD-8826', recipient:'منال الشهري',    phone:'0512340004', region:'مكة',     service:'آخر ميل', status:'مرتجع',      date:'2026-05-28', value:340 },
+  { id:'ORD-8825', recipient:'مركز الرياض',    phone:'0512340005', region:'الرياض',  service:'B2B',      status:'تم التسليم', date:'2026-05-27', value:1800},
+  { id:'ORD-8824', recipient:'يوسف الفريدي',  phone:'0512340006', region:'مكة',     service:'آخر ميل', status:'تم التسليم', date:'2026-05-27', value:175 },
+  { id:'ORD-8823', recipient:'ليلى المنصور',  phone:'0512340007', region:'الرياض',  service:'آخر ميل', status:'ملغى',       date:'2026-05-26', value:65  },
+  { id:'ORD-8821', recipient:'ريان المصري',   phone:'0512340008', region:'الرياض',  service:'آخر ميل', status:'تم التسليم', date:'2026-05-25', value:95  },
+  { id:'ORD-8819', recipient:'رانيا الصالح',  phone:'0512340009', region:'جدة',     service:'آخر ميل', status:'تم التسليم', date:'2026-05-24', value:290 },
+  { id:'ORD-8818', recipient:'طلال المزيد',   phone:'0512340010', region:'المدينة', service:'آخر ميل', status:'قيد التنفيذ',date:'2026-05-24', value:185 },
+  { id:'ORD-8815', recipient:'فهد البقمي',    phone:'0512340011', region:'جدة',     service:'آخر ميل', status:'في الطريق',  date:'2026-05-23', value:320 },
+  { id:'ORD-8813', recipient:'شركة النخبة',   phone:'0512340012', region:'الدمام',  service:'B2B',      status:'في الطريق',  date:'2026-05-22', value:4200},
+  { id:'ORD-8811', recipient:'سلمى العتيبي',  phone:'0512340013', region:'الرياض',  service:'آخر ميل', status:'فشل التسليم',date:'2026-05-21', value:180 },
+  { id:'ORD-8809', recipient:'بدر الحمادي',   phone:'0512340014', region:'الرياض',  service:'آخر ميل', status:'تم التسليم', date:'2026-05-20', value:110 },
+  { id:'ORD-8807', recipient:'هدى المطيري',   phone:'0512340015', region:'جدة',     service:'آخر ميل', status:'تم التسليم', date:'2026-05-19', value:260 },
+];
+
+const DRIVERS = ['ماجد علي','وائل صالح','تركي محمد','أنور حسن','خليل ناصر'];
+
+const SHIPMENTS_DATA = ORDERS_DATA.filter(o => ['قيد التنفيذ','في الطريق','تم التسليم'].includes(o.status)).map((o,i) => ({
+  ...o,
+  driver: DRIVERS[i % DRIVERS.length],
+  eta: o.status === 'تم التسليم' ? 'تم' : o.status === 'في الطريق' ? 'خلال ساعة' : 'اليوم',
+}));
+
+const RETURNS_DATA = [
+  { id:'RET-041', orig:'ORD-8826', reason:'رفض الاستلام', service:'آخر ميل', value:340, status:'تمت المعالجة', date:'2026-05-29' },
+  { id:'RET-040', orig:'ORD-8811', reason:'غياب المستلم', service:'آخر ميل', value:180, status:'قيد المراجعة',  date:'2026-05-22' },
+  { id:'RET-039', orig:'ORD-8823', reason:'ملغى من التاجر',service:'آخر ميل',value:65,  status:'تمت المعالجة', date:'2026-05-27' },
+  { id:'RET-038', orig:'ORD-8807', reason:'بضاعة تالفة',  service:'آخر ميل', value:260, status:'تمت المعالجة', date:'2026-05-20' },
+  { id:'RET-037', orig:'ORD-8803', reason:'عنوان خاطئ',   service:'آخر ميل', value:145, status:'تمت المعالجة', date:'2026-05-18' },
+  { id:'RET-036', orig:'ORD-8799', reason:'رفض الاستلام', service:'B2B',      value:1800,status:'تمت المعالجة', date:'2026-05-15' },
+  { id:'RET-035', orig:'ORD-8794', reason:'غياب المستلم', service:'آخر ميل', value:95,  status:'قيد المراجعة',  date:'2026-05-13' },
+];
+
+const INVOICES_DATA = [
+  { id:'INV-0042', period:'مايو 2026',   count:52, amount:14800, date:'2026-05-31', status:'معلق' },
+  { id:'INV-0038', period:'أبريل 2026',  count:48, amount:13200, date:'2026-04-30', status:'مُحصَّل' },
+  { id:'INV-0034', period:'مارس 2026',   count:42, amount:10600, date:'2026-03-31', status:'مُحصَّل' },
+  { id:'INV-0030', period:'فبراير 2026', count:38, amount:9200,  date:'2026-02-28', status:'مُحصَّل' },
+  { id:'INV-0026', period:'يناير 2026',  count:31, amount:7800,  date:'2026-01-31', status:'مُحصَّل' },
+];
+
+const STATUSES_DIST = [
+  { name:'تم التسليم', count:118, color:'#22C55E' },
+  { name:'قيد التنفيذ', count:8,  color:'#1D4ED8' },
+  { name:'في الطريق',  count:5,  color:'#7C3AED' },
+  { name:'فشل التسليم',count:4,  color:'#EF4444' },
+  { name:'مرتجع',      count:7,  color:'#EA580C' },
+];
+
+/* ─── PILL HELPER ─── */
+function pill(s) {
+  const m = {'تم التسليم':'p-delivered','قيد التنفيذ':'p-pending','في الطريق':'p-transit','فشل التسليم':'p-failed','مرتجع':'p-returned','ملغى':'p-cancelled','مُحصَّل':'p-paid','معلق':'p-unpaid','قيد المراجعة':'p-review','تمت المعالجة':'p-delivered'};
+  return `<span class="pill ${m[s]||'p-pending'}">${s}</span>`;
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  if (!M) return;
+  // Sidebar
+  document.getElementById('storeName').textContent = M.storeName || '';
+  document.getElementById('storeId').textContent   = 'ID: ' + (M.id || '');
+  document.getElementById('sbAvatar').textContent  = (M.firstName||'م')[0].toUpperCase();
+  document.getElementById('sbName').textContent    = M.name || '';
+  document.getElementById('sbRegion').textContent  = M.region || '';
+  // Welcome
+  document.getElementById('wName').textContent  = 'أهلاً، ' + (M.firstName || '');
+  document.getElementById('wStore').textContent = (M.storeName||'') + '  ' + (M.businessType||'');
+  document.getElementById('wId').textContent    = 'معرّف التاجر: ' + (M.id||'');
+  // Settings
+  document.getElementById('s-store').value  = M.storeName  || '';
+  document.getElementById('s-phone').value  = M.phone      || '';
+  document.getElementById('s-email').value  = M.email      || '';
+  if (M.service) { const ss = document.getElementById('s-service'); for(let o of ss.options) if(o.value===M.service){o.selected=true;break;} }
+  // Title
+  setDays(30, document.querySelector('.filter-btn.active'));
+  // Render
+  renderHomeDist();
+  renderHomeRecent();
+  renderOrders();
+  renderShipments();
+  renderReturns();
+  renderInvoices();
+  renderTrackSuggestions();
+  // WMS (only for storage merchants)
+  initWMS();
+});
+
+/* ─── DATE ─── */
+let currentDays = 30;
+function setDays(d, btn) {
+  currentDays = d;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const to   = new Date('2026-05-31');
+  const from = new Date(to);
+  from.setDate(to.getDate() - (d||0));
+  const fmt = x => x.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
+  document.getElementById('dFrom').textContent = fmt(from);
+  document.getElementById('dTo').textContent   = fmt(to);
+  const f = d===0?.03:d===7?.22:1;
+  document.getElementById('h-total').textContent  = Math.round(142*f);
+  document.getElementById('h-del').textContent    = Math.round(118*f);
+  document.getElementById('h-active').textContent = Math.round(12*f);
+  document.getElementById('h-rev').textContent    = Math.round(38200*f).toLocaleString('ar-SA');
+}
+
+/* ─── NAV ─── */
+const PAGE_TITLES = {
+  home:'لوحة التحكم',orders:'طلباتي',shipments:'شحناتي',track:'تتبع الشحنة',
+  returns:'المرتجعات',finance:'ماليتي',invoices:'فواتيري',settings:'إعدادات المتجر',support:'الدعم والمساعدة',
+  'wms-home':'نظرة عامة على المخزن','wms-inventory':'مخزوني','wms-receive':'استقبال البضاعة',
+  'wms-ship':'شحن من المخزن','wms-locations':'مواقع المستودع','wms-reports':'تقارير المخزون',
+};
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-'+id);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('pgTitle').textContent = PAGE_TITLES[id]||id;
+  document.getElementById('pgSub').textContent   = 'المتجر: ' + (M?.storeName||'');
+  if (event) event.preventDefault();
+}
+
+/* ─── HOME ─── */
+function renderHomeDist() {
+  const total = STATUSES_DIST.reduce((a,s)=>a+s.count,0);
+  document.getElementById('home-dist').innerHTML = STATUSES_DIST.map(s=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;">
+      <span style="width:9px;height:9px;border-radius:50%;background:${s.color};display:inline-block;flex-shrink:0;"></span>
+      <span style="color:#555;min-width:90px;">${s.name}</span>
+      <div style="flex:1;height:6px;background:#F0EEF9;border-radius:3px;overflow:hidden;">
+        <div style="width:${Math.round(s.count/total*100)}%;height:100%;background:${s.color};border-radius:3px;transition:width .6s;"></div>
+      </div>
+      <span style="font-weight:700;color:#1A0A4A;min-width:28px;text-align:left;">${s.count}</span>
+    </div>`).join('');
+}
+
+function renderHomeRecent() {
+  document.getElementById('home-recent').innerHTML = ORDERS_DATA.slice(0,6).map(o=>`
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.recipient}</td>
+      <td>${o.region}</td>
+      <td style="font-size:11px;font-weight:700;color:#481DBC;">${o.service}</td>
+      <td>${pill(o.status)}</td>
+      <td style="color:#aaa;font-size:12px;">${o.date}</td>
+    </tr>`).join('');
+}
+
+/* ─── ORDERS TABLE ─── */
+function renderOrders(data) {
+  const rows = (data||ORDERS_DATA).map(o=>`
+    <tr ondblclick="viewOrderDetail('${o.id}')">
+      <td><strong>${o.id}</strong></td>
+      <td>${o.recipient}</td>
+      <td style="color:#aaa;font-size:12px;">${o.phone}</td>
+      <td>${o.region}</td>
+      <td style="font-size:11px;font-weight:700;color:#481DBC;">${o.service}</td>
+      <td>${pill(o.status)}</td>
+      <td style="color:#aaa;font-size:12px;">${o.date}</td>
+      <td style="font-weight:700;">${o.value.toLocaleString()} ر.س.</td>
+      <td><button class="act-btn act-track" onclick="quickTrack('${o.id}')">تتبع</button></td>
+    </tr>`).join('');
+  document.getElementById('orders-body').innerHTML = rows || '<tr><td colspan="9" style="text-align:center;padding:24px;color:#ccc;">لا توجد نتائج</td></tr>';
+}
+function filterOrders() {
+  const q  = document.getElementById('ord-search').value.toLowerCase();
+  const st = document.getElementById('ord-status').value;
+  const sv = document.getElementById('ord-service').value;
+  renderOrders(ORDERS_DATA.filter(o=>
+    (!q  || o.id.toLowerCase().includes(q) || o.recipient.toLowerCase().includes(q)) &&
+    (!st || o.status===st) && (!sv || o.service===sv)
+  ));
+}
+
+/* ─── SHIPMENTS TABLE ─── */
+function renderShipments(data) {
+  const rows = (data||SHIPMENTS_DATA).map(o=>`
+    <tr>
+      <td><strong>${o.id}</strong></td>
+      <td>${o.recipient}</td>
+      <td>${o.region}</td>
+      <td style="color:#666;">${o.driver}</td>
+      <td>${pill(o.status)}</td>
+      <td style="color:#481DBC;font-weight:600;">${o.eta}</td>
+      <td style="font-weight:700;">${o.value.toLocaleString()} ر.س.</td>
+      <td><button class="act-btn act-track" onclick="quickTrack('${o.id}')">تتبع</button></td>
+    </tr>`).join('');
+  document.getElementById('shipments-body').innerHTML = rows || '<tr><td colspan="8" style="text-align:center;padding:24px;color:#ccc;">لا توجد شحنات</td></tr>';
+}
+function filterShipments() {
+  const q  = document.getElementById('ship-search').value.toLowerCase();
+  const st = document.getElementById('ship-status').value;
+  renderShipments(SHIPMENTS_DATA.filter(o=>
+    (!q || o.id.toLowerCase().includes(q)) && (!st || o.status===st)
+  ));
+}
+
+/* ─── TRACKING ─── */
+function renderTrackSuggestions() {
+  const sugg = ORDERS_DATA.filter(o=>['قيد التنفيذ','في الطريق'].includes(o.status)).slice(0,4);
+  if (!sugg.length) return;
+  document.getElementById('track-suggestions').innerHTML = `
+    <div class="card" style="margin-top:0;">
+      <div class="card-title" style="margin-bottom:10px;">شحناتك النشطة</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        ${sugg.map(o=>`
+          <div onclick="quickTrack('${o.id}')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#F4F2FB;border-radius:10px;cursor:pointer;border:1px solid #E0DBF0;transition:all .15s;" onmouseover="this.style.borderColor='#481DBC'" onmouseout="this.style.borderColor='#E0DBF0'">
+            <div style="font-weight:700;color:#1A0A4A;">${o.id}</div>
+            <div style="font-size:12px;color:#888;">${o.recipient}  ${o.region}</div>
+            ${pill(o.status)}
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function liveTrack() {
+  const q = document.getElementById('track-input').value.trim().toUpperCase();
+  if (!q) { document.getElementById('track-result').innerHTML = ''; return; }
+  const found = ORDERS_DATA.find(o => o.id.toUpperCase().includes(q));
+  if (found) showTrackResult(found);
+  else if (q.length > 4) document.getElementById('track-result').innerHTML = `<div class="card" style="margin-bottom:0;text-align:center;padding:30px;color:#aaa;"><div style="font-size:30px;margin-bottom:8px;opacity:.3;"></div>لم يتم العثور على شحنة بهذا الرقم</div>`;
+}
+
+function doTrack() {
+  const q = document.getElementById('track-input').value.trim().toUpperCase();
+  if (!q) { showToast('⚠️ أدخل رقم الشحنة'); return; }
+  const found = ORDERS_DATA.find(o => o.id.toUpperCase() === q || o.id.toUpperCase().includes(q));
+  if (found) showTrackResult(found);
+  else document.getElementById('track-result').innerHTML = `<div class="card" style="margin-bottom:0;text-align:center;padding:30px;color:#aaa;">لم يتم العثور على شحنة برقم: ${q}</div>`;
+}
+
+function quickTrack(id) {
+  nav('track', document.querySelectorAll('.nav-item')[3]);
+  document.getElementById('track-input').value = id;
+  const found = ORDERS_DATA.find(o => o.id === id);
+  if (found) { document.getElementById('track-suggestions').innerHTML=''; showTrackResult(found); }
+}
+
+function showTrackResult(o) {
+  const STEPS = [
+    {label:'تم استلام الطلب',    sub:`رقم التتبع: ${o.id}`,       when:'بعد الإنشاء مباشرة'},
+    {label:'جاري التجهيز',       sub:'يتم تحضير الشحنة للاستلام', when:'خلال ساعة'},
+    {label:'تم استلام الشحنة',   sub:'المندوب استلم البضاعة',     when:'من مستودعك'},
+    {label:'في الطريق للمستلم', sub:'المندوب في الطريق',         when:'خلال 2-4 ساعات'},
+    {label:'تم التسليم',          sub:'استلم العميل البضاعة',      when:'مكتمل'},
+  ];
+  const statusIdx = {'قيد التنفيذ':1,'في الطريق':3,'تم التسليم':4,'مرتجع':3,'فشل التسليم':3,'ملغى':0};
+  const current = statusIdx[o.status] ?? 1;
+
+  const tlHtml = STEPS.map((s,i) => {
+    const done    = i < current;
+    const isCurr  = i === current;
+    const isPend  = i > current;
+    return `
+      <div class="tl-step">
+        <div class="tl-left">
+          <div class="tl-dot ${done?'done':isCurr?'current':'pending'}">${done?'✓':isCurr?'●':i+1}</div>
+          ${i < STEPS.length-1 ? `<div class="tl-line ${done?'done':''}"></div>` : ''}
+        </div>
+        <div class="tl-content">
+          <div class="tl-title" style="color:${isPend?'#bbb':'#1A0A4A'}">${s.label}</div>
+          <div class="tl-sub">${isPend?'':s.sub}</div>
+          ${isCurr?`<div style="margin-top:4px;font-size:11px;background:#F4F2FB;display:inline-block;padding:2px 8px;border-radius:6px;color:#481DBC;font-weight:600;">الحالة الحالية</div>`:''}
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('track-result').innerHTML = `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #F0EEF9;">
+        <div>
+          <div style="font-size:18px;font-weight:900;color:#1A0A4A;">${o.id}</div>
+          <div style="font-size:12px;color:#aaa;margin-top:3px;">${o.recipient}  ${o.region}</div>
+        </div>
+        ${pill(o.status)}
+      </div>
+      <div class="timeline">${tlHtml}</div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid #F0EEF9;display:flex;justify-content:space-between;font-size:13px;">
+        <span style="color:#888;">قيمة الشحنة</span>
+        <strong style="color:#1A0A4A;">${o.value.toLocaleString()} ر.س.</strong>
+      </div>
+    </div>`;
+  document.getElementById('track-suggestions').innerHTML = '';
+}
+
+function viewOrderDetail(id) {
+  const o = ORDERS_DATA.find(x=>x.id===id);
+  if (o) { nav('track',document.querySelectorAll('.nav-item')[3]); quickTrack(id); }
+}
+
+/* ─── RETURNS ─── */
+function renderReturns(data) {
+  document.getElementById('returns-body').innerHTML = (data||RETURNS_DATA).map(r=>`
+    <tr>
+      <td style="color:#EA580C;font-weight:700;">${r.id}</td>
+      <td style="color:#aaa;">${r.orig}</td>
+      <td>${r.reason}</td>
+      <td style="font-size:11px;font-weight:700;color:#481DBC;">${r.service}</td>
+      <td style="font-weight:700;">${r.value.toLocaleString()} ر.س.</td>
+      <td>${pill(r.status)}</td>
+      <td style="color:#aaa;font-size:12px;">${r.date}</td>
+    </tr>`).join('');
+}
+function filterReturns() {
+  const r = document.getElementById('ret-reason').value;
+  renderReturns(!r ? RETURNS_DATA : RETURNS_DATA.filter(x=>x.reason===r));
+}
+
+/* ─── INVOICES ─── */
+function renderInvoices(data) {
+  document.getElementById('invoices-body').innerHTML = (data||INVOICES_DATA).map(inv=>`
+    <tr>
+      <td><strong>${inv.id}</strong></td>
+      <td>${inv.period}</td>
+      <td style="font-weight:700;">${inv.count}</td>
+      <td style="font-weight:700;">${inv.amount.toLocaleString()} ر.س.</td>
+      <td style="color:#aaa;font-size:12px;">${inv.date}</td>
+      <td>${pill(inv.status)}</td>
+      <td>
+        <button class="act-btn act-view" onclick="showToast('جاري تحميل الفاتورة ${inv.id}...')">تنزيل</button>
+      </td>
+    </tr>`).join('');
+}
+function filterInvoices() {
+  const s = document.getElementById('inv-status').value;
+  renderInvoices(!s ? INVOICES_DATA : INVOICES_DATA.filter(x=>x.status===s));
+}
+
+/* ─── SETTINGS ─── */
+function saveSettings() {
+  const updated = { ...M,
+    storeName:    document.getElementById('s-store').value.trim()  || M.storeName,
+    businessType: document.getElementById('s-type').value,
+    service:      document.getElementById('s-service').value,
+    region:       document.getElementById('s-region').value,
+    phone:        document.getElementById('s-phone').value.trim(),
+    email:        document.getElementById('s-email').value.trim(),
+  };
+  localStorage.setItem('madar_merchant', JSON.stringify(updated));
+  // Update sidebar
+  document.getElementById('storeName').textContent = updated.storeName;
+  document.getElementById('sbRegion').textContent  = updated.region;
+  document.getElementById('wStore').textContent    = updated.storeName + '  ' + updated.businessType;
+  const ok = document.getElementById('settings-ok');
+  ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',2500);
+  showToast('تم حفظ إعدادات المتجر');
+}
+
+function changePass() {
+  const oldP = document.getElementById('s-old-pass').value;
+  const newP = document.getElementById('s-new-pass').value;
+  const conf = document.getElementById('s-confirm-pass').value;
+  if (M && oldP !== M.password) { showToast('⚠️ كلمة المرور الحالية غير صحيحة'); return; }
+  if (newP.length < 6) { showToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
+  if (newP !== conf) { showToast('⚠️ كلمتا المرور غير متطابقتين'); return; }
+  const updated = { ...M, password: newP };
+  localStorage.setItem('madar_merchant', JSON.stringify(updated));
+  ['s-old-pass','s-new-pass','s-confirm-pass'].forEach(id=>document.getElementById(id).value='');
+  const ok = document.getElementById('pass-ok');
+  ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',2500);
+  showToast('تم تغيير كلمة المرور');
+}
+
+/* ─── SUPPORT ─── */
+function sendSupport() {
+  const msg = document.getElementById('sup-msg').value.trim();
+  if (!msg) { showToast('⚠️ اكتب رسالتك أولاً'); return; }
+  document.getElementById('sup-msg').value='';
+  document.getElementById('sup-order').value='';
+  showToast('تم إرسال رسالتك  سنتواصل معك قريباً');
+}
+
+/* ─── NEW ORDER MODAL ─── */
+let orderStep_ = 1;
+function orderStep(n) {
+  orderStep_ = n;
+  [1,2,3].forEach(i=>{
+    document.getElementById('order-s'+i).style.display = i===n?'block':'none';
+    const lbl = document.getElementById('step'+i+'-lbl');
+    lbl.className = 'step-pill ' + (i<n?'done':i===n?'active':'');
+  });
+  if (n===2 && !document.getElementById('no-pickup').value.trim()) {
+    document.getElementById('no-pickup').value = M?.storeName ? M.storeName + '  ' + (M.region||'الرياض') : '';
+  }
+}
+
+function submitOrder() {
+  const name    = document.getElementById('no-name').value.trim();
+  const phone   = document.getElementById('no-phone').value.trim();
+  const address = document.getElementById('no-address').value.trim();
+  const service = document.getElementById('no-service').value;
+  const region  = document.getElementById('no-region').value;
+  const value   = parseFloat(document.getElementById('no-value').value)||0;
+  const desc    = document.getElementById('no-desc').value.trim();
+  const cod     = document.getElementById('no-cod').value;
+  if (!name || !phone) { showToast('⚠️ أدخل اسم ورقم جوال المستلم'); return; }
+  const id = 'ORD-' + (8831 + ORDERS_DATA.length + 1);
+  const today = '2026-05-31';
+  const newO = { id, recipient:name, phone, region, service, status:'قيد التنفيذ', date:today, value };
+  ORDERS_DATA.unshift(newO);
+  SHIPMENTS_DATA.unshift({ ...newO, driver: DRIVERS[Math.floor(Math.random()*DRIVERS.length)], eta:'اليوم' });
+  STATUSES_DIST.find(s=>s.name==='قيد التنفيذ').count++;
+  renderOrders(); renderShipments(); renderHomeRecent(); renderHomeDist();
+  document.getElementById('order-ok').style.display='block';
+  setTimeout(()=>{
+    document.getElementById('order-ok').style.display='none';
+    closeModal('m-neworder');
+    orderStep(1);
+    ['no-name','no-phone','no-address','no-notes','no-desc','no-weight','no-value'].forEach(i=>{ const el=document.getElementById(i); if(el)el.value=''; });
+    showToast('تم إنشاء الطلب '+id+' بنجاح!');
+  }, 1400);
+}
+
+/* ─── MODAL SYSTEM ─── */
+function openModal(id) { document.getElementById(id).classList.add('open'); orderStep(1); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function bgClose(e,id) { if(e.target.id===id) closeModal(id); }
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ─── LOGOUT ─── */
+function logout() { localStorage.removeItem('madar_merchant'); window.location.href='merchant-login.html'; }
+
+/* ══════════════════════════════════
+   WMS  DATA
+══════════════════════════════════ */
+const WMS_INVENTORY = [
+  { sku:'SKU-001', name:'تيشيرت صيفي قطن', type:'عادي',  qty:45, loc:'A-01', min:10, status:'متوفر',  updated:'2026-05-30' },
+  { sku:'SKU-002', name:'سماعة بلوتوث',    type:'هش',    qty:12, loc:'B-03', min:5,  status:'متوفر',  updated:'2026-05-29' },
+  { sku:'SKU-003', name:'عطر فاخر',         type:'هش',    qty:3,  loc:'B-07', min:5,  status:'منخفض',  updated:'2026-05-28' },
+  { sku:'SKU-004', name:'كيك الشوكولاتة',  type:'مبرد',  qty:18, loc:'C-02', min:8,  status:'متوفر',  updated:'2026-05-31' },
+  { sku:'SKU-005', name:'حقيبة جلدية',     type:'عادي',  qty:7,  loc:'A-04', min:3,  status:'متوفر',  updated:'2026-05-27' },
+  { sku:'SKU-006', name:'هاتف ذكي',         type:'هش',    qty:0,  loc:'B-01', min:5,  status:'نافد',   updated:'2026-05-25' },
+  { sku:'SKU-007', name:'مجموعة هدايا',    type:'هدايا', qty:22, loc:'D-01', min:5,  status:'متوفر',  updated:'2026-05-30' },
+  { sku:'SKU-008', name:'كريم الترطيب',    type:'عادي',  qty:2,  loc:'A-09', min:8,  status:'منخفض',  updated:'2026-05-29' },
+  { sku:'SKU-009', name:'لابتوب',           type:'هش',    qty:1,  loc:'B-02', min:3,  status:'منخفض',  updated:'2026-05-28' },
+  { sku:'SKU-010', name:'ملابس أطفال',     type:'عادي',  qty:60, loc:'A-06', min:15, status:'متوفر',  updated:'2026-05-31' },
+];
+
+const RECEIVE_REQUESTS = [
+  { id:'RCV-018', name:'تيشيرت صيفي قطن', qty:100, unit:'قطعة', type:'عادي',  date:'2026-06-05', status:'انتظار الاستقبال', notes:'' },
+  { id:'RCV-017', name:'هاتف ذكي',         qty:20,  unit:'قطعة', type:'هش',    date:'2026-06-03', status:'وصلت للمخزن',     notes:'هشة' },
+  { id:'RCV-016', name:'كيك الشوكولاتة',  qty:50,  unit:'كرتون', type:'مبرد',  date:'2026-05-29', status:'تم التخزين',      notes:'تبريد' },
+  { id:'RCV-015', name:'مجموعة هدايا',    qty:30,  unit:'طرد',  type:'هدايا', date:'2026-05-27', status:'تم التخزين',      notes:'' },
+  { id:'RCV-014', name:'عطر فاخر',         qty:25,  unit:'قطعة', type:'هش',    date:'2026-05-22', status:'تم التخزين',      notes:'' },
+];
+
+const WMS_MOVEMENTS = [
+  { product:'تيشيرت صيفي قطن', type:'استقبال', qty:+50, balance:45, date:'2026-05-30', ref:'RCV-016' },
+  { product:'هاتف ذكي',         type:'شحن',     qty:-3,  balance:1,  date:'2026-05-29', ref:'ORD-8831' },
+  { product:'كيك الشوكولاتة',  type:'استقبال', qty:+20, balance:18, date:'2026-05-29', ref:'RCV-015' },
+  { product:'عطر فاخر',         type:'شحن',     qty:-5,  balance:3,  date:'2026-05-28', ref:'ORD-8829' },
+  { product:'ملابس أطفال',     type:'استقبال', qty:+30, balance:60, date:'2026-05-27', ref:'RCV-014' },
+  { product:'سماعة بلوتوث',    type:'شحن',     qty:-4,  balance:12, date:'2026-05-26', ref:'ORD-8826' },
+  { product:'حقيبة جلدية',     type:'تعديل',   qty:+2,  balance:7,  date:'2026-05-25', ref:'ADJUST-03'},
+  { product:'مجموعة هدايا',    type:'استقبال', qty:+10, balance:22, date:'2026-05-24', ref:'RCV-013' },
+  { product:'كريم الترطيب',    type:'شحن',     qty:-8,  balance:2,  date:'2026-05-23', ref:'ORD-8821' },
+  { product:'لابتوب',           type:'شحن',     qty:-1,  balance:1,  date:'2026-05-22', ref:'ORD-8819' },
+];
+
+const WMS_LOCATIONS_DATA = [
+  { loc:'A-01', product:'تيشيرت صيفي قطن', qty:45, cap:60, date:'2026-05-30' },
+  { loc:'A-02', product:'',                  qty:0,  cap:60, date:'' },
+  { loc:'A-03', product:'',                  qty:0,  cap:60, date:'' },
+  { loc:'A-04', product:'حقيبة جلدية',     qty:7,  cap:20, date:'2026-05-27' },
+  { loc:'A-05', product:'',                  qty:0,  cap:40, date:'' },
+  { loc:'A-06', product:'ملابس أطفال',     qty:60, cap:80, date:'2026-05-31' },
+  { loc:'A-07', product:'',                  qty:0,  cap:60, date:'' },
+  { loc:'A-08', product:'',                  qty:0,  cap:60, date:'' },
+  { loc:'A-09', product:'كريم الترطيب',    qty:2,  cap:30, date:'2026-05-29' },
+  { loc:'B-01', product:'هاتف ذكي (نافد)', qty:1,  cap:15, date:'2026-05-28' },
+  { loc:'B-02', product:'لابتوب',           qty:1,  cap:10, date:'2026-05-28' },
+  { loc:'B-03', product:'سماعة بلوتوث',    qty:12, cap:30, date:'2026-05-29' },
+  { loc:'B-04', product:'',                  qty:0,  cap:30, date:'' },
+  { loc:'B-05', product:'',                  qty:0,  cap:30, date:'' },
+  { loc:'B-06', product:'',                  qty:0,  cap:30, date:'' },
+  { loc:'B-07', product:'عطر فاخر',         qty:3,  cap:20, date:'2026-05-28' },
+  { loc:'C-01', product:'',                  qty:0,  cap:50, date:'' },
+  { loc:'C-02', product:'كيك الشوكولاتة',  qty:18, cap:40, date:'2026-05-31' },
+  { loc:'D-01', product:'مجموعة هدايا',    qty:22, cap:40, date:'2026-05-30' },
+  { loc:'D-02', product:'',                  qty:0,  cap:40, date:'' },
+];
+
+const WMS_SHIP_HISTORY = [
+  { id:'ORD-8831', product:'تيشيرت صيفي قطن', qty:2, recv:'سعد المالكي',   status:'تم التسليم', date:'2026-05-30' },
+  { id:'ORD-8829', product:'سماعة بلوتوث',    qty:1, recv:'نورة السالم',   status:'قيد التنفيذ', date:'2026-05-29' },
+  { id:'ORD-8826', product:'عطر فاخر',         qty:2, recv:'منال الشهري',   status:'مرتجع',      date:'2026-05-28' },
+  { id:'ORD-8824', product:'ملابس أطفال',     qty:3, recv:'يوسف الفريدي', status:'تم التسليم', date:'2026-05-27' },
+  { id:'ORD-8821', product:'كريم الترطيب',    qty:4, recv:'ريان المصري',   status:'تم التسليم', date:'2026-05-25' },
+];
+
+/* ══ WMS INIT ══ */
+function initWMS() {
+  const service = M?.service || '';
+  const hasStorage = service === 'تخزين' || service === 'شحن وتخزين';
+  // Show/hide WMS nav
+  ['wms-nav-sec','wms-nav-overview','wms-nav-inventory','wms-nav-receive','wms-nav-ship','wms-nav-locations','wms-nav-reports'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = hasStorage ? '' : 'none';
+  });
+  if (hasStorage) {
+    renderWMSHome();
+    renderInventory();
+    renderReceiveList();
+    renderWMSShipments();
+    renderLocations();
+    renderMovements();
+    renderWMSReports();
+    populateShipProductSelect();
+    // Show storage KPI on main home page
+    document.getElementById('wms-storage-kpi').style.display = '';
+  }
+}
+
+/* ══ WMS HOME ══ */
+function renderWMSHome() {
+  // Recent movements
+  document.getElementById('wms-recent-body').innerHTML = WMS_MOVEMENTS.slice(0,5).map(m => `
+    <tr>
+      <td><strong style="font-size:12px;">${m.product}</strong></td>
+      <td><span class="pill ${m.type==='استقبال'?'p-delivered':m.type==='شحن'?'p-transit':'p-review'}">${m.type}</span></td>
+      <td style="font-weight:700;color:${m.qty>0?'#15803D':'#B91C1C'};">${m.qty>0?'+':''}${m.qty}</td>
+      <td style="font-weight:700;color:#1A0A4A;">${m.balance}</td>
+      <td style="color:#aaa;font-size:12px;">${m.date}</td>
+    </tr>`).join('');
+  // Usage bars
+  const types = [
+    {name:'عادي',   pct:45, color:'#481DBC'},
+    {name:'هش',     pct:28, color:'#EA580C'},
+    {name:'مبرد',   pct:15, color:'#0369A1'},
+    {name:'هدايا',  pct:12, color:'#7E22CE'},
+  ];
+  document.getElementById('wms-usage-bars').innerHTML = types.map(t => `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:4px;">
+        <span>${t.name}</span><span style="font-weight:700;color:#1A0A4A;">${t.pct}%</span>
+      </div>
+      <div style="height:7px;background:#F0EEF9;border-radius:4px;overflow:hidden;">
+        <div style="width:${t.pct}%;height:100%;background:${t.color};border-radius:4px;transition:width .6s;"></div>
+      </div>
+    </div>`).join('');
+  // Pending receiving
+  const pending = RECEIVE_REQUESTS.filter(r => r.status !== 'تم التخزين');
+  document.getElementById('wms-pending-recv').innerHTML = pending.length ? pending.map(r => `
+    <div class="recv-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+        <div>
+          <div style="font-size:14px;font-weight:800;color:#1A0A4A;">${r.name}</div>
+          <div style="font-size:12px;color:#888;margin-top:3px;">${r.id}  ${r.qty} ${r.unit}  ${r.type}</div>
+        </div>
+        <span class="recv-status ${r.status==='انتظار الاستقبال'?'rs-pending':r.status==='وصلت للمخزن'?'rs-arrived':'rs-stored'}">${r.status}</span>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:#aaa;">
+        <span>تاريخ الوصول: <strong style="color:#481DBC;">${r.date}</strong></span>
+        ${r.notes?`<span>ملاحظات: ${r.notes}</span>`:''}
+      </div>
+    </div>`).join('') : '<div style="text-align:center;padding:24px;color:#ccc;font-size:13px;">لا توجد طلبات استقبال قادمة</div>';
+}
+
+/* ══ INVENTORY TABLE ══ */
+function renderInventory(data) {
+  document.getElementById('inventory-body').innerHTML = (data || WMS_INVENTORY).map(p => {
+    const typeClass = {عادي:'inv-normal',مبرد:'inv-cold',هش:'inv-fragile',هدايا:'inv-gift'}[p.type] || 'inv-normal';
+    const stPill = p.status==='متوفر'?'p-delivered':p.status==='منخفض'?'p-review':'p-failed';
+    return `<tr>
+      <td style="font-family:monospace;font-size:11px;color:#888;">${p.sku}</td>
+      <td><strong>${p.name}</strong></td>
+      <td><span class="inv-type-pill ${typeClass}">${p.type}</span></td>
+      <td><strong style="font-size:16px;color:${p.qty===0?'#B91C1C':p.qty<=p.min?'#D97706':'#1A0A4A'};">${p.qty}</strong></td>
+      <td style="font-family:monospace;color:#481DBC;font-weight:700;">${p.loc}</td>
+      <td style="color:#aaa;">${p.min}</td>
+      <td><span class="pill ${stPill}">${p.status}</span></td>
+      <td style="color:#aaa;font-size:12px;">${p.updated}</td>
+      <td>
+        <button class="act-btn act-view" onclick="showToast('SKU: ${p.sku}  الكمية: ${p.qty}  الموقع: ${p.loc}')">تفاصيل</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="9" style="text-align:center;padding:24px;color:#ccc;">لا توجد منتجات</td></tr>';
+}
+function filterInventory() {
+  const q  = document.getElementById('inv-search').value.toLowerCase();
+  const tp = document.getElementById('inv-type').value;
+  const st = document.getElementById('inv-status-f').value;
+  renderInventory(WMS_INVENTORY.filter(p =>
+    (!q  || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)) &&
+    (!tp || p.type === tp) &&
+    (!st || p.status === st)
+  ));
+}
+
+/* ══ RECEIVE LIST ══ */
+function renderReceiveList(data) {
+  document.getElementById('receive-list').innerHTML = (data || RECEIVE_REQUESTS).map(r => `
+    <div class="recv-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#1A0A4A;">${r.name}</div>
+          <div style="font-size:12px;color:#888;margin-top:3px;">${r.id}  ${r.qty} ${r.unit}  نوع: ${r.type}</div>
+        </div>
+        <span class="recv-status ${r.status==='انتظار الاستقبال'?'rs-pending':r.status==='وصلت للمخزن'?'rs-arrived':'rs-stored'}">${r.status}</span>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#888;">
+        <span>تاريخ الوصول: <strong style="color:#481DBC;">${r.date}</strong></span>
+        ${r.notes?`<span>ملاحظات: <strong>${r.notes}</strong></span>`:''}
+      </div>
+    </div>`).join('') || '<div style="text-align:center;padding:40px;color:#ccc;">لا توجد طلبات استقبال</div>';
+}
+
+/* ══ SUBMIT RECEIVING ══ */
+function submitReceiving() {
+  const name = document.getElementById('rv-name').value.trim();
+  const qty  = document.getElementById('rv-qty').value;
+  if (!name || !qty) { showToast('أدخل اسم المنتج والكمية'); return; }
+  const id = 'RCV-' + String(RECEIVE_REQUESTS.length + 19).padStart(3,'0');
+  const newR = {
+    id, name, qty: parseInt(qty),
+    unit: document.getElementById('rv-unit').value,
+    type: document.getElementById('rv-type').value,
+    date: document.getElementById('rv-date').value || '2026-06-10',
+    status: 'انتظار الاستقبال',
+    notes: document.getElementById('rv-notes').value.trim(),
+  };
+  RECEIVE_REQUESTS.unshift(newR);
+  renderReceiveList();
+  renderWMSHome();
+  document.getElementById('recv-ok').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('recv-ok').style.display = 'none';
+    closeModal('m-newrecv');
+    ['rv-name','rv-qty','rv-min','rv-date','rv-notes'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    showToast('تم إرسال طلب الاستقبال  ' + id);
+  }, 1600);
+}
+
+/* ══ WAREHOUSE SHIPMENTS ══ */
+function renderWMSShipments(data) {
+  document.getElementById('wms-shipments-body').innerHTML = (data || WMS_SHIP_HISTORY).map(s => `
+    <tr>
+      <td><strong>${s.id}</strong></td>
+      <td style="font-size:12px;">${s.product}</td>
+      <td style="font-weight:700;color:#481DBC;">${s.qty}</td>
+      <td style="font-size:12px;">${s.recv}</td>
+      <td>${pill(s.status)}</td>
+      <td style="color:#aaa;font-size:12px;">${s.date}</td>
+    </tr>`).join('');
+}
+
+/* ══ POPULATE SHIP PRODUCT SELECT ══ */
+function populateShipProductSelect() {
+  const sel = document.getElementById('ship-product');
+  if (!sel) return;
+  const available = WMS_INVENTORY.filter(p => p.qty > 0);
+  sel.innerHTML = '<option value="">اختر منتجاً...</option>' +
+    available.map(p => `<option value="${p.sku}" data-qty="${p.qty}">${p.name} (${p.qty} وحدة)</option>`).join('');
+}
+function updateShipQty() {
+  const sel = document.getElementById('ship-product');
+  const opt = sel.options[sel.selectedIndex];
+  document.getElementById('ship-avail').value = opt.dataset.qty ? opt.dataset.qty + ' وحدة' : '';
+}
+
+/* ══ SUBMIT WAREHOUSE SHIP ══ */
+function submitWarehouseShip() {
+  const sku   = document.getElementById('ship-product').value;
+  const qty   = parseInt(document.getElementById('ship-qty').value) || 0;
+  const name  = document.getElementById('ship-recv-name').value.trim();
+  const phone = document.getElementById('ship-recv-phone').value.trim();
+  const addr  = document.getElementById('ship-recv-addr').value.trim();
+  if (!sku)   { showToast('اختر منتجاً أولاً'); return; }
+  if (!qty)   { showToast('أدخل الكمية'); return; }
+  if (!name || !phone) { showToast('أدخل اسم ورقم المستلم'); return; }
+  const item = WMS_INVENTORY.find(p => p.sku === sku);
+  if (!item)  { showToast('المنتج غير موجود'); return; }
+  if (qty > item.qty) { showToast('الكمية المطلوبة أكثر من المتوفر (' + item.qty + ')'); return; }
+  // Deduct from inventory
+  item.qty -= qty;
+  item.status = item.qty === 0 ? 'نافد' : item.qty <= item.min ? 'منخفض' : 'متوفر';
+  item.updated = '2026-06-02';
+  // Create shipment record
+  const id = 'ORD-' + (8832 + ORDERS_DATA.length);
+  const pkg = document.getElementById('ship-pkg').value;
+  const region = document.getElementById('ship-recv-region').value;
+  WMS_SHIP_HISTORY.unshift({ id, product:item.name, qty, recv:name, status:'قيد التنفيذ', date:'2026-06-02' });
+  ORDERS_DATA.unshift({ id, recipient:name, phone, region, service:'آخر ميل', status:'قيد التنفيذ', date:'2026-06-02', value:0 });
+  // Add movement
+  WMS_MOVEMENTS.unshift({ product:item.name, type:'شحن', qty:-qty, balance:item.qty, date:'2026-06-02', ref:id });
+  // Re-render
+  renderInventory();
+  renderWMSShipments();
+  renderMovements();
+  renderWMSHome();
+  renderHomeRecent();
+  populateShipProductSelect();
+  // Clear form
+  ['ship-qty','ship-recv-name','ship-recv-phone','ship-recv-addr'].forEach(i => { const el=document.getElementById(i); if(el)el.value=''; });
+  document.getElementById('ship-product').value = '';
+  document.getElementById('ship-avail').value = '';
+  showToast('تم إنشاء طلب الشحن ' + id + ' بتغليف ' + pkg);
+}
+
+/* ══ LOCATIONS ══ */
+function renderLocations() {
+  // Grid
+  document.getElementById('loc-grid-container').innerHTML = `<div class="loc-grid">` +
+    WMS_LOCATIONS_DATA.map(l => {
+      const pct = l.qty / l.cap;
+      const cls = l.qty===0 ? 'loc-empty' : pct<0.25 ? 'loc-low' : pct<0.75 ? 'loc-med' : 'loc-full';
+      return `<div class="loc-cell ${cls}" onclick="showToast('${l.loc}: ${l.product||"فارغ"}  ${l.qty}/${l.cap}')">
+        <div class="loc-name">${l.loc}</div>
+        <div class="loc-items">${l.qty===0?'فارغ':l.qty+'/'+l.cap}</div>
+      </div>`;
+    }).join('') + '</div>';
+  // Table  only non-empty
+  const occupied = WMS_LOCATIONS_DATA.filter(l => l.qty > 0);
+  document.getElementById('locations-body').innerHTML = occupied.map(l => {
+    const pct = Math.round(l.qty/l.cap*100);
+    const stCls = pct<25?'p-transit':pct<75?'p-review':'p-delivered';
+    return `<tr>
+      <td style="font-family:monospace;font-weight:700;color:#481DBC;">${l.loc}</td>
+      <td><strong>${l.product}</strong></td>
+      <td style="font-weight:700;">${l.qty}</td>
+      <td style="color:#aaa;">${l.cap}</td>
+      <td><span class="pill ${stCls}">${pct}% مشغول</span></td>
+      <td style="color:#aaa;font-size:12px;">${l.date}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ══ MOVEMENTS ══ */
+function renderMovements(data) {
+  document.getElementById('movements-body').innerHTML = (data || WMS_MOVEMENTS).map(m => `
+    <tr>
+      <td style="font-size:13px;"><strong>${m.product}</strong></td>
+      <td><span class="pill ${m.type==='استقبال'?'p-delivered':m.type==='شحن'?'p-transit':'p-review'}">${m.type}</span></td>
+      <td style="font-weight:800;color:${m.qty>0?'#15803D':'#B91C1C'};">${m.qty>0?'+':''}${m.qty}</td>
+      <td style="font-weight:700;color:#1A0A4A;">${m.balance}</td>
+      <td style="color:#aaa;font-size:12px;">${m.date}</td>
+      <td style="font-family:monospace;font-size:11px;color:#888;">${m.ref}</td>
+    </tr>`).join('');
+}
+function filterMovements() {
+  const tp = document.getElementById('rep-type').value;
+  const mn = document.getElementById('rep-month').value;
+  renderMovements(WMS_MOVEMENTS.filter(m =>
+    (!tp || m.type === tp) &&
+    (!mn || m.date.startsWith(mn === 'مايو 2026'?'2026-05':mn === 'أبريل 2026'?'2026-04':'2026-03'))
+  ));
+}
+
+/* ══ WMS REPORTS ══ */
+function renderWMSReports() {
+  // Top products
+  const topProds = [
+    {name:'تيشيرت صيفي قطن', units:18, color:'#481DBC'},
+    {name:'ملابس أطفال',     units:15, color:'#7C3AED'},
+    {name:'كريم الترطيب',    units:12, color:'#9333EA'},
+    {name:'سماعة بلوتوث',    units:8,  color:'#C084FC'},
+    {name:'عطر فاخر',         units:5,  color:'#E9D5FF'},
+  ];
+  const maxU = topProds[0].units;
+  document.getElementById('wms-top-products').innerHTML = topProds.map(p => `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+        <span style="color:#555;">${p.name}</span>
+        <span style="font-weight:700;color:#1A0A4A;">${p.units} وحدة</span>
+      </div>
+      <div style="height:7px;background:#F0EEF9;border-radius:4px;overflow:hidden;">
+        <div style="width:${Math.round(p.units/maxU*100)}%;height:100%;background:${p.color};border-radius:4px;"></div>
+      </div>
+    </div>`).join('');
+  // Movement chart
+  setTimeout(() => {
+    const canvas = document.getElementById('wms-movement-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو'];
+    const recv   = [38, 45, 52, 60, 89, 0];
+    const ship   = [28, 35, 44, 55, 78, 0];
+    const W = canvas.offsetWidth || 400;
+    canvas.width  = W;
+    canvas.height = 180;
+    const pad = { t:20, r:10, b:30, l:30 };
+    const cW = W - pad.l - pad.r;
+    const cH = 180 - pad.t - pad.b;
+    const maxV = 100;
+    const xStep = cW / (months.length - 1);
+    ctx.clearRect(0, 0, W, 180);
+
+    const drawLine = (data, color) => {
+      ctx.beginPath();
+      data.forEach((v, i) => {
+        const x = pad.l + i * xStep;
+        const y = pad.t + cH - (v / maxV * cH);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.stroke();
+      data.forEach((v, i) => {
+        const x = pad.l + i * xStep;
+        const y = pad.t + cH - (v / maxV * cH);
+        ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = color; ctx.fill();
+      });
+    };
+    // Grid lines
+    ctx.strokeStyle = '#F0EEF9'; ctx.lineWidth = 1;
+    [0,25,50,75,100].forEach(v => {
+      const y = pad.t + cH - (v / maxV * cH);
+      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cW, y); ctx.stroke();
+      ctx.fillStyle = '#bbb'; ctx.font = '10px Tajawal,sans-serif';
+      ctx.fillText(v, 0, y + 4);
+    });
+    // X labels
+    months.forEach((m, i) => {
+      const x = pad.l + i * xStep;
+      ctx.fillStyle = '#aaa'; ctx.font = '10px Tajawal,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(m, x, 180 - 5);
+    });
+    drawLine(recv, '#481DBC');
+    drawLine(ship, '#FF6A00');
+    // Legend
+    ctx.fillStyle = '#481DBC'; ctx.fillRect(pad.l, 5, 12, 8);
+    ctx.fillStyle = '#555'; ctx.font = '10px Tajawal,sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText('استقبال', pad.l + 60, 13);
+    ctx.fillStyle = '#FF6A00'; ctx.fillRect(pad.l + 70, 5, 12, 8);
+    ctx.fillStyle = '#555';
+    ctx.fillText('شحن', pad.l + 130, 13);
+  }, 100);
+}
+
+</script>
+</body>
+</html>

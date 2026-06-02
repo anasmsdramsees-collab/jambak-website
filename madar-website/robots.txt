@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /app.html
+
+# Hidden portals — not for search engines
+Disallow: /control/
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /dashboard.html
+Disallow: /merchant-login.html
+Disallow: /merchant-register.html
+Disallow: /merchant-dashboard.html
+Disallow: /dev-admin.html
+Disallow: /dev-merchant.html
+
+Sitemap: https://madarlogistic.com/sitemap.xml

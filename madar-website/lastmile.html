@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدار  خدمة آخر ميل</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F8F7FF;
+      color: #1A0A4A;
+      direction: rtl;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: #1A0A4A;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a.link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+    .nav-links a.link:hover { color: #fff; }
+    .nav-links a.cta {
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-links a.cta:hover { background: #e05a00; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: url('ChatGPT Image May 17, 2026, 01_08_42 AM.png') center center / cover no-repeat;
+      padding: 100px 24px 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 6, 40, 0.62);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, #F8F7FF);
+      pointer-events: none;
+    }
+    .hero-glass {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 52px 60px 48px;
+      max-width: 720px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,106,0,0.15);
+      border: 1px solid rgba(255,106,0,0.35);
+      color: #FF6A00;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+    }
+    .hero h1 span { color: #FF6A00; }
+    .hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.35);
+      margin-bottom: 36px;
+    }
+    .hero-cta:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,106,0,0.45);
+    }
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(72,29,188,0.1);
+      color: #481DBC;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 900;
+      color: #1A0A4A;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: #666;
+      font-weight: 400;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    /* ─── FEATURES ─── */
+    .features-section {
+      background: #fff;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 860px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .features-grid { grid-template-columns: 1fr; } }
+
+    .feat-card {
+      background: #F8F7FF;
+      border: 1.5px solid rgba(72,29,188,0.08);
+      border-radius: 18px;
+      padding: 28px 24px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .feat-card:hover {
+      border-color: rgba(72,29,188,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(72,29,188,0.08);
+    }
+    .feat-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .feat-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 8px;
+    }
+    .feat-card p {
+      font-size: 14px;
+      color: #666;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* ─── COVERAGE ─── */
+    .coverage-section {
+      background: linear-gradient(145deg, #1A0A4A 0%, #0f0628 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .coverage-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(72,29,188,0.3) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .coverage-section .section-title { color: #fff; }
+    .coverage-section .section-sub { color: rgba(255,255,255,0.55); }
+    .coverage-section .section-tag {
+      background: rgba(255,106,0,0.15);
+      color: #FF6A00;
+      border: 1px solid rgba(255,106,0,0.3);
+    }
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 700px) { .coverage-grid { grid-template-columns: 1fr; } }
+
+    .cov-card {
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 30px 24px;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .cov-card:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .cov-card.active { border-color: rgba(72,29,188,0.5); background: rgba(72,29,188,0.12); }
+    .cov-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      letter-spacing: 0.3px;
+    }
+    .cov-badge.active-badge {
+      background: rgba(34,197,94,0.2);
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+    .cov-badge.soon-badge {
+      background: rgba(255,106,0,0.15);
+      color: #FF6A00;
+      border: 1px solid rgba(255,106,0,0.3);
+    }
+    .cov-city {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .cov-tier {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 12px;
+    }
+    .cov-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+    }
+
+    /* ─── PRICING ─── */
+    .pricing-section {
+      background: #F0EEF8;
+    }
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 600px) { .pricing-cards { grid-template-columns: 1fr; } }
+
+    .price-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.1);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .price-card:hover {
+      box-shadow: 0 8px 24px rgba(72,29,188,0.1);
+      border-color: rgba(72,29,188,0.2);
+    }
+    .price-card.featured {
+      border-color: #481DBC;
+      background: linear-gradient(145deg, #fff 0%, #f5f2ff 100%);
+    }
+    .price-card .price-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .price-card .price-amount {
+      font-size: 36px;
+      font-weight: 900;
+      color: #1A0A4A;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .price-card .price-amount span {
+      font-size: 16px;
+      font-weight: 600;
+      color: #888;
+    }
+    .price-card .price-note {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 6px;
+    }
+    .price-card.featured .price-amount { color: #481DBC; }
+    .price-divider {
+      width: 40px;
+      height: 3px;
+      background: #481DBC;
+      border-radius: 2px;
+      margin: 12px auto;
+      opacity: 0.3;
+    }
+    .price-card.featured .price-divider { opacity: 1; }
+
+    .pricing-cta-row {
+      text-align: center;
+    }
+    .btn-pricing {
+      display: inline-block;
+      background: #481DBC;
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 36px;
+      border-radius: 12px;
+      transition: background .2s, transform .2s;
+    }
+    .btn-pricing:hover { background: #3a169e; transform: translateY(-1px); }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      background: linear-gradient(135deg, #1A0A4A 0%, #FF6A00 200%);
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #FF6A00 140%);
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(255,106,0,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      color: #fff;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      position: relative;
+    }
+    .final-cta p {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .final-cta a {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.4);
+      position: relative;
+    }
+    .final-cta a:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(255,106,0,0.5);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0A4A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    footer img { display: block; margin: 0 auto 12px; opacity: 0.55; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:36px;"></a>
+  <div class="nav-links">
+    <a href="index.html" class="link">الرئيسية</a>
+    <a href="merchant-login.html" class="link">دخول</a>
+    <a href="merchant-register.html" class="cta">ابدأ الآن</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glass">
+    <div class="hero-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      آخر ميل · Last Mile
+    </div>
+    <h1>توصيل في <span>نفس اليوم</span></h1>
+    <p>نوصّل طلباتك للعميل في نفس اليوم أو اليوم التالي  B2C وB2B  في جميع مناطق المملكة العربية السعودية</p>
+    <a href="merchant-register.html" class="hero-cta">ابدأ خدمة آخر ميل</a>
+    <div class="hero-stats">
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        نفس اليوم
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        جميع مناطق المملكة
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        تتبع لحظي
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="section-inner">
+    <div class="section-tag">المميزات</div>
+    <h2 class="section-title">لماذا مدار للتوصيل؟</h2>
+    <p class="section-sub">نظام توصيل متكامل مصمم لمتطلبات التجارة الإلكترونية السعودية</p>
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <!-- Clock -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>توصيل سريع</h3>
+        <p>نفس اليوم (Y1) واليوم التالي (Y2) في جميع أحياء الرياض والمدن الكبرى</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <!-- Map Pin -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>تغطية واسعة</h3>
+        <p>الرياض متاح الآن · جدة والدمام قريباً مع خطط توسع مستمرة في جميع مناطق المملكة</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <!-- Phone -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <h3>تطبيق المندوب الذكي</h3>
+        <p>تتبع المندوب لحظياً ورابط تتبع للعميل يُرسل تلقائياً عند بدء التوصيل</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <!-- Bell / Zap -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>إشعارات تلقائية</h3>
+        <p>SMS وواتساب للعميل عند استلام الشحنة وعند التوصيل  دون أي إجراء من التاجر</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <!-- Briefcase -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12"/></svg>
+        </div>
+        <h3>B2B وB2C</h3>
+        <p>سواء توصيل للأفراد أو توزيع بين المتاجر والشركات  نظام واحد يتعامل مع الحالتين</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <!-- Check / COD -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <h3>تحصيل COD</h3>
+        <p>تحصيل نقدي أو إلكتروني مع تحويل يومي تلقائي لحساب التاجر دون تأخير</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section class="coverage-section">
+  <div class="section-inner" style="position:relative;z-index:2;">
+    <div class="section-tag">التغطية الجغرافية</div>
+    <h2 class="section-title">نصل لكل مكان في المملكة</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.55);">تغطية شاملة لجميع مناطق المملكة العربية السعودية الثلاث عشرة</p>
+    <div class="coverage-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">
+
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">الرياض</div>
+        <div class="cov-tier">نفس اليوم</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">جدة</div>
+        <div class="cov-tier">اليوم التالي</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">الدمام</div>
+        <div class="cov-tier">اليوم التالي</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">مكة المكرمة</div>
+        <div class="cov-tier">اليوم التالي</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">المدينة المنورة</div>
+        <div class="cov-tier">اليوم التالي</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">الخبر</div>
+        <div class="cov-tier">اليوم التالي</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">الطائف</div>
+        <div class="cov-tier">٢-٣ أيام</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">تبوك</div>
+        <div class="cov-tier">٢-٣ أيام</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">أبها</div>
+        <div class="cov-tier">٢-٣ أيام</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">القصيم</div>
+        <div class="cov-tier">اليوم التالي</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">حائل</div>
+        <div class="cov-tier">٢-٣ أيام</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">جازان</div>
+        <div class="cov-tier">٢-٣ أيام</div>
+      </div>
+      <div class="cov-card active">
+        <div class="cov-badge active-badge">● نشط</div>
+        <div class="cov-city">نجران</div>
+        <div class="cov-tier">٢-٣ أيام</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="section-inner">
+    <div class="section-tag">الأسعار</div>
+    <h2 class="section-title">التسعير</h2>
+    <p class="section-sub">أسعار واضحة وتنافسية  لا رسوم خفية، لا التزامات شهرية</p>
+    <div class="pricing-cards">
+
+      <div class="price-card">
+        <div class="price-label">آخر ميل داخل الرياض</div>
+        <div class="price-divider"></div>
+        <div class="price-amount">15 <span>ريال</span></div>
+        <div class="price-note">لكل شحنة</div>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-label">خارج الرياض</div>
+        <div class="price-divider"></div>
+        <div class="price-amount">22 <span>ريال</span></div>
+        <div class="price-note">لكل شحنة</div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-label">تحصيل نقدي COD</div>
+        <div class="price-divider"></div>
+        <div class="price-amount">2 <span>%</span></div>
+        <div class="price-note">من قيمة الطلب</div>
+      </div>
+
+    </div>
+    <div class="pricing-cta-row">
+      <a href="merchant-register.html" class="btn-pricing">اطلع على جميع الأسعار وسجّل الآن</a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>جاهز تبدأ؟</h2>
+  <p>سجّل متجرك وابدأ التوصيل خلال 24 ساعة</p>
+  <a href="merchant-register.html">سجّل الآن مجاناً</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:28px;"></a>
+  <p>© 2025 مدار لوجستيك · جميع الحقوق محفوظة · <a href="index.html">العودة للرئيسية</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدار  دخول التجار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #1A0A4A 0%, #2D1270 50%, #481DBC 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  }
+  .logo { text-align: center; margin-bottom: 28px; }
+  .logo-sub { font-size: 12px; color: #999; margin-top: 4px; }
+  .card-title { font-size: 20px; font-weight: 700; color: #1A0A4A; margin-bottom: 6px; }
+  .card-sub { font-size: 13px; color: #888; margin-bottom: 28px; }
+  .field { margin-bottom: 16px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #E0DBF0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1A0A4A;
+    background: #FAFAFA;
+    transition: border-color .2s, box-shadow .2s;
+    direction: ltr;
+    text-align: right;
+  }
+  input:focus { outline: none; border-color: #481DBC; box-shadow: 0 0 0 3px rgba(72,29,188,.1); background:#fff; }
+  input::placeholder { color: #bbb; }
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: #481DBC;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background .2s, transform .1s;
+  }
+  .btn-primary:hover { background: #3a169a; }
+  .btn-primary:active { transform: scale(.98); }
+  .divider { text-align: center; color: #ccc; font-size: 12px; margin: 18px 0; position: relative; }
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #eee;
+  }
+  .divider::before { right: 0; }
+  .divider::after { left: 0; }
+  .link-row { text-align: center; font-size: 13px; color: #888; margin-top: 16px; }
+  .link-row a { color: #481DBC; font-weight: 600; text-decoration: none; }
+  .error-msg {
+    background: #FEE2E2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .badge-merchant {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #F4F2FB;
+    color: #481DBC;
+    border: 1px solid #D8D3EE;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .admin-link {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #EDE8FF;
+    font-size: 11.5px;
+    color: #bbb;
+  }
+  .admin-link a { color: #999; text-decoration: none; }
+  .admin-link a:hover { color: #481DBC; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <img src="logo.png" alt="Madar" style="height:64px;margin-bottom:4px;">
+    <div class="logo-sub">بوابة التجار</div>
+
+  <div class="badge-merchant">🏪 بوابة التجار</div>
+
+  <div class="card-title">تسجيل الدخول</div>
+  <div class="card-sub">أدخل بيانات حسابك لإدارة شحناتك</div>
+
+  <div class="error-msg" id="errorMsg">البريد الإلكتروني أو كلمة المرور غير صحيحة</div>
+
+  <div class="field">
+    <label>البريد الإلكتروني</label>
+    <input type="email" id="email" placeholder="merchant@store.com" />
+  </div>
+  <div class="field">
+    <label>كلمة المرور</label>
+    <input type="password" id="password" placeholder="••••••••" />
+  </div>
+
+  <button class="btn-primary" onclick="login()">دخول إلى لوحة التاجر →</button>
+
+  <div class="divider">أو</div>
+
+  <div class="link-row">
+    ليس لديك حساب؟ <a href="merchant-register.html">سجّل متجرك الآن</a>
+  </div>
+
+  <div class="admin-link">
+    هل أنت مدير؟ <a href="login.html">الدخول من بوابة الإدارة</a>
+  </div>
+</div>
+
+<script>
+  if (localStorage.getItem('madar_merchant')) {
+    window.location.href = 'merchant-dashboard.html';
+  }
+
+  function login() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const errorMsg = document.getElementById('errorMsg');
+    errorMsg.style.display = 'none';
+
+    if (!email || !password) {
+      errorMsg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور';
+      errorMsg.style.display = 'block'; return;
+    }
+
+    const merchants = JSON.parse(localStorage.getItem('madar_merchants') || '[]');
+    const merchant  = merchants.find(m => m.email === email && m.password === password);
+
+    if (merchant) {
+      localStorage.setItem('madar_merchant', JSON.stringify(merchant));
+      window.location.href = 'merchant-dashboard.html';
+    } else {
+      errorMsg.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+      errorMsg.style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keypress', e => { if (e.key === 'Enter') login(); });
+</script>
+</body>
+</html>
