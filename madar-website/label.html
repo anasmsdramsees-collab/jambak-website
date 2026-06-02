@@ -5,451 +5,359 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shipping Label — Madar</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-  font-family: 'Arial', sans-serif;
-  background: #eaeaea;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24px 16px;
-  gap: 16px;
-}
-
-/* ── ACTIONS BAR ── */
-.actions {
-  display: flex;
-  gap: 10px;
-  background: #fff;
-  padding: 12px 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.1);
-  width: 100%;
-  max-width: 740px;
-  align-items: center;
-  justify-content: space-between;
-}
-.actions-title { font-size: 15px; font-weight: 700; color: #1A0A4A; }
-.btn-print {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 22px;
-  background: #481DBC; color: #fff;
-  border: none; border-radius: 8px;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  transition: background .2s;
-}
-.btn-print:hover { background: #3a169a; }
-.btn-back {
-  display: flex; align-items: center; gap: 6px;
-  padding: 9px 16px;
-  background: #F4F2FB; color: #481DBC;
-  border: 1px solid #D8D3EE; border-radius: 8px;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-}
-.btn-back:hover { background: #EDE8FF; }
-
-/* ── LABEL WRAPPER ── */
-.label-wrapper {
-  width: 100%;
-  max-width: 740px;
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 4px 24px rgba(0,0,0,.14);
-  overflow: hidden;
-}
-
-/* ── LABEL (A5 148×210mm) ── */
-.label {
-  width: 100%;
-  background: #fff;
   font-family: Arial, Helvetica, sans-serif;
-  border: 2px solid #1A0A4A;
-  font-size: 11px;
-}
-
-/* ── HEADER ── */
-.lbl-header {
-  display: flex;
-  align-items: stretch;
-  border-bottom: 2px solid #1A0A4A;
-}
-.lbl-logo-box {
-  padding: 12px 18px;
-  background: #fff;
+  background: #ccc;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-width: 150px;
-  border-right: 2px solid #1A0A4A;
-}
-.lbl-logo-box img { height: 38px; }
-.lbl-logo-sub { font-size: 8px; color: #999; margin-top: 3px; text-align: center; letter-spacing: .5px; }
-.lbl-service-box {
-  flex: 1;
-  background: #1A0A4A;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 16px;
-  gap: 2px;
-}
-.lbl-service-label { font-size: 9px; color: rgba(255,255,255,.5); letter-spacing: 1.5px; text-transform: uppercase; }
-.lbl-service-name  { font-size: 20px; font-weight: 900; color: #FF6A00; letter-spacing: 1px; }
-.lbl-weight-box {
-  padding: 10px 20px;
-  background: #FF6A00;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 86px;
-  border-left: 2px solid #1A0A4A;
-}
-.lbl-weight-lbl { font-size: 8px; color: rgba(255,255,255,.7); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
-.lbl-weight-val  { font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
-.lbl-weight-unit { font-size: 9px; color: rgba(255,255,255,.8); }
-
-/* ── BARCODE ── */
-.lbl-barcode-row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 20px 8px;
-  border-bottom: 2px solid #1A0A4A;
-  gap: 3px;
-  background: #fff;
-}
-#barcode { max-width: 100%; }
-.lbl-tracking-num {
-  font-size: 16px; font-weight: 900;
-  letter-spacing: 3px; color: #1A0A4A;
-  font-family: 'Courier New', monospace;
-}
-
-/* ── DELIVERY BANNER ── */
-.lbl-delivery {
-  background: #481DBC;
-  padding: 9px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid #1A0A4A;
-}
-.lbl-delivery-left {}
-.lbl-delivery-lbl  { font-size: 9px; color: rgba(255,255,255,.55); letter-spacing: 1px; text-transform: uppercase; }
-.lbl-delivery-city { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: .5px; line-height: 1.1; }
-.lbl-delivery-zone {
-  background: #FF6A00; color: #fff;
-  font-size: 15px; font-weight: 900;
-  padding: 7px 18px; border-radius: 6px;
-  letter-spacing: 2px;
-}
-
-/* ── ADDRESSES ── */
-.lbl-addresses {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 2px solid #1A0A4A;
-}
-.lbl-addr-to   { border-right: 1.5px solid #1A0A4A; }
-.lbl-addr-box  { padding: 12px 14px; }
-.lbl-addr-head {
-  font-size: 8px; font-weight: 800;
-  letter-spacing: 2px; color: #aaa;
-  text-transform: uppercase; margin-bottom: 6px;
-  padding-bottom: 5px; border-bottom: 1px solid #F0EEF9;
-}
-.lbl-addr-name  { font-size: 14px; font-weight: 900; color: #1A0A4A; margin-bottom: 3px; }
-.lbl-addr-line  { font-size: 11px; color: #555; line-height: 1.55; margin-bottom: 1px; }
-.lbl-addr-phone { font-size: 12px; font-weight: 700; color: #481DBC; margin-top: 6px; }
-
-/* ── DETAILS ROW ── */
-.lbl-details {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.2fr;
-  border-bottom: 2px solid #1A0A4A;
-}
-.lbl-dc {
-  padding: 9px 13px;
-  border-right: 1px solid #E0DBF0;
-}
-.lbl-dc:last-child { border-right: none; }
-.lbl-dc-lbl { font-size: 7.5px; color: #bbb; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
-.lbl-dc-val { font-size: 13px; font-weight: 800; color: #1A0A4A; }
-.lbl-dc-val.orange { color: #FF6A00; }
-
-/* ── COD ROW ── */
-.lbl-cod-row {
-  background: #FFF8E8;
-  border-bottom: 2px solid #1A0A4A;
-  padding: 9px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.lbl-cod-left {}
-.lbl-cod-title { font-size: 11px; font-weight: 800; color: #92400E; }
-.lbl-cod-sub   { font-size: 9px; color: #aaa; margin-top: 2px; }
-.lbl-cod-right { display: flex; align-items: baseline; gap: 5px; }
-.lbl-cod-amt   { font-size: 30px; font-weight: 900; color: #D97706; }
-.lbl-cod-cur   { font-size: 12px; color: #aaa; }
-
-/* ── FOOTER ── */
-.lbl-footer {
-  display: flex;
-  align-items: center;
+  padding: 20px 16px;
   gap: 14px;
-  padding: 10px 16px;
-  background: #FAFAFA;
 }
-.lbl-qr { flex-shrink: 0; }
-.lbl-footer-mid { flex: 1; }
-.lbl-fref { font-size: 10px; color: #999; margin-bottom: 3px; }
-.lbl-fref strong { color: #1A0A4A; font-family: 'Courier New', monospace; font-size: 11px; }
-.lbl-fnotes { font-size: 10px; color: #777; margin-top: 5px; line-height: 1.5; }
-.lbl-fbrand { text-align: right; font-size: 9px; color: #ccc; line-height: 1.6; }
-.lbl-fbrand strong { font-size: 12px; color: #481DBC; display: block; font-weight: 900; }
 
-/* ── CUT LINE ── */
-.lbl-cut {
-  border-top: 1.5px dashed #ddd;
-  margin: 0 16px;
-  padding: 6px 0 8px;
-  display: flex;
-  justify-content: space-around;
-  font-size: 8.5px;
-  color: #ccc;
-  letter-spacing: .5px;
+/* ── ACTIONS ── */
+.actions {
+  display: flex; gap: 10px;
+  background: #fff; padding: 10px 18px;
+  border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.15);
+  width: 148mm; justify-content: flex-end;
 }
+.btn { padding: 8px 20px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.btn-print { background: #481DBC; color: #fff; }
+.btn-print:hover { background: #3a169a; }
+.btn-back  { background: #eee; color: #333; }
+.btn-back:hover { background: #ddd; }
+
+/* ── LABEL SHEET ── */
+.label {
+  width: 148mm;
+  background: #fff;
+  border: 2px solid #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8pt;
+  color: #000;
+}
+
+/* ── ROW HELPER ── */
+.row { display: flex; border-bottom: 1.5px solid #000; }
+.row:last-child { border-bottom: none; }
+.cell {
+  padding: 3px 5px;
+  border-right: 1.5px solid #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cell:last-child { border-right: none; }
+
+/* ROW 1: Logo + Barcode */
+.r1-logo { width: 36mm; padding: 4px 6px; }
+.r1-logo img { height: 28px; }
+.r1-barcode { flex: 1; padding: 4px 6px 2px; align-items: flex-end; }
+.r1-barcode svg { max-width: 100%; height: 32px; }
+.tracking-num { font-size: 8pt; font-weight: 700; letter-spacing: 1px; text-align: right; margin-top: 1px; }
+
+/* ROW 2: Origin / Dest / Meta */
+.r2-origin { width: 36mm; padding: 4px 6px; }
+.r2-dest   { width: 36mm; padding: 4px 6px; border-right: 1.5px solid #000; }
+.r2-meta   { flex: 1; padding: 4px 6px; }
+.lbl-small { font-size: 6.5pt; color: #555; }
+.city-big  { font-size: 26pt; font-weight: 900; line-height: 1; letter-spacing: -1px; }
+.meta-row  { display: flex; gap: 4px; align-items: baseline; margin-bottom: 2px; }
+.meta-lbl  { font-size: 6.5pt; color: #555; width: 56px; }
+.meta-val  { font-size: 7.5pt; font-weight: 700; }
+
+/* ROW 3: Service Codes — big boxes */
+.r3 { display: flex; border-bottom: 1.5px solid #000; }
+.svc-box {
+  flex: 1; text-align: center;
+  padding: 6px 4px; border-right: 1.5px solid #000;
+  font-size: 18pt; font-weight: 900; letter-spacing: 1px;
+  line-height: 1;
+}
+.svc-box:last-child { border-right: none; }
+.svc-box.highlight { background: #000; color: #fff; }
+
+/* ROW 4: Weight / Pieces */
+.r4 { display: flex; border-bottom: 1.5px solid #000; }
+.r4 .cell { font-size: 7.5pt; }
+.r4 .cell strong { font-size: 9pt; }
+
+/* ROW 5: Services bar */
+.r5-svc {
+  background: #000; color: #fff;
+  padding: 3px 6px; font-size: 8.5pt; font-weight: 700;
+  letter-spacing: 0.5px;
+  border-bottom: 1.5px solid #000;
+}
+
+/* ROW 6: COD */
+.r6-cod { border-bottom: 1.5px solid #000; padding: 3px 6px; font-size: 7.5pt; }
+.cod-val { font-size: 11pt; font-weight: 900; color: #c00; }
+
+/* ROW 7: Account */
+.r7-acct { border-bottom: 1.5px solid #000; padding: 3px 6px; }
+.acct-lbl { font-size: 6.5pt; color: #555; }
+.acct-num { font-size: 11pt; font-weight: 900; }
+
+/* ROW 8: Addresses + vertical barcode */
+.r8 { display: flex; border-bottom: 1.5px solid #000; min-height: 50mm; }
+.r8-addr { flex: 1; padding: 5px 6px; border-right: 1.5px solid #000; }
+.r8-addr.right { border-right: none; }
+.addr-type { font-size: 6.5pt; color: #555; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+.addr-name { font-size: 10pt; font-weight: 900; line-height: 1.2; }
+.addr-company { font-size: 8.5pt; font-weight: 700; margin-bottom: 2px; }
+.addr-line { font-size: 7.5pt; line-height: 1.4; }
+.addr-phone { font-size: 8pt; font-weight: 700; margin-top: 4px; letter-spacing: 0.5px; }
+.r8-vbar { width: 12mm; display: flex; align-items: center; justify-content: center; padding: 3px 2px; }
+.r8-vbar svg { transform: rotate(90deg); }
+
+/* ROW 9: Footer refs */
+.r9-footer { padding: 3px 6px; font-size: 6.5pt; display: flex; justify-content: space-between; }
+.r9-footer span { color: #333; }
+.r9-footer strong { font-size: 7.5pt; }
 
 /* ── PRINT ── */
 @media print {
-  body { background: #fff; padding: 0; margin: 0; }
+  body { background: #fff; padding: 0; }
   .actions { display: none !important; }
-  .label-wrapper { box-shadow: none; border-radius: 0; max-width: 100%; width: 100%; }
-  .label { border: 1px solid #000; }
-  @page { margin: 5mm; size: A5; }
+  .label { border: 1.5px solid #000; box-shadow: none; }
+  @page { margin: 4mm; size: A5; }
 }
 </style>
 </head>
 <body>
 
-<!-- ACTIONS -->
 <div class="actions">
-  <div class="actions-title">Shipping Label</div>
-  <div style="display:flex;gap:8px;">
-    <button class="btn-back" onclick="history.back()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back
-    </button>
-    <button class="btn-print" onclick="window.print()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      Print Label
-    </button>
-  </div>
+  <button class="btn btn-back" onclick="history.back()">&#8592; Back</button>
+  <button class="btn btn-print" onclick="window.print()">&#128438; Print Label</button>
 </div>
 
-<!-- LABEL -->
-<div class="label-wrapper">
 <div class="label" id="label">
 
-  <!-- HEADER -->
-  <div class="lbl-header">
-    <div class="lbl-logo-box">
-      <img src="logo.png" alt="Madar" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div style="display:none;font-size:22px;font-weight:900;color:#1A0A4A;letter-spacing:3px;">MADAR</div>
-      <div class="lbl-logo-sub">Logistics Platform</div>
+  <!-- ROW 1: LOGO + BARCODE -->
+  <div class="row">
+    <div class="cell r1-logo">
+      <img src="logo.png" alt="MADAR" onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'">
+      <div id="logo-text" style="display:none;font-size:18pt;font-weight:900;color:#481DBC;letter-spacing:-1px;">MADAR</div>
     </div>
-    <div class="lbl-service-box">
-      <div class="lbl-service-label">Service Type</div>
-      <div class="lbl-service-name" id="lbl-service-name">Last Mile</div>
-    </div>
-    <div class="lbl-weight-box">
-      <div class="lbl-weight-lbl">Weight</div>
-      <div class="lbl-weight-val" id="lbl-weight">0.5</div>
-      <div class="lbl-weight-unit">KG</div>
+    <div class="cell r1-barcode">
+      <svg id="barcode-h"></svg>
+      <div class="tracking-num" id="tracking-display"></div>
     </div>
   </div>
 
-  <!-- BARCODE -->
-  <div class="lbl-barcode-row">
-    <svg id="barcode"></svg>
-    <div class="lbl-tracking-num" id="lbl-tracking">MDR0000000000</div>
-  </div>
-
-  <!-- DELIVERY BANNER -->
-  <div class="lbl-delivery">
-    <div class="lbl-delivery-left">
-      <div class="lbl-delivery-lbl">Delivery To</div>
-      <div class="lbl-delivery-city" id="lbl-city">Riyadh</div>
+  <!-- ROW 2: ORIGIN / DESTINATION / META -->
+  <div class="row">
+    <div class="cell r2-origin">
+      <div class="lbl-small">Origin:</div>
+      <div class="city-big" id="city-origin">RUH</div>
     </div>
-    <div class="lbl-delivery-zone" id="lbl-zone">RUH</div>
-  </div>
-
-  <!-- ADDRESSES -->
-  <div class="lbl-addresses">
-    <div class="lbl-addr-box lbl-addr-to">
-      <div class="lbl-addr-head">Recipient</div>
-      <div class="lbl-addr-name"  id="lbl-to-name">Recipient Name</div>
-      <div class="lbl-addr-line"  id="lbl-to-addr">Address</div>
-      <div class="lbl-addr-phone" id="lbl-to-phone">05XXXXXXXX</div>
+    <div class="cell r2-dest">
+      <div class="lbl-small">Destination:</div>
+      <div class="city-big" id="city-dest">RUH</div>
     </div>
-    <div class="lbl-addr-box">
-      <div class="lbl-addr-head">Sender</div>
-      <div class="lbl-addr-name"  id="lbl-from-name">Store Name</div>
-      <div class="lbl-addr-line"  id="lbl-from-addr">Riyadh, Saudi Arabia</div>
-      <div class="lbl-addr-phone" id="lbl-from-phone"></div>
+    <div class="cell r2-meta" style="flex:1">
+      <div class="meta-row">
+        <span class="meta-lbl">Date:</span>
+        <span class="meta-val" id="lbl-date"></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-lbl">Order Ref:</span>
+        <span class="meta-val" id="lbl-order"></span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-lbl">Merchant ID:</span>
+        <span class="meta-val" id="lbl-merchant"></span>
+      </div>
     </div>
   </div>
 
-  <!-- DETAILS -->
-  <div class="lbl-details">
-    <div class="lbl-dc">
-      <div class="lbl-dc-lbl">Contents</div>
-      <div class="lbl-dc-val" id="lbl-desc">General Goods</div>
+  <!-- ROW 3: SERVICE CODE BOXES -->
+  <div class="r3">
+    <div class="svc-box" id="svc-type">DOM</div>
+    <div class="svc-box highlight" id="svc-code">EXP</div>
+    <div class="svc-box" id="svc-pkg-code">P</div>
+  </div>
+
+  <!-- ROW 4: PIECES / WEIGHT / CHARGEABLE -->
+  <div class="r4">
+    <div class="cell" style="width:33%">
+      <span class="lbl-small">Pieces:</span>
+      <strong id="lbl-pieces">1</strong>
     </div>
-    <div class="lbl-dc">
-      <div class="lbl-dc-lbl">Pieces</div>
-      <div class="lbl-dc-val" id="lbl-pieces">1</div>
+    <div class="cell" style="width:33%">
+      <span class="lbl-small">Weight:</span>
+      <strong id="lbl-weight">0.5 KG</strong>
     </div>
-    <div class="lbl-dc">
-      <div class="lbl-dc-lbl">Packaging</div>
-      <div class="lbl-dc-val orange" id="lbl-pkg">Standard</div>
-    </div>
-    <div class="lbl-dc">
-      <div class="lbl-dc-lbl">Date</div>
-      <div class="lbl-dc-val" id="lbl-date">2026-06-03</div>
+    <div class="cell" style="flex:1">
+      <span class="lbl-small">Chargeable:</span>
+      <strong id="lbl-chargeable">0.5 KG</strong>
     </div>
   </div>
 
-  <!-- COD -->
-  <div class="lbl-cod-row" id="lbl-cod-row">
-    <div class="lbl-cod-left">
-      <div class="lbl-cod-title">Cash on Delivery (COD)</div>
-      <div class="lbl-cod-sub">Collect before handover</div>
+  <!-- ROW 5: SERVICE BAR -->
+  <div class="r5-svc">Services: <span id="lbl-service-bar">Standard Delivery</span></div>
+
+  <!-- ROW 6: COD (shown only if cod > 0) -->
+  <div class="r6-cod" id="cod-row" style="display:none">
+    <span class="lbl-small">Cash on Delivery (COD):</span>
+    <span class="cod-val" id="lbl-cod"></span>
+    <span style="font-size:7.5pt"> SAR</span>
+    <span style="float:right;font-size:7pt;color:#666;">Customs: &mdash;</span>
+  </div>
+
+  <!-- ROW 7: ACCOUNT -->
+  <div class="r7-acct">
+    <div class="acct-lbl">Merchant Account</div>
+    <div class="acct-num" id="lbl-acct-num">MAD-00000</div>
+    <div style="font-size:8.5pt;font-weight:700;margin-top:1px;" id="lbl-store-name"></div>
+  </div>
+
+  <!-- ROW 8: RECIPIENT + SENDER + VERTICAL BARCODE -->
+  <div class="r8">
+    <div class="r8-addr" style="flex:1">
+      <div class="addr-type">Consignee (Recipient)</div>
+      <div class="addr-name" id="to-name"></div>
+      <div class="addr-line" id="to-addr"></div>
+      <div class="addr-line" id="to-city-country"></div>
+      <div class="addr-phone" id="to-phone"></div>
     </div>
-    <div class="lbl-cod-right">
-      <div class="lbl-cod-amt" id="lbl-cod-amount">150</div>
-      <div class="lbl-cod-cur">SAR</div>
+    <div class="r8-vbar">
+      <svg id="barcode-v" width="70" height="10"></svg>
+    </div>
+    <div class="r8-addr right" style="flex:1">
+      <div class="addr-type">Shipper (Sender)</div>
+      <div class="addr-name" id="from-name"></div>
+      <div class="addr-line" id="from-addr"></div>
+      <div class="addr-line" id="from-city-country"></div>
+      <div class="addr-phone" id="from-phone"></div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <div class="lbl-footer">
-    <div class="lbl-qr" id="qr-code"></div>
-    <div class="lbl-footer-mid">
-      <div class="lbl-fref">Order No: <strong id="lbl-order-id">ORD-XXXX</strong></div>
-      <div class="lbl-fref">Tracking: <strong id="lbl-tracking-ref">MDR0000000000</strong></div>
-      <div class="lbl-fnotes" id="lbl-notes"></div>
-    </div>
-    <div class="lbl-fbrand">
-      <strong>MADAR Logistics</strong>
-      madarlogistic.com<br>
-      support@madarlogistic.com
-    </div>
+  <!-- ROW 9: FOOTER REFS -->
+  <div class="r9-footer">
+    <span>Shipper Ref: <strong id="footer-order"></strong></span>
+    <span>Consignee Ref: <strong id="footer-tracking"></strong></span>
+    <span>Description: <strong id="footer-desc"></strong></span>
   </div>
 
-  <!-- CUT LINE -->
-  <div class="lbl-cut">
-    <span>Do not fold</span>
-    <span>Attach clearly on top of parcel</span>
-    <span>Keep a copy for tracking</span>
-    <span>Track: madarlogistic.com/track</span>
-  </div>
-
-</div>
-</div>
+</div><!-- /label -->
 
 <script>
-const CITY_EN = {
-  'الرياض':'Riyadh',       'جدة':'Jeddah',        'الدمام':'Dammam',
-  'مكة المكرمة':'Makkah',  'المدينة المنورة':'Madinah', 'الطائف':'Taif',
-  'تبوك':'Tabuk',          'أبها':'Abha',          'الجبيل':'Jubail',
-  'ينبع':'Yanbu',          'حائل':'Hail',          'القصيم':'Qassim',
-  'نجران':'Najran',        'جازان':'Jazan',
-};
+/* ── CITY MAPS ── */
 const CITY_CODE = {
-  'الرياض':'RUH','جدة':'JED','الدمام':'DMM','مكة المكرمة':'MKK',
-  'المدينة المنورة':'MED','الطائف':'TIF','تبوك':'TUU','أبها':'AHB',
-  'الجبيل':'QJB','ينبع':'YNB','حائل':'HAS','القصيم':'ELQ',
-  'نجران':'NJR','جازان':'GIZ',
+  'الرياض':'RUH','جدة':'JED','الدمام':'DMM','مكة المكرمة':'MEC',
+  'المدينة المنورة':'MED','الطائف':'TIF','أبها':'AHB','تبوك':'TUU',
+  'حائل':'HAS','جازان':'GIZ','نجران':'EAM','الباحة':'ABT','القصيم':'ULH',
+  'عرعر':'RAE','سكاكا':'AJF'
 };
-const PKG_EN = {
-  'عادي':'Standard','هدية':'Gift','علامة تجارية':'Branded','واقي':'Protected',
-  'Standard':'Standard','Gift':'Gift','Branded':'Branded','Protected':'Protected',
+const SVC_CODE = {
+  'شحن':'EXP','تخزين وشحن':'EXP','شحن وتخزين':'EXP','standard':'STD'
+};
+const PKG_CODE = {
+  'عادي':'P','مجمد':'F','هش':'F','ثقيل':'H','normal':'P','frozen':'F'
 };
 const SVC_EN = {
-  'آخر ميل':'Last Mile Express','B2B':'B2B Freight','تخزين':'Warehousing',
+  'شحن':'Standard Delivery','شحن وتخزين':'Express + Storage',
+  'تخزين وشحن':'Express + Storage'
 };
 
-function loadLabel() {
-  const params = new URLSearchParams(window.location.search);
-  const stored = JSON.parse(localStorage.getItem('madar_label') || '{}');
-  const get = (k, def='') => params.get(k) || stored[k] || def;
-
-  const orderId  = get('id',       'ORD-8831');
-  const tracking = get('tracking', 'MDR' + Date.now().toString().slice(-10));
-  const toName   = get('toName',   'Saad Al-Maliki');
-  const toAddr   = get('toAddr',   'Al-Nuzha District, Riyadh');
-  const toPhone  = get('toPhone',  '0512340001');
-  const fromName = get('fromName', 'Madar Store');
-  const fromAddr = get('fromAddr', 'Riyadh, Saudi Arabia');
-  const fromPhone= get('fromPhone','');
-  const city     = get('city',     'الرياض');
-  const service  = get('service',  'آخر ميل');
-  const weight   = get('weight',   '0.5');
-  const desc     = get('desc',     'General Goods');
-  const pieces   = get('pieces',   '1');
-  const pkg      = get('pkg',      'عادي');
-  const cod      = parseFloat(get('cod','0'));
-  const notes    = get('notes',    '');
-
-  document.getElementById('lbl-tracking').textContent     = tracking;
-  document.getElementById('lbl-tracking-ref').textContent = tracking;
-  document.getElementById('lbl-order-id').textContent     = orderId;
-  document.getElementById('lbl-to-name').textContent      = toName;
-  document.getElementById('lbl-to-addr').textContent      = toAddr;
-  document.getElementById('lbl-to-phone').textContent     = toPhone;
-  document.getElementById('lbl-from-name').textContent    = fromName;
-  document.getElementById('lbl-from-addr').textContent    = fromAddr;
-  document.getElementById('lbl-from-phone').textContent   = fromPhone;
-  document.getElementById('lbl-city').textContent         = CITY_EN[city] || city;
-  document.getElementById('lbl-zone').textContent         = CITY_CODE[city] || 'KSA';
-  document.getElementById('lbl-service-name').textContent = SVC_EN[service] || service;
-  document.getElementById('lbl-weight').textContent       = weight;
-  document.getElementById('lbl-desc').textContent         = desc;
-  document.getElementById('lbl-pieces').textContent       = pieces;
-  document.getElementById('lbl-pkg').textContent          = PKG_EN[pkg] || pkg;
-  document.getElementById('lbl-date').textContent         = new Date().toLocaleDateString('en-GB');
-
-  if (cod > 0) {
-    document.getElementById('lbl-cod-amount').textContent = cod.toLocaleString();
-  } else {
-    document.getElementById('lbl-cod-row').style.display = 'none';
+/* ── LOAD DATA ── */
+let D = {};
+try { D = JSON.parse(localStorage.getItem('madar_label') || '{}'); } catch(e) {}
+if (!D.tracking) {
+  const p = new URLSearchParams(location.search);
+  if (p.get('tracking')) {
+    D = {
+      tracking: p.get('tracking') || 'MDR0000000001',
+      id: p.get('id') || 'ORD-00001',
+      toName: p.get('toName') || 'John Doe',
+      toAddr: p.get('toAddr') || '123 Main Street',
+      toPhone: p.get('toPhone') || '',
+      fromName: p.get('fromName') || 'MADAR Store',
+      fromAddr: p.get('fromAddr') || 'Riyadh, Saudi Arabia',
+      fromPhone: p.get('fromPhone') || '',
+      city: p.get('city') || 'الرياض',
+      service: p.get('service') || 'شحن',
+      weight: p.get('weight') || '0.5',
+      pieces: p.get('pieces') || '1',
+      pkg: p.get('pkg') || 'عادي',
+      cod: p.get('cod') || '0',
+      desc: p.get('desc') || 'General Goods',
+      merchantId: p.get('merchantId') || 'MAD-00000',
+      storeName: p.get('storeName') || ''
+    };
   }
-
-  if (notes) {
-    document.getElementById('lbl-notes').textContent = 'Notes: ' + notes;
-  }
-
-  JsBarcode('#barcode', tracking, {
-    format: 'CODE128', width: 2.4, height: 62,
-    displayValue: false, margin: 6, lineColor: '#1A0A4A',
-  });
-
-  new QRCode(document.getElementById('qr-code'), {
-    text: 'https://madarlogistic.com/track?q=' + tracking,
-    width: 70, height: 70,
-    colorDark: '#1A0A4A', colorLight: '#fff',
-    correctLevel: QRCode.CorrectLevel.M,
-  });
 }
 
-window.addEventListener('DOMContentLoaded', loadLabel);
+/* ── FALLBACK DEMO DATA ── */
+if (!D.tracking) {
+  D = {
+    tracking:'MDR202500001',id:'ORD-2025-001',
+    toName:'Ahmed Al-Rashidi',toAddr:'King Fahd Road, Al Olaya District',
+    toPhone:'0501234567',fromName:'Store Manager',
+    fromAddr:'Industrial Area, Riyadh',fromPhone:'0112345678',
+    city:'الرياض',service:'شحن',weight:'1.5',pieces:'1',
+    pkg:'عادي',cod:'150',desc:'General Merchandise',
+    merchantId:'MAD-10399',storeName:'Al Amal Trading'
+  };
+}
+
+/* ── CITY ORIGIN (from-city) ── */
+const originCity = D.fromCity || 'الرياض';
+const destCity   = D.city     || 'الرياض';
+const originCode = CITY_CODE[originCity] || 'RUH';
+const destCode   = CITY_CODE[destCity]   || 'RUH';
+
+/* ── FILL DOM ── */
+document.getElementById('city-origin').textContent  = originCode;
+document.getElementById('city-dest').textContent    = destCode;
+document.getElementById('tracking-display').textContent = D.tracking;
+document.getElementById('lbl-date').textContent     = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+document.getElementById('lbl-order').textContent    = D.id || '';
+document.getElementById('lbl-merchant').textContent = D.merchantId || '';
+document.getElementById('lbl-pieces').textContent   = (D.pieces || '1');
+document.getElementById('lbl-weight').textContent   = (D.weight || '0.5') + ' KG';
+document.getElementById('lbl-chargeable').textContent = (D.weight || '0.5') + ' KG';
+document.getElementById('lbl-service-bar').textContent = SVC_EN[D.service] || 'Standard Delivery';
+document.getElementById('lbl-acct-num').textContent = D.merchantId || '';
+document.getElementById('lbl-store-name').textContent = D.storeName || '';
+document.getElementById('to-name').textContent      = D.toName || '';
+document.getElementById('to-addr').textContent      = D.toAddr || '';
+document.getElementById('to-city-country').textContent = (CITY_CODE[D.city] ? D.city + ' — SA' : 'SA');
+document.getElementById('to-phone').textContent     = D.toPhone || '';
+document.getElementById('from-name').textContent    = D.fromName || '';
+document.getElementById('from-addr').textContent    = D.fromAddr || '';
+document.getElementById('from-city-country').textContent = (D.fromCity || 'Riyadh') + ' — SA';
+document.getElementById('from-phone').textContent   = D.fromPhone || '';
+document.getElementById('footer-order').textContent = D.id || '';
+document.getElementById('footer-tracking').textContent = D.tracking;
+document.getElementById('footer-desc').textContent  = D.desc || 'General Goods';
+
+/* Service code boxes */
+document.getElementById('svc-type').textContent     = 'DOM';
+document.getElementById('svc-code').textContent     = SVC_CODE[D.service] || 'EXP';
+document.getElementById('svc-pkg-code').textContent = PKG_CODE[D.pkg] || 'P';
+
+/* COD row */
+const codVal = parseFloat(D.cod || 0);
+if (codVal > 0) {
+  document.getElementById('cod-row').style.display = 'block';
+  document.getElementById('lbl-cod').textContent   = codVal.toFixed(2);
+}
+
+/* ── BARCODES ── */
+JsBarcode('#barcode-h', D.tracking, {
+  format:'CODE128', width:1.6, height:40,
+  displayValue:false, margin:0, background:'#ffffff', lineColor:'#000000'
+});
+JsBarcode('#barcode-v', D.tracking, {
+  format:'CODE128', width:1.2, height:60,
+  displayValue:false, margin:0, background:'#ffffff', lineColor:'#000000'
+});
 </script>
 </body>
 </html>
