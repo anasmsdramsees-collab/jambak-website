@@ -72,29 +72,29 @@ body {
   align-items: stretch;
   border-bottom: 1.5px solid #000;
   flex-shrink: 0;
-  height: 18mm;
+  height: 22mm;
 }
 .logo-box {
-  width: 34mm;
+  width: 38mm;
   display: flex;
   align-items: center;
-  padding: 4px 6px;
+  padding: 5px 8px;
   border-right: 1.5px solid #000;
   flex-shrink: 0;
 }
 .logo-text {
-  font-size: 22pt;
+  font-size: 26pt;
   font-weight: 900;
   color: #481DBC;
   letter-spacing: -1px;
   line-height: 1;
 }
 .logo-sub {
-  font-size: 5pt;
+  font-size: 6pt;
   color: #888;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .bar-box {
   flex: 1;
@@ -250,20 +250,22 @@ body {
 
 /* vertical barcode column */
 .vbar-col {
-  width: 11mm;
+  width: 13mm;
   flex-shrink: 0;
   border-left: 1px solid #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   overflow: hidden;
-  padding: 3px 1px;
 }
-.vbar-col svg {
-  transform: rotate(90deg);
-  transform-origin: center center;
-  width: 55mm;   /* becomes height when rotated */
-  height: 9mm;   /* becomes width when rotated */
+.vbar-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.vbar-inner svg {
+  display: block;
+  width: 56mm;
+  height: 11mm;
 }
 
 /* ── ROW 9: Footer refs ── */
@@ -311,7 +313,7 @@ body {
       <div style="display:flex;flex-direction:column;">
         <!-- Try image first, fallback to text -->
         <img id="logo-img" src="logo.png" alt="MADAR"
-             style="height:26px;object-fit:contain;object-position:left;"
+             style="height:44px;max-width:100%;object-fit:contain;object-position:left;"
              onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
         <div id="logo-fallback" style="display:none;">
           <div class="logo-text">MADAR</div>
@@ -413,7 +415,9 @@ body {
 
     <!-- VERTICAL BARCODE -->
     <div class="vbar-col">
-      <svg id="barcode-v"></svg>
+      <div class="vbar-inner">
+        <svg id="barcode-v"></svg>
+      </div>
     </div>
   </div>
 
