@@ -1,0 +1,7 @@
+.DS_Store
+*.DS_Store
+netlify.toml
+serve.sh
+dev-admin.html
+dev-merchant.html
+.vercel
