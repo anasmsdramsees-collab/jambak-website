@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدار · النقل البري الداخلي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F8F7FF;
+      color: #1A0A4A;
+      direction: rtl;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: #1A0A4A;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a.link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+    .nav-links a.link:hover { color: #fff; }
+    .nav-links a.cta {
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-links a.cta:hover { background: #e05a00; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: url('ChatGPT Image May 17, 2026, 01_08_42 AM.png') center center / cover no-repeat;
+      padding: 100px 24px 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 6, 40, 0.65);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, #F8F7FF);
+      pointer-events: none;
+    }
+    .hero-glass {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 52px 60px 48px;
+      max-width: 720px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,106,0,0.15);
+      border: 1px solid rgba(255,106,0,0.35);
+      color: #FF6A00;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(32px, 5.5vw, 58px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      letter-spacing: -1px;
+    }
+    .hero h1 span { color: #FF6A00; }
+    .hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 17px;
+      font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.35);
+      margin-bottom: 36px;
+    }
+    .hero-cta:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,106,0,0.45);
+    }
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(72,29,188,0.1);
+      color: #481DBC;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 900;
+      color: #1A0A4A;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: #666;
+      font-weight: 400;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    /* ─── SHIPPING TYPES ─── */
+    .shipping-section { background: #fff; }
+    .shipping-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 860px) { .shipping-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 540px) { .shipping-grid { grid-template-columns: 1fr; } }
+
+    .ship-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.1);
+      border-radius: 20px;
+      padding: 36px 28px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .ship-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(72,29,188,0.1);
+      border-color: rgba(72,29,188,0.22);
+    }
+    .ship-icon-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ship-icon-wrap.purple {
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+    }
+    .ship-icon-wrap.orange {
+      background: linear-gradient(135deg, #FF6A00 0%, #ff8c38 100%);
+    }
+    .ship-icon-wrap.navy {
+      background: linear-gradient(135deg, #1A0A4A 0%, #2e1a6e 100%);
+    }
+    .ship-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 6px;
+    }
+    .ship-card p {
+      font-size: 15px;
+      color: #666;
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    /* ─── REGIONS ─── */
+    .regions-section { background: #F0EBFF; }
+    .regions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    .region-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.1);
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .region-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(72,29,188,0.1);
+      border-color: rgba(72,29,188,0.2);
+    }
+    .region-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .region-card span {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1A0A4A;
+    }
+
+    /* ─── WHY MADAR ─── */
+    .why-section { background: #fff; }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 640px) { .why-grid { grid-template-columns: 1fr; } }
+
+    .why-card {
+      background: #F8F7FF;
+      border: 1.5px solid rgba(72,29,188,0.08);
+      border-radius: 18px;
+      padding: 32px 28px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .why-card:hover {
+      border-color: rgba(72,29,188,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(72,29,188,0.08);
+    }
+    .why-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+    }
+    .why-card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 8px;
+    }
+    .why-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.65;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section {
+      background: linear-gradient(135deg, #481DBC 0%, #2e1a6e 100%);
+    }
+    .how-section .section-tag {
+      background: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.9);
+    }
+    .how-section .section-title { color: #fff; }
+    .how-section .section-sub { color: rgba(255,255,255,0.65); }
+
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: calc(16.67% + 20px);
+      left: calc(16.67% + 20px);
+      height: 2px;
+      background: linear-gradient(to left, rgba(255,106,0,0.6), rgba(255,255,255,0.2));
+      z-index: 0;
+    }
+    @media (max-width: 640px) {
+      .steps-row { grid-template-columns: 1fr; }
+      .steps-row::before { display: none; }
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .step-number {
+      width: 56px;
+      height: 56px;
+      background: #FF6A00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 20px rgba(255,106,0,0.45);
+      flex-shrink: 0;
+    }
+    .step-item h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .step-item p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.65;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      background: linear-gradient(135deg, #1A0A4A 0%, #0f0628 100%);
+      text-align: center;
+      padding: 90px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(72,29,188,0.3) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      color: #fff;
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      position: relative;
+    }
+    .final-cta p {
+      color: rgba(255,255,255,0.65);
+      font-size: 16px;
+      margin-bottom: 40px;
+      position: relative;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+    .final-cta a {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 50px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.4);
+      position: relative;
+    }
+    .final-cta a:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(255,106,0,0.5);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0A4A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    footer img { display: block; margin: 0 auto 12px; opacity: 0.55; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:36px;"></a>
+  <div class="nav-links">
+    <a href="index.html" class="link">الرئيسية</a>
+    <a href="warehousing.html" class="link">التخزين</a>
+    <a href="lastmile.html" class="link">آخر ميل</a>
+    <a href="scm.html" class="link">سلاسل التوريد</a>
+    <a href="merchant-register.html" class="cta">ابدأ الآن</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glass">
+    <div class="hero-tag">
+      <!-- Truck icon -->
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      النقل البري
+    </div>
+    <h1>شحن يصل في الموعد — <span>في كل مكان</span> بالمملكة</h1>
+    <p>خدمات FTL وLTL والشحن السريع تغطي جميع مناطق المملكة العربية السعودية الثلاث عشرة، بأسطول متطور وتتبع GPS لحظي وضمان التسليم في الموعد المحدد.</p>
+    <a href="merchant-register.html" class="hero-cta">احجز شحنتك الآن</a>
+    <div class="hero-stats">
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        تغطية 13 منطقة
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        98% في الموعد
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        تتبع GPS لحظي
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- SHIPPING TYPES -->
+<section class="shipping-section">
+  <div class="section-inner">
+    <div class="section-tag">خدمات الشحن</div>
+    <h2 class="section-title">اختر نوع الشحن المناسب</h2>
+    <p class="section-sub">حلول شحن مرنة تناسب جميع أحجام الشحنات والأعمال</p>
+    <div class="shipping-grid">
+
+      <!-- FTL -->
+      <div class="ship-card">
+        <div class="ship-icon-wrap purple">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 4v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div>
+          <h3>FTL — حمولة كاملة</h3>
+          <p>مثالي للشحنات الكبيرة والمصانع، تحجز الشاحنة بالكامل لشحنتك فقط. أسرع وصول وأعلى حماية للبضاعة دون توقفات وسيطة.</p>
+        </div>
+      </div>
+
+      <!-- LTL -->
+      <div class="ship-card">
+        <div class="ship-icon-wrap orange">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <div>
+          <h3>LTL — حمولة جزئية</h3>
+          <p>ادفع فقط عن المساحة التي تستخدمها. الخيار الأمثل للشركات المتوسطة والصغيرة التي لا تملك حمولة كاملة، بأسعار تنافسية.</p>
+        </div>
+      </div>
+
+      <!-- Express -->
+      <div class="ship-card">
+        <div class="ship-icon-wrap navy">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <h3>شحن سريع — Express</h3>
+          <p>توصيل خلال 24 إلى 48 ساعة للشحنات العاجلة والوقت-الحرج. أولوية قصوى في المعالجة والتسليم بتغطية واسعة في المملكة.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- REGIONS COVERED -->
+<section class="regions-section">
+  <div class="section-inner">
+    <div class="section-tag">التغطية الجغرافية</div>
+    <h2 class="section-title">المناطق المغطاة</h2>
+    <p class="section-sub">شبكة شحن تغطي جميع مناطق المملكة العربية السعودية الثلاث عشرة</p>
+    <div class="regions-grid">
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>الرياض</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>جدة</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>مكة المكرمة</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>المدينة المنورة</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>الدمام</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>الطائف</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>أبها</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>القصيم</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>تبوك</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>جازان</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>نجران</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>حائل</span>
+      </div>
+
+      <div class="region-card">
+        <div class="region-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span>عسير</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY MADAR -->
+<section class="why-section">
+  <div class="section-inner">
+    <div class="section-tag">لماذا مدار</div>
+    <h2 class="section-title">لماذا مدار للشحن البري؟</h2>
+    <p class="section-sub">موثوقية عالية وتقنية متقدمة تضمن وصول شحنتك بأمان وفي الموعد</p>
+    <div class="why-grid">
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <h3>تتبع GPS ومعيار SLA</h3>
+          <p>تتبع شحنتك لحظياً على الخريطة مع تقارير تفصيلية وضمان اتفاقية مستوى الخدمة لكل رحلة.</p>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <h3>سائقون محترفون ومرخّصون</h3>
+          <p>طاقم سائقين معتمدون ومدرّبون على التعامل مع جميع أنواع البضائع والمسارات البرية في المملكة.</p>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h3>تأمين شامل على البضاعة</h3>
+          <p>تغطية تأمينية كاملة على شحنتك طوال رحلة النقل من نقطة الاستلام حتى التسليم النهائي.</p>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div>
+          <h3>توثيق رقمي كامل</h3>
+          <p>بوليصة شحن رقمية، إيصال استلام إلكتروني، وسجل كامل لكل رحلة يمكن الوصول إليه في أي وقت.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="section-inner">
+    <div class="section-tag">كيف يعمل</div>
+    <h2 class="section-title" style="color:#fff;">كيف تشحن مع مدار؟</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.65);">ثلاث خطوات بسيطة من إنشاء الطلب حتى التسليم للمستلم</p>
+    <div class="steps-row">
+
+      <div class="step-item">
+        <div class="step-number">١</div>
+        <h3>أنشئ طلب الشحن</h3>
+        <p>سجّل تفاصيل شحنتك من نوع وحجم وعنوان الاستلام والتسليم عبر المنصة</p>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">٢</div>
+        <h3>نتحقق ونؤكد الموعد</h3>
+        <p>يتواصل معك فريقنا لتأكيد التفاصيل وتحديد موعد الاستلام المناسب</p>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">٣</div>
+        <h3>تتبع حتى التسليم</h3>
+        <p>تابع شحنتك لحظياً عبر GPS واستلم تأكيداً فورياً عند وصول البضاعة للمستلم</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>ابدأ الشحن اليوم</h2>
+  <p>انضم لمئات الشركات التي تثق بمدار لنقل بضائعها في كل أرجاء المملكة</p>
+  <a href="merchant-register.html">احجز شحنتك الآن</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:28px;"></a>
+  <p>© 2026 مدار لوجستيك · جميع الحقوق محفوظة · <a href="index.html">العودة للرئيسية</a></p>
+</footer>
+
+</body>
+</html>

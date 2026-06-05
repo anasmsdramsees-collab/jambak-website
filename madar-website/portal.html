@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدار — بوابة العميل الذكية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F8F7FF;
+      color: #1A0A4A;
+      direction: rtl;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: #1A0A4A;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a.link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+    .nav-links a.link:hover { color: #fff; }
+    .nav-links a.cta {
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-links a.cta:hover { background: #e05a00; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: url('ChatGPT Image May 17, 2026, 01_08_42 AM.png') center center / cover no-repeat;
+      padding: 100px 24px 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 6, 40, 0.65);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, #F8F7FF);
+      pointer-events: none;
+    }
+    .hero-glass {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 52px 60px 48px;
+      max-width: 760px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,106,0,0.15);
+      border: 1px solid rgba(255,106,0,0.35);
+      color: #FF6A00;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(32px, 5.5vw, 58px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+    }
+    .hero h1 span { color: #FF6A00; }
+    .hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 17px;
+      font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.35);
+      margin-bottom: 36px;
+    }
+    .hero-cta:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,106,0,0.45);
+    }
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(72,29,188,0.1);
+      color: #481DBC;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 900;
+      color: #1A0A4A;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: #666;
+      font-weight: 400;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    /* ─── 6-FEATURE CARDS 3-COL ─── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+    @media (max-width: 860px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .features-grid { grid-template-columns: 1fr; } }
+
+    .feat-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.08);
+      border-radius: 18px;
+      padding: 28px 24px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .feat-card:hover {
+      border-color: rgba(72,29,188,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(72,29,188,0.08);
+    }
+    .feat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .feat-icon.purple { background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%); }
+    .feat-icon.orange { background: linear-gradient(135deg, #FF6A00 0%, #ff8c38 100%); }
+    .feat-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 8px;
+    }
+    .feat-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.65;
+    }
+
+    /* ─── SPLIT LAYOUT ─── */
+    .split-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media (max-width: 760px) { .split-wrap { grid-template-columns: 1fr; gap: 40px; } }
+
+    .split-text h3 {
+      font-size: 28px;
+      font-weight: 900;
+      color: #1A0A4A;
+      margin-bottom: 18px;
+      line-height: 1.25;
+    }
+    .split-text p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: #444;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .check-list li svg { flex-shrink: 0; margin-top: 2px; }
+
+    /* ─── INTEGRATIONS ─── */
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 860px) { .integrations-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .integrations-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .integration-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.1);
+      border-radius: 14px;
+      padding: 20px 12px;
+      text-align: center;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      cursor: default;
+    }
+    .integration-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(72,29,188,0.1);
+      border-color: rgba(72,29,188,0.22);
+    }
+    .integration-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .integration-card span {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1A0A4A;
+      line-height: 1.3;
+    }
+
+    /* ─── PRICING ─── */
+    .pricing-section {
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #5e27d4 100%);
+      padding: 80px 24px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    @media (max-width: 760px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; } }
+
+    .pricing-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .2s, background .2s;
+      position: relative;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.11);
+    }
+    .pricing-card.featured {
+      background: rgba(255,255,255,0.13);
+      border-color: rgba(255,106,0,0.5);
+      transform: scale(1.03);
+    }
+    .pricing-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+    .pricing-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #FF6A00;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .pricing-card .plan-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .pricing-card .plan-price {
+      font-size: 40px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .pricing-card .plan-price sup {
+      font-size: 18px;
+      font-weight: 700;
+      vertical-align: super;
+    }
+    .pricing-card .plan-period {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 28px;
+    }
+    .pricing-card .plan-features {
+      list-style: none;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-bottom: 32px;
+    }
+    .pricing-card .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.75);
+    }
+    .pricing-card .plan-cta {
+      display: block;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 20px;
+      border-radius: 12px;
+      transition: background .2s, transform .2s;
+    }
+    .plan-cta.outline {
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: #fff;
+    }
+    .plan-cta.outline:hover { background: rgba(255,255,255,0.1); }
+    .plan-cta.solid {
+      background: #FF6A00;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(255,106,0,0.4);
+    }
+    .plan-cta.solid:hover { background: #e05a00; transform: translateY(-2px); }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #FF6A00 140%);
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(255,106,0,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      color: #fff;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      position: relative;
+    }
+    .final-cta p {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .final-cta a {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.4);
+      position: relative;
+    }
+    .final-cta a:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(255,106,0,0.5);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0A4A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    footer img { display: block; margin: 0 auto 12px; opacity: 0.55; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:36px;"></a>
+  <div class="nav-links">
+    <a href="index.html" class="link">الرئيسية</a>
+    <a href="warehousing.html" class="link">التخزين</a>
+    <a href="lastmile.html" class="link">التوصيل</a>
+    <a href="land-transport.html" class="link">النقل البري</a>
+    <a href="merchant-register.html" class="cta">ابدأ الآن</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glass">
+    <div class="hero-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      بوابة العميل
+    </div>
+    <h1>كل شحناتك — في <span>لوحة تحكم واحدة</span> ذكية</h1>
+    <p>بوابة موحدة تربط متجرك بعمليات اللوجستيات كاملةً — تتبع لحظي، تقارير ذكية، وإدارة شاملة لكل طلباتك من مكان واحد</p>
+    <a href="merchant-register.html" class="hero-cta">جرّب البوابة مجاناً</a>
+    <div class="hero-stats">
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        لوحة تحكم موحدة
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        تتبع لحظي
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        تقارير ذكية
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- مزايا البوابة -->
+<section style="background:#fff; padding:80px 24px;">
+  <div class="section-inner">
+    <div class="section-tag">مزايا البوابة</div>
+    <h2 class="section-title">كل ما تحتاجه في مكان واحد</h2>
+    <p class="section-sub">ست مزايا أساسية تجعل إدارة عملياتك اللوجستية أسرع وأكثر ذكاءً</p>
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>تتبع الشحنات لحظياً</h3>
+        <p>تتبع كل شحنة من لحظة الاستلام حتى التسليم بخريطة حية وتحديثات فورية لك ولعميلك.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/></svg>
+        </div>
+        <h3>إدارة الطلبات</h3>
+        <p>إنشاء طلبات شحن جديدة، تعديل العناوين، وإلغاء الطلبات — كل ذلك بنقرات بسيطة دون اتصال هاتفي.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>تقارير الأداء</h3>
+        <p>تقارير تفصيلية لمعدل التسليم، أوقات التوصيل، ومناطق التركز — قرارات أذكى مبنية على بيانات حقيقية.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <h3>الفواتير الإلكترونية</h3>
+        <p>عرض وتحميل جميع فواتيرك الإلكترونية، متابعة المدفوعات والمستحقات، وتصدير التقارير المالية.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h3>ربط منصات التجارة</h3>
+        <p>تكامل مباشر مع سلة وزد وشوبيفاي — طلباتك تتدفق تلقائياً دون أي إدخال يدوي.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>دعم على مدار الساعة</h3>
+        <p>محادثة مباشرة مع فريق الدعم من داخل البوابة، تاريخ كامل للتذاكر، وقاعدة معرفة شاملة.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- واجهة سهلة الاستخدام -->
+<section style="background:#F0EBFF; padding:80px 24px;">
+  <div class="section-inner">
+    <div class="split-wrap">
+
+      <!-- Text (right) -->
+      <div class="split-text">
+        <div class="section-tag">واجهة المستخدم</div>
+        <h3>لوحة تحكم مصممة للتاجر السعودي</h3>
+        <p>واجهة عربية بالكامل، بسيطة ومنظمة، تعمل على الجوال والكمبيوتر بنفس الكفاءة. بدون تدريب أو تعقيد — ابدأ الاستخدام فوراً.</p>
+        <ul class="check-list">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            نظرة عامة فورية على جميع شحناتك في شاشة واحدة
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            فلترة متقدمة بالتاريخ والمنطقة والحالة ورقم الطلب
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            إشعارات واضحة للمستجدات الحرجة فور حدوثها
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            تطبيق جوال كامل لمتابعة عملياتك في أي مكان
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#481DBC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            إدارة صلاحيات الفريق — امنح وصولاً مخصصاً لكل موظف
+          </li>
+        </ul>
+      </div>
+
+      <!-- SVG Dashboard Mockup (left) -->
+      <div style="background:#fff; border-radius:20px; padding:20px; border:1.5px solid rgba(72,29,188,0.12); box-shadow:0 16px 48px rgba(72,29,188,0.1); overflow:hidden;">
+        <svg viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+          <!-- Dashboard BG -->
+          <rect width="480" height="320" fill="#F8F7FF" rx="12"/>
+
+          <!-- Sidebar -->
+          <rect x="0" y="0" width="80" height="320" fill="#1A0A4A" rx="12"/>
+          <rect x="14" y="18" width="52" height="16" fill="#481DBC" rx="4"/>
+          <!-- Sidebar icons -->
+          <rect x="22" y="52" width="36" height="8" fill="rgba(255,255,255,0.25)" rx="3"/>
+          <rect x="22" y="68" width="36" height="8" fill="rgba(255,106,0,0.7)" rx="3"/>
+          <rect x="22" y="84" width="36" height="8" fill="rgba(255,255,255,0.25)" rx="3"/>
+          <rect x="22" y="100" width="36" height="8" fill="rgba(255,255,255,0.25)" rx="3"/>
+          <rect x="22" y="116" width="36" height="8" fill="rgba(255,255,255,0.25)" rx="3"/>
+
+          <!-- Header bar -->
+          <rect x="88" y="12" width="378" height="36" fill="#fff" rx="8"/>
+          <rect x="100" y="22" width="120" height="16" fill="#E8E4F5" rx="4"/>
+          <circle cx="440" cy="30" r="12" fill="#481DBC" opacity="0.15"/>
+          <circle cx="440" cy="30" r="6" fill="#481DBC"/>
+
+          <!-- Stat cards row -->
+          <rect x="88" y="58" width="84" height="52" fill="#fff" rx="8"/>
+          <rect x="96" y="65" width="40" height="7" fill="#E8E4F5" rx="3"/>
+          <rect x="96" y="76" width="60" height="12" fill="#1A0A4A" rx="3"/>
+          <rect x="96" y="92" width="30" height="6" fill="rgba(72,29,188,0.2)" rx="3"/>
+
+          <rect x="180" y="58" width="84" height="52" fill="#fff" rx="8"/>
+          <rect x="188" y="65" width="40" height="7" fill="#E8E4F5" rx="3"/>
+          <rect x="188" y="76" width="60" height="12" fill="#1A0A4A" rx="3"/>
+          <rect x="188" y="92" width="30" height="6" fill="rgba(255,106,0,0.2)" rx="3"/>
+
+          <rect x="272" y="58" width="84" height="52" fill="#fff" rx="8"/>
+          <rect x="280" y="65" width="40" height="7" fill="#E8E4F5" rx="3"/>
+          <rect x="280" y="76" width="60" height="12" fill="#1A0A4A" rx="3"/>
+          <rect x="280" y="92" width="30" height="6" fill="rgba(72,29,188,0.2)" rx="3"/>
+
+          <rect x="364" y="58" width="100" height="52" fill="#FF6A00" rx="8"/>
+          <rect x="374" y="67" width="50" height="7" fill="rgba(255,255,255,0.4)" rx="3"/>
+          <rect x="374" y="79" width="70" height="12" fill="#fff" rx="3"/>
+          <rect x="374" y="96" width="35" height="6" fill="rgba(255,255,255,0.3)" rx="3"/>
+
+          <!-- Chart area -->
+          <rect x="88" y="120" width="254" height="110" fill="#fff" rx="8"/>
+          <rect x="98" y="128" width="80" height="10" fill="#E8E4F5" rx="3"/>
+          <!-- Chart lines -->
+          <polyline points="100,210 130,190 160,200 190,175 220,185 250,160 280,170 310,150 330,155" stroke="#481DBC" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+          <polyline points="100,215 130,210 160,218 190,205 220,212 250,200 280,208 310,195 330,200" stroke="#FF6A00" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
+          <!-- X axis -->
+          <line x1="100" y1="220" x2="335" y2="220" stroke="#E8E4F5" stroke-width="1"/>
+          <rect x="100" y="223" width="20" height="5" fill="#E8E4F5" rx="2"/>
+          <rect x="128" y="223" width="20" height="5" fill="#E8E4F5" rx="2"/>
+          <rect x="156" y="223" width="20" height="5" fill="#E8E4F5" rx="2"/>
+          <rect x="184" y="223" width="20" height="5" fill="#E8E4F5" rx="2"/>
+
+          <!-- Right panel - table -->
+          <rect x="350" y="120" width="116" height="110" fill="#fff" rx="8"/>
+          <rect x="360" y="128" width="60" height="8" fill="#E8E4F5" rx="3"/>
+          <!-- Table rows -->
+          <rect x="360" y="142" width="96" height="1" fill="#F0EBFF"/>
+          <rect x="360" y="146" width="50" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="420" y="146" width="28" height="7" fill="rgba(72,29,188,0.15)" rx="2"/>
+          <rect x="360" y="158" width="1" height="1" fill="#F0EBFF"/>
+          <rect x="360" y="159" width="50" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="420" y="159" width="28" height="7" fill="rgba(255,106,0,0.2)" rx="2"/>
+          <rect x="360" y="171" width="50" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="420" y="171" width="28" height="7" fill="rgba(72,29,188,0.15)" rx="2"/>
+          <rect x="360" y="183" width="50" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="420" y="183" width="28" height="7" fill="rgba(255,106,0,0.2)" rx="2"/>
+          <rect x="360" y="195" width="50" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="420" y="195" width="28" height="7" fill="rgba(72,29,188,0.15)" rx="2"/>
+
+          <!-- Bottom table -->
+          <rect x="88" y="240" width="378" height="66" fill="#fff" rx="8"/>
+          <rect x="100" y="248" width="60" height="8" fill="#E8E4F5" rx="3"/>
+          <!-- Row 1 -->
+          <rect x="100" y="262" width="60" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="180" y="262" width="80" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="280" y="262" width="60" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="360" y="262" width="50" height="7" fill="rgba(72,29,188,0.15)" rx="2"/>
+          <!-- Row 2 -->
+          <rect x="100" y="275" width="60" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="180" y="275" width="80" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="280" y="275" width="60" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="360" y="275" width="50" height="7" fill="rgba(255,106,0,0.2)" rx="2"/>
+          <!-- Row 3 -->
+          <rect x="100" y="288" width="60" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="180" y="288" width="80" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="280" y="288" width="60" height="7" fill="#E8E4F5" rx="2"/>
+          <rect x="360" y="288" width="50" height="7" fill="rgba(72,29,188,0.15)" rx="2"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- التكاملات المدعومة -->
+<section style="background:#fff; padding:80px 24px;">
+  <div class="section-inner">
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="section-tag">التكاملات</div>
+      <h2 class="section-title">يتصل بمنصتك بدون تعقيد</h2>
+      <p class="section-sub" style="margin:0 auto 0;">ربط مباشر مع أشهر منصات التجارة الإلكترونية في السعودية والعالم — أو اربط نظامك الخاص عبر API مفتوح</p>
+    </div>
+    <div class="integrations-grid">
+
+      <div class="integration-card">
+        <div class="integration-logo" style="background:linear-gradient(135deg,#00C389,#00A775);">
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="transparent"/><text x="4" y="28" font-family="Arial" font-size="22" font-weight="900" fill="#fff">س</text></svg>
+        </div>
+        <span>سلة</span>
+        <span style="font-size:10px;color:#888;font-weight:400;">Salla</span>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-logo" style="background:linear-gradient(135deg,#6554C0,#5243AA);">
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><text x="6" y="28" font-family="Arial" font-size="22" font-weight="900" fill="#fff">ز</text></svg>
+        </div>
+        <span>زد</span>
+        <span style="font-size:10px;color:#888;font-weight:400;">Zid</span>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-logo" style="background:linear-gradient(135deg,#96BF48,#5E8E3E);">
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><text x="4" y="28" font-family="Arial" font-size="16" font-weight="900" fill="#fff">SHO</text></svg>
+        </div>
+        <span>Shopify</span>
+        <span style="font-size:10px;color:#888;font-weight:400;">شوبيفاي</span>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-logo" style="background:linear-gradient(135deg,#7B5EA7,#5B3F8A);">
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><text x="2" y="27" font-family="Arial" font-size="13" font-weight="900" fill="#fff">WOO</text></svg>
+        </div>
+        <span>WooCommerce</span>
+        <span style="font-size:10px;color:#888;font-weight:400;">ووكومرس</span>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-logo" style="background:linear-gradient(135deg,#FF9900,#E88000);">
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><text x="4" y="28" font-family="Arial" font-size="18" font-weight="900" fill="#fff">AM</text></svg>
+        </div>
+        <span>Amazon</span>
+        <span style="font-size:10px;color:#888;font-weight:400;">أمازون</span>
+      </div>
+
+      <div class="integration-card">
+        <div class="integration-logo" style="background:linear-gradient(135deg,#1A0A4A,#481DBC);">
+          <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><text x="2" y="27" font-family="Arial" font-size="13" font-weight="900" fill="#fff">API</text></svg>
+        </div>
+        <span>API مخصص</span>
+        <span style="font-size:10px;color:#888;font-weight:400;">Custom API</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- خطط الاشتراك -->
+<section class="pricing-section">
+  <div style="text-align:center; max-width:1080px; margin:0 auto 48px;">
+    <span style="display:inline-block;background:rgba(255,106,0,0.2);border:1px solid rgba(255,106,0,0.35);color:#FF6A00;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:14px;letter-spacing:.5px;">خطط الاشتراك</span>
+    <h2 style="color:#fff;font-size:clamp(26px,3.5vw,38px);font-weight:900;margin-bottom:12px;">اختر الخطة المناسبة</h2>
+    <p style="color:rgba(255,255,255,0.65);font-size:16px;max-width:480px;margin:0 auto;line-height:1.6;">ابدأ مجاناً وطوّر خطتك مع نمو أعمالك — بدون تعقيدات أو عقود</p>
+  </div>
+  <div class="pricing-grid">
+
+    <!-- Starter -->
+    <div class="pricing-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">مجاني</div>
+      <div class="plan-period">لمدة 60 يوماً</div>
+      <ul class="plan-features">
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          وصول كامل لجميع المزايا
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          حتى 200 شحنة شهرياً
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          تكامل منصة واحدة
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          دعم إلكتروني
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          تقارير أساسية
+        </li>
+      </ul>
+      <a href="merchant-register.html" class="plan-cta outline">ابدأ مجاناً</a>
+    </div>
+
+    <!-- Professional -->
+    <div class="pricing-card featured">
+      <div class="pricing-badge">الأكثر شيوعاً</div>
+      <div class="plan-name">Professional</div>
+      <div class="plan-price"><sup>ر.س</sup>149</div>
+      <div class="plan-period">شهرياً — بدون عقد</div>
+      <ul class="plan-features">
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          شحنات غير محدودة
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          تكامل 3 منصات
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          تقارير متقدمة وتحليلات
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          فواتير إلكترونية ZATCA
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          دعم ذو أولوية 24/7
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          إدارة 5 مستخدمين
+        </li>
+      </ul>
+      <a href="merchant-register.html" class="plan-cta solid">ابدأ الآن</a>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="pricing-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price" style="font-size:28px; padding-top:8px;">تسعير مخصص</div>
+      <div class="plan-period">حسب احتياج مؤسستك</div>
+      <ul class="plan-features">
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          حجم عمليات ضخم
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          تكاملات غير محدودة + API
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          مدير حساب مخصص
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          SLA مضمون
+        </li>
+        <li>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          تقارير مخصصة وWhite-label
+        </li>
+      </ul>
+      <a href="merchant-register.html" class="plan-cta outline">تواصل معنا</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>ابدأ تجربتك المجانية 60 يوماً</h2>
+  <p>لا بطاقة ائتمانية — لا عقود — فقط ابدأ وشاهد الفرق</p>
+  <a href="merchant-register.html">سجّل مجاناً الآن</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:28px;"></a>
+  <p>© 2026 مدار لوجستيك · جميع الحقوق محفوظة · <a href="index.html">العودة للرئيسية</a></p>
+</footer>
+
+</body>
+</html>

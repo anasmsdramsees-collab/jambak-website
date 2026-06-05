@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدار · إدارة سلاسل التوريد (SCM)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F8F7FF;
+      color: #1A0A4A;
+      direction: rtl;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: #1A0A4A;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a.link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+    .nav-links a.link:hover { color: #fff; }
+    .nav-links a.cta {
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-links a.cta:hover { background: #e05a00; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: url('ChatGPT Image May 17, 2026, 01_08_42 AM.png') center center / cover no-repeat;
+      padding: 100px 24px 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 6, 40, 0.65);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, #F8F7FF);
+      pointer-events: none;
+    }
+    .hero-glass {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 52px 60px 48px;
+      max-width: 720px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,106,0,0.15);
+      border: 1px solid rgba(255,106,0,0.35);
+      color: #FF6A00;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(32px, 5.5vw, 56px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+    }
+    .hero h1 span { color: #FF6A00; }
+    .hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 17px;
+      font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.35);
+      margin-bottom: 36px;
+    }
+    .hero-cta:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,106,0,0.45);
+    }
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(72,29,188,0.1);
+      color: #481DBC;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 900;
+      color: #1A0A4A;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: #666;
+      font-weight: 400;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    /* ─── SERVICES GRID ─── */
+    .services-section { background: #fff; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 700px) { .services-grid { grid-template-columns: 1fr; } }
+
+    .service-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.1);
+      border-radius: 16px;
+      padding: 32px 28px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(72,29,188,0.1);
+      border-color: rgba(72,29,188,0.22);
+    }
+    .service-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .service-icon-wrap.purple {
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+    }
+    .service-icon-wrap.orange {
+      background: linear-gradient(135deg, #FF6A00 0%, #ff8c38 100%);
+    }
+    .service-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 6px;
+    }
+    .service-card p {
+      font-size: 15px;
+      color: #666;
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    /* ─── METHODOLOGY ─── */
+    .method-section { background: #F0EBFF; }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 860px) { .method-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .method-grid { grid-template-columns: 1fr; } }
+
+    .method-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.08);
+      border-radius: 18px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative;
+    }
+    .method-card:hover {
+      border-color: rgba(72,29,188,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(72,29,188,0.08);
+    }
+    .method-step-num {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      margin: 0 auto 18px;
+      box-shadow: 0 4px 16px rgba(72,29,188,0.3);
+    }
+    .method-card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 10px;
+    }
+    .method-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* ─── WHY MADAR SCM ─── */
+    .why-section { background: #fff; }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 700px) { .why-grid { grid-template-columns: 1fr; } }
+
+    .why-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      background: #F8F7FF;
+      border: 1.5px solid rgba(72,29,188,0.08);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .why-card:hover {
+      border-color: rgba(72,29,188,0.18);
+      box-shadow: 0 8px 24px rgba(72,29,188,0.07);
+    }
+    .why-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .why-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 6px;
+    }
+    .why-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* ─── STATS / RESULTS ─── */
+    .results-section {
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #3a0f9e 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,106,0,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .results-section .section-tag {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.9);
+    }
+    .results-section .section-title {
+      color: #fff;
+    }
+    .results-section .section-sub {
+      color: rgba(255,255,255,0.65);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+    @media (max-width: 860px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 20px;
+      padding: 36px 24px;
+      backdrop-filter: blur(10px);
+      transition: transform .2s, background .2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.12);
+    }
+    .stat-value {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 900;
+      color: #FF6A00;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.4;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #FF6A00 140%);
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(255,106,0,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      color: #fff;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      position: relative;
+    }
+    .final-cta p {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .final-cta a {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.4);
+      position: relative;
+    }
+    .final-cta a:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(255,106,0,0.5);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0A4A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    footer img { display: block; margin: 0 auto 12px; opacity: 0.55; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:36px;"></a>
+  <div class="nav-links">
+    <a href="index.html" class="link">الرئيسية</a>
+    <a href="warehousing.html" class="link">التخزين</a>
+    <a href="lastmile.html" class="link">آخر ميل</a>
+    <a href="land-transport.html" class="link">النقل البري</a>
+    <a href="merchant-register.html" class="cta">ابدأ الآن</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glass">
+    <div class="hero-tag">
+      <!-- Network / supply chain icon -->
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      سلاسل التوريد
+    </div>
+    <h1>سلسلة توريدك في يد <span>خبراء</span> السوق السعودي</h1>
+    <p>استشارات متكاملة في إدارة سلاسل التوريد مصممة خصيصاً لمتطلبات السوق السعودي والخليجي  من التخطيط حتى التنفيذ</p>
+    <a href="merchant-register.html" class="hero-cta">احجز استشارة مجانية</a>
+    <div class="hero-stats">
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        خبرة محلية سعودية
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        تخطيط شامل
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        جاهزية خليجية
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section">
+  <div class="section-inner">
+    <div class="section-tag">خدماتنا</div>
+    <h2 class="section-title">خدماتنا في إدارة سلاسل التوريد</h2>
+    <p class="section-sub">حلول متكاملة تغطي كل مراحل سلسلة التوريد من المورد حتى المستهلك النهائي</p>
+    <div class="services-grid">
+
+      <!-- Card 1 -->
+      <div class="service-card">
+        <div class="service-icon-wrap purple">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </div>
+        <div>
+          <h3>تصميم سلسلة التوريد</h3>
+          <p>تحليل عمليات التوريد الحالية وإعادة هيكلتها بما يتوافق مع أهداف عملك وخصائص السوق السعودي  لبناء سلسلة توريد مرنة وكفؤة.</p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="service-card">
+        <div class="service-icon-wrap orange">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <h3>إدارة الموردين</h3>
+          <p>اختيار وتقييم وتطوير علاقات الموردين وفق معايير الجودة والاستدامة  مع وضع آليات واضحة للأداء والامتثال.</p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="service-card">
+        <div class="service-icon-wrap orange">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="22" y1="20" x2="2" y2="20"/></svg>
+        </div>
+        <div>
+          <h3>تخطيط الطلب والمخزون</h3>
+          <p>توقع الطلب باستخدام تحليلات متقدمة وتحسين مستويات المخزون لتقليل التكلفة وتجنب نفاد البضاعة في أوقات الذروة.</p>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="service-card">
+        <div class="service-icon-wrap purple">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div>
+          <h3>الاستشارات اللوجستية</h3>
+          <p>حلول مخصصة للسوق السعودي والخليجي تشمل إعادة تصميم شبكات التوزيع واختيار شركاء النقل وتحسين مسارات التسليم.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="method-section">
+  <div class="section-inner">
+    <div class="section-tag">المنهجية</div>
+    <h2 class="section-title">منهجيتنا في العمل</h2>
+    <p class="section-sub">نهج منظم في أربع مراحل لضمان نتائج قابلة للقياس وتحسين مستمر</p>
+    <div class="method-grid">
+
+      <div class="method-card">
+        <div class="method-step-num">١</div>
+        <h3>تقييم</h3>
+        <p>تحليل شامل للوضع الحالي وتحديد نقاط الضعف والفرص في سلسلة التوريد</p>
+      </div>
+
+      <div class="method-card">
+        <div class="method-step-num">٢</div>
+        <h3>تصميم</h3>
+        <p>بناء خارطة طريق مفصلة بأهداف واضحة وخطوات قابلة للتنفيذ وجداول زمنية محددة</p>
+      </div>
+
+      <div class="method-card">
+        <div class="method-step-num">٣</div>
+        <h3>تطبيق</h3>
+        <p>تنفيذ الحلول بالتوازي مع العمليات القائمة لضمان استمرارية الأعمال دون انقطاع</p>
+      </div>
+
+      <div class="method-card">
+        <div class="method-step-num">٤</div>
+        <h3>تحسين</h3>
+        <p>مراقبة مستمرة للأداء وتعديلات دورية لضمان تطور سلسلة التوريد مع نمو أعمالك</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY MADAR SCM -->
+<section class="why-section">
+  <div class="section-inner">
+    <div class="section-tag">لماذا مدار</div>
+    <h2 class="section-title">لماذا مدار للـ SCM؟</h2>
+    <p class="section-sub">نجمع بين الخبرة المحلية والتقنية المتقدمة لتقديم حلول سلاسل توريد فعلية</p>
+    <div class="why-grid">
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <h3>خبرة سعودية محلية</h3>
+          <p>فريقنا يمتلك فهماً عميقاً لديناميكيات السوق السعودي والأنظمة اللوجستية المحلية وشبكات التوزيع الإقليمية.</p>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div>
+          <h3>تغطية خليجية شاملة</h3>
+          <p>شبكة علاقات وشراكات تمتد عبر دول الخليج تتيح توسع سلاسل توريد عملائنا خارج حدود المملكة بسلاسة.</p>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </div>
+        <div>
+          <h3>تكامل مع WMS</h3>
+          <p>ربط سلس مع نظام إدارة المستودعات الخاص بمدار للحصول على رؤية كاملة وشفافية تامة لحركة البضائع.</p>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div>
+          <h3>تقارير أداء دورية</h3>
+          <p>لوحات تحكم تفاعلية وتقارير دورية مفصلة تقيس مؤشرات الأداء الرئيسية وتتابع التقدم نحو الأهداف.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS / STATS -->
+<section class="results-section">
+  <div class="section-inner">
+    <div class="section-tag">نتائج قابلة للقياس</div>
+    <h2 class="section-title" style="margin-bottom:12px;">نتائج حقيقية يحققها عملاؤنا</h2>
+    <p class="section-sub" style="margin:0 auto 48px;text-align:center;">أرقام موثقة من مشاريع تحسين سلاسل التوريد التي نفّذناها في السوق السعودي</p>
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-value">−25%</div>
+        <div class="stat-label">تكلفة المخزون</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">−18%</div>
+        <div class="stat-label">زمن التوريد</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">+30%</div>
+        <div class="stat-label">كفاءة التوزيع</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">شفافية في التتبع</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>ابدأ رحلة تحسين سلسلة توريدك</h2>
+  <p>تحدث مع خبرائنا واحصل على تقييم مجاني لسلسلة توريدك الحالية</p>
+  <a href="merchant-register.html">احجز استشارة مجانية الآن</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:28px;"></a>
+  <p>© 2026 مدار لوجستيك · جميع الحقوق محفوظة · <a href="index.html">العودة للرئيسية</a></p>
+</footer>
+
+</body>
+</html>

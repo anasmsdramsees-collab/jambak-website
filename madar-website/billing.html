@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدار — التحصيل المالي والفواتير الإلكترونية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #F8F7FF;
+      color: #1A0A4A;
+      direction: rtl;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      background: #1A0A4A;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-links a.link {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+    .nav-links a.link:hover { color: #fff; }
+    .nav-links a.cta {
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-links a.cta:hover { background: #e05a00; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: url('ChatGPT Image May 17, 2026, 01_08_42 AM.png') center center / cover no-repeat;
+      padding: 100px 24px 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 6, 40, 0.65);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, #F8F7FF);
+      pointer-events: none;
+    }
+    .hero-glass {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 52px 60px 48px;
+      max-width: 760px;
+      width: 100%;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,106,0,0.15);
+      border: 1px solid rgba(255,106,0,0.35);
+      color: #FF6A00;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(32px, 5.5vw, 58px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+    }
+    .hero h1 span { color: #FF6A00; }
+    .hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 17px;
+      font-weight: 400;
+      margin-bottom: 40px;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.35);
+      margin-bottom: 36px;
+    }
+    .hero-cta:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,106,0,0.45);
+    }
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ─── SECTION COMMON ─── */
+    section { padding: 80px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(72,29,188,0.1);
+      color: #481DBC;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .section-title {
+      font-size: clamp(26px, 3.5vw, 38px);
+      font-weight: 900;
+      color: #1A0A4A;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 16px;
+      color: #666;
+      font-weight: 400;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    /* ─── 3-COL CARD GRID ─── */
+    .cards-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 860px) { .cards-3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .cards-3 { grid-template-columns: 1fr; } }
+
+    .service-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.1);
+      border-radius: 18px;
+      padding: 32px 28px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(72,29,188,0.1);
+      border-color: rgba(72,29,188,0.2);
+    }
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .card-icon.purple { background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%); }
+    .card-icon.orange { background: linear-gradient(135deg, #FF6A00 0%, #ff8c38 100%); }
+    .service-card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 10px;
+    }
+    .service-card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.65;
+    }
+
+    /* ─── 4-COL FEATURE GRID ─── */
+    .cards-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 960px) { .cards-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .cards-4 { grid-template-columns: 1fr; } }
+
+    .feat-card {
+      background: #fff;
+      border: 1.5px solid rgba(72,29,188,0.08);
+      border-radius: 16px;
+      padding: 26px 22px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .feat-card:hover {
+      border-color: rgba(72,29,188,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(72,29,188,0.08);
+    }
+    .feat-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #481DBC 0%, #6d41d4 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feat-card h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1A0A4A;
+      margin-bottom: 8px;
+    }
+    .feat-card p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* ─── SECURITY / COMPLIANCE SECTION ─── */
+    .compliance-section {
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #5e27d4 100%);
+      padding: 80px 24px;
+    }
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    @media (max-width: 960px) { .compliance-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 540px) { .compliance-grid { grid-template-columns: 1fr; } }
+
+    .compliance-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 28px 22px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: background .2s, transform .2s;
+    }
+    .compliance-card:hover {
+      background: rgba(255,255,255,0.13);
+      transform: translateY(-3px);
+    }
+    .compliance-card .badge {
+      display: inline-block;
+      background: rgba(255,106,0,0.25);
+      border: 1px solid rgba(255,106,0,0.4);
+      color: #FF6A00;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+    .compliance-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .compliance-card p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    /* ─── FINAL CTA ─── */
+    .final-cta {
+      background: linear-gradient(135deg, #1e0d52 0%, #481DBC 60%, #FF6A00 140%);
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(255,106,0,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      color: #fff;
+      font-size: clamp(24px, 3.5vw, 38px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      position: relative;
+    }
+    .final-cta p {
+      color: rgba(255,255,255,0.7);
+      font-size: 16px;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .final-cta a {
+      display: inline-block;
+      background: #FF6A00;
+      color: #fff;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 18px 44px;
+      border-radius: 14px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 32px rgba(255,106,0,0.4);
+      position: relative;
+    }
+    .final-cta a:hover {
+      background: #e05a00;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(255,106,0,0.5);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0A4A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    footer img { display: block; margin: 0 auto 12px; opacity: 0.55; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:36px;"></a>
+  <div class="nav-links">
+    <a href="index.html" class="link">الرئيسية</a>
+    <a href="warehousing.html" class="link">التخزين</a>
+    <a href="lastmile.html" class="link">التوصيل</a>
+    <a href="land-transport.html" class="link">النقل البري</a>
+    <a href="merchant-register.html" class="cta">ابدأ الآن</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glass">
+    <div class="hero-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      الفواتير الإلكترونية
+    </div>
+    <h1>فواتير متوافقة مع <span>ZATCA</span> — وتقارير مالية شفافة</h1>
+    <p>نظام فوترة إلكترونية متكامل متوافق مع متطلبات هيئة الزكاة والضريبة والجمارك، مع تقارير مالية آنية تمنحك رؤية كاملة على تحصيلاتك</p>
+    <a href="merchant-register.html" class="hero-cta">ابدأ الفوترة الإلكترونية</a>
+    <div class="hero-stats">
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        متوافق مع ZATCA
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        فواتير آنية
+      </span>
+      <span class="stat-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        تقارير شهرية
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- الفوترة الإلكترونية -->
+<section style="background:#fff; padding:80px 24px;">
+  <div class="section-inner">
+    <div class="section-tag">الفوترة الإلكترونية</div>
+    <h2 class="section-title">نظام فوترة إلكترونية متكامل</h2>
+    <p class="section-sub">إصدار وإرسال الفواتير بالكامل إلكترونياً بما يتوافق مع المرحلة الثانية من برنامج الفوترة الإلكترونية</p>
+    <div class="cards-3">
+
+      <div class="service-card">
+        <div class="card-icon purple">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>توافق ZATCA الكامل</h3>
+        <p>فواتير إلكترونية معتمدة بالكامل من هيئة الزكاة والضريبة والجمارك، شاملة QR code والتوقيع الرقمي وكل متطلبات المرحلة الثانية.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="card-icon orange">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>إصدار فوري للفواتير</h3>
+        <p>تُصدر الفاتورة تلقائياً لحظة إتمام الشحنة وتُرسل فوراً للعميل بالبريد الإلكتروني أو WhatsApp دون أي تدخل يدوي.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="card-icon purple">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>فواتير العملاء والموردين</h3>
+        <p>إدارة متكاملة لفواتير الذمم المدينة والدائنة — تتبع مستحقاتك من العملاء وسدادك للموردين في منصة واحدة.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- خدمات التحصيل -->
+<section style="background:#F0EBFF; padding:80px 24px;">
+  <div class="section-inner">
+    <div class="section-tag">خدمات التحصيل</div>
+    <h2 class="section-title">تحصيل ذكي وموثوق</h2>
+    <p class="section-sub">نتولى تحصيل مدفوعاتك وإدارة المرتجعات المالية حتى تركز على تنمية أعمالك</p>
+    <div class="cards-3">
+
+      <div class="service-card">
+        <div class="card-icon orange">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <h3>تحصيل الكاش عند التسليم (COD)</h3>
+        <p>نتحصّل المبالغ نقداً أو بمدى لحظة التسليم ونحولها لحسابك في المواعيد المحددة مع تقارير واضحة لكل عملية.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="card-icon purple">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>تقارير مستحقات أسبوعية</h3>
+        <p>تقرير أسبوعي تفصيلي بجميع المستحقات المحصّلة والمعلّقة مع تحليل معدل التحصيل وتوقعات التدفق النقدي.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="card-icon orange">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.02"/></svg>
+        </div>
+        <h3>إدارة المرتجعات المالية</h3>
+        <p>معالجة رد المبالغ للعملاء بشكل منظم مع توثيق كامل لكل مرتجع مالي ومطابقتها مع فواتير الشحن الأصلية.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- التقارير والتحليلات -->
+<section style="background:#fff; padding:80px 24px;">
+  <div class="section-inner">
+    <div class="section-tag">التقارير والتحليلات</div>
+    <h2 class="section-title">رؤية مالية كاملة وفورية</h2>
+    <p class="section-sub">تقارير ذكية وتحليلات متعمقة تمنحك السيطرة الكاملة على وضعك المالي</p>
+    <div class="cards-4">
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>تقرير شهري تلقائي</h3>
+        <p>يُرسل في أول كل شهر ملخص شامل بالإيرادات والمصروفات وصافي التحصيل مع المقارنة بالشهر السابق.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>لوحة تحكم مالية</h3>
+        <p>لوحة تحكم تفاعلية تعرض مؤشرات الأداء المالي في الوقت الفعلي مع رسوم بيانية سهلة القراءة.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <h3>تنبيهات فورية</h3>
+        <p>إشعارات لحظية عند تأخر السداد أو وجود فواتير مختلف عليها أو تجاوز عتبات معينة تحددها أنت.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3>تصدير Excel/PDF</h3>
+        <p>تصدير أي تقرير مالي بنقرة واحدة بصيغة Excel أو PDF جاهزة للمحاسب أو الجهات الرقابية.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- الأمان والامتثال -->
+<section class="compliance-section">
+  <div style="max-width:1080px; margin:0 auto; text-align:center; margin-bottom:48px;">
+    <span style="display:inline-block;background:rgba(255,106,0,0.2);border:1px solid rgba(255,106,0,0.35);color:#FF6A00;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:14px;letter-spacing:.5px;">الأمان والامتثال</span>
+    <h2 style="color:#fff;font-size:clamp(26px,3.5vw,38px);font-weight:900;margin-bottom:12px;">مطابق للمعايير — آمن بالكامل</h2>
+    <p style="color:rgba(255,255,255,0.65);font-size:16px;max-width:520px;margin:0 auto;line-height:1.6;">نضمن حماية بياناتك المالية وامتثالك الكامل للأنظمة السعودية واللوائح الضريبية</p>
+  </div>
+  <div class="compliance-grid">
+
+    <div class="compliance-card">
+      <div class="badge">Phase 2</div>
+      <h3>ZATCA المرحلة الثانية</h3>
+      <p>ربط مباشر مع بوابة فاتورة التابعة لهيئة ZATCA مع الإرسال الفوري لكل فاتورة للاعتماد.</p>
+    </div>
+
+    <div class="compliance-card">
+      <div class="badge">ضريبة القيمة المضافة</div>
+      <h3>امتثال VAT كامل</h3>
+      <p>احتساب ضريبة القيمة المضافة تلقائياً على جميع الفواتير بالنسب الصحيحة وإعداد الإقرارات الضريبية.</p>
+    </div>
+
+    <div class="compliance-card">
+      <div class="badge">تشفير 256-bit</div>
+      <h3>أمان البيانات</h3>
+      <p>تشفير كامل لجميع البيانات المالية أثناء النقل والتخزين وفق معايير ISO 27001.</p>
+    </div>
+
+    <div class="compliance-card">
+      <div class="badge">Audit Ready</div>
+      <h3>سجلات المراجعة</h3>
+      <p>سجل تفصيلي بكل عملية مالية مع الطابع الزمني والمسؤول — جاهز للمراجعة الخارجية في أي وقت.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>ابدأ الفوترة الإلكترونية اليوم</h2>
+  <p>انضم للتجار الذين يديرون فواتيرهم وتحصيلاتهم مع مدار — بدون تعقيد، بدون متأخرات</p>
+  <a href="merchant-register.html">سجّل وابدأ الآن</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html"><img src="logo.png" alt="Madar" style="height:28px;"></a>
+  <p>© 2026 مدار لوجستيك · جميع الحقوق محفوظة · <a href="index.html">العودة للرئيسية</a></p>
+</footer>
+
+</body>
+</html>
