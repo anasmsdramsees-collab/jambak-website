@@ -744,7 +744,16 @@ function showToast(msg) {
 }
 
 /* ════ INIT ════ */
-renderProducts();
+(function init() {
+  const cat = new URLSearchParams(window.location.search).get('cat');
+  if (cat) {
+    const btn = document.querySelector(`.filter-btn[onclick*="'${cat}'"]`);
+    if (btn) filterCat(cat, btn);
+    else renderProducts();
+  } else {
+    renderProducts();
+  }
+})();
 </script>
 </body>
 </html>
