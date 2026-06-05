@@ -43,8 +43,24 @@ ul { list-style: none; }
 /* ── SECTION HELPERS ──────────────────────────────────────── */
 .section        { padding: 88px 64px; }
 .section.bg-gray   { background: var(--bg); }
-.section.bg-purple { background: var(--purple); }
-.section.bg-dark   { background: var(--purple-dim); }
+.section.bg-purple { background: var(--purple); color: #fff; }
+.section.bg-dark   { background: var(--purple-dim); color: #fff; }
+
+/* ── Dark sections: force white on all text elements ── */
+.bg-purple .sec-title,
+.bg-purple .sec-sub,
+.bg-purple h1, .bg-purple h2, .bg-purple h3, .bg-purple h4,
+.bg-purple p, .bg-purple li, .bg-purple span:not(.btn):not(.badge),
+.bg-dark .sec-title,
+.bg-dark .sec-sub,
+.bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4,
+.bg-dark p, .bg-dark li, .bg-dark span:not(.btn):not(.badge) {
+  color: #fff;
+}
+.bg-purple .sec-sub,
+.bg-dark .sec-sub {
+  color: rgba(255,255,255,.78);
+}
 
 .sec-header { margin-bottom: 52px; }
 .sec-header.center { text-align: center; }
